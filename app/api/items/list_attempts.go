@@ -1,10 +1,11 @@
 package items
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -42,7 +43,7 @@ type attemptsListResponseRow struct {
 
 		// required: true
 		GroupID *int64 `json:"group_id,string"`
-	} `json:"user_creator" gorm:"embedded;embedded_prefix:user_creator__"`
+	} `json:"user_creator" gorm:"embedded;embeddedPrefix:user_creator__"`
 }
 
 // swagger:operation GET /items/{item_id}/attempts items attemptsList
@@ -189,7 +190,7 @@ func (srv *Service) resolveParametersForListAttempts(r *http.Request) (
 				Where("attempts.participant_id = ? AND attempts.id = ?", participantID, attemptID).
 				Select("IF(attempts.root_item_id = ?, attempts.parent_attempt_id, attempts.id) AS parent_attempt_id", itemID).
 				Take(&result).Error()
-			if gorm.IsRecordNotFoundError(err) {
+			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return 0, 0, 0, service.InsufficientAccessRightsError
 			}
 			service.MustNotBeError(err)

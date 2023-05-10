@@ -1,6 +1,10 @@
 package database
 
-import "github.com/jinzhu/gorm"
+import (
+	"errors"
+
+	"gorm.io/gorm"
+)
 
 // GroupJoiningByCodeInfo represents info related to ability to join a team by code.
 type GroupJoiningByCodeInfo struct {
@@ -26,7 +30,7 @@ func (s *DataStore) GetGroupJoiningByCodeInfoByCode(code string, withLock bool) 
 		query = query.WithWriteLock()
 	}
 	err := query.Take(&info).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
 	return &info, err

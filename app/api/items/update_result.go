@@ -103,7 +103,7 @@ func (srv *Service) updateResult(w http.ResponseWriter, r *http.Request) service
 
 		data := formData.ConstructMapForDB()
 		if len(data) > 0 {
-			service.MustNotBeError(resultScope.UpdateColumn(data).Error())
+			service.MustNotBeError(resultScope.UpdateColumns(data).Error())
 		}
 		return nil
 	})

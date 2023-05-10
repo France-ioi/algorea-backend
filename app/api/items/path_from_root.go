@@ -100,10 +100,13 @@ func findItemPath(store *database.DataStore, participantID, itemID int64) []stri
 	canViewContentIndex := store.PermissionsGranted().ViewIndexByName("content")
 
 	var pathStrings []string
-	service.MustNotBeError(store.Raw(`
-			WITH RECURSIVE paths (path, last_item_id, last_attempt_id, score, attempts, is_active) AS (
-				WITH groups_with_root_items AS ?,
-					visible_items AS ?,
+	service.MustNotBeError(store.
+		Select("path").
+		Table("paths").
+		With(`
+			RECURSIVE paths (path, last_item_id, last_attempt_id, score, attempts, is_active) AS (
+				WITH groups_with_root_items AS (?),
+					visible_items AS (?),
 					root_items AS (
 						SELECT visible_items.id AS id FROM groups_with_root_items JOIN visible_items ON visible_items.id = root_activity_id
 						UNION
@@ -145,8 +148,8 @@ func findItemPath(store *database.DataStore, participantID, itemID int64) []stri
 					(NOT item_ancestors.requires_explicit_entry OR results.attempt_id IS NOT NULL) AND
 					(results.started_at IS NOT NULL OR attempts.ended_at IS NULL AND NOW() < attempts.allows_submissions_until AND paths.is_active)))
 			SELECT path FROM paths WHERE paths.last_item_id = ? ORDER BY score, attempts DESC LIMIT 1`,
-		groupsWithRootItems.SubQuery(), visibleItems.SubQuery(), itemID, itemID, participantID, itemID, canViewContentIndex,
-		participantID, itemID, itemID, canViewContentIndex, itemID).
+			groupsWithRootItems.SubQuery(), visibleItems.SubQuery(), itemID, itemID, participantID, itemID, canViewContentIndex,
+			participantID, itemID, itemID, canViewContentIndex, itemID).
 		ScanIntoSlices(&pathStrings).Error())
 
 	if len(pathStrings) == 0 {

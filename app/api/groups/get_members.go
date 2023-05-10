@@ -33,7 +33,7 @@ type groupsMembersViewResponseRow struct {
 		// Nullable
 		// required: true
 		Grade *int32 `json:"grade"`
-	} `json:"user" gorm:"embedded;embedded_prefix:user__"`
+	} `json:"user" gorm:"embedded;embeddedPrefix:user__"`
 }
 
 // swagger:operation GET /groups/{group_id}/members group-memberships groupsMembersView

@@ -1,9 +1,10 @@
 package database
 
 import (
+	"errors"
 	"time"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // ThreadStore implements database operations on threads.
@@ -85,7 +86,7 @@ func (s *ThreadStore) GetThreadStatus(participantID, itemID int64) string {
 		Select("threads.status AS status").
 		PluckFirst("status", &status).
 		Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return "not_started"
 	}
 	mustNotBeError(err)

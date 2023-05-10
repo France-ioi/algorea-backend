@@ -23,8 +23,8 @@ func TestPermissionGeneratedStore_AggregatedPermissionsForItemsVisibleToGroup(t 
 			"MAX(is_owner_generated) AS is_owner_generated "+
 			"FROM permissions_generated AS permissions "+
 			"JOIN groups_ancestors_active AS ancestors ON ancestors.ancestor_group_id = permissions.group_id "+
-			"WHERE (ancestors.child_group_id = ?) GROUP BY permissions.item_id "+
-			"HAVING (MAX(can_view_generated_value) >= ?)")+"$").
+			"WHERE ancestors.child_group_id = ? GROUP BY `permissions`.`item_id` "+
+			"HAVING MAX(can_view_generated_value) >= ?")+"$").
 		WithArgs(3, NewDataStore(db).PermissionsGranted().ViewIndexByName("info")).
 		WillReturnRows(mock.NewRows([]string{"id"}))
 
@@ -49,8 +49,8 @@ func TestPermissionGeneratedStore_AggregatedPermissionsForItemsOnWhichGroupHasVi
 			"MAX(is_owner_generated) AS is_owner_generated "+
 			"FROM permissions_generated AS permissions "+
 			"JOIN groups_ancestors_active AS ancestors ON ancestors.ancestor_group_id = permissions.group_id "+
-			"WHERE (ancestors.child_group_id = ?) GROUP BY permissions.item_id "+
-			"HAVING (MAX(can_view_generated_value) >= ?)")+"$").
+			"WHERE ancestors.child_group_id = ? GROUP BY `permissions`.`item_id` "+
+			"HAVING MAX(can_view_generated_value) >= ?")+"$").
 		WithArgs(2, NewDataStore(db).PermissionsGranted().ViewIndexByName("content")).
 		WillReturnRows(mock.NewRows([]string{"id"}))
 

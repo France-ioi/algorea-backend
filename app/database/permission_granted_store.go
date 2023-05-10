@@ -1,6 +1,9 @@
 package database
 
-import "github.com/jinzhu/gorm"
+import (
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+)
 
 // PermissionGrantedStore implements database operations on `permissions_granted`.
 type PermissionGrantedStore struct {
@@ -24,7 +27,7 @@ func (s *PermissionGrantedStore) PermissionIndexByKindAndName(kind, name string)
 
 // PermissionIsAtLeastSQLExpr returns a gorm.SqlExpr for filtering by `can_*_generated_value` >= indexOf(`permissionName`)
 // depending on the given permission kind.
-func (s *PermissionGrantedStore) PermissionIsAtLeastSQLExpr(permissionKind, permissionName string) *gorm.SqlExpr {
+func (s *PermissionGrantedStore) PermissionIsAtLeastSQLExpr(permissionKind, permissionName string) clause.Expr {
 	return gorm.Expr("IFNULL("+permissionColumnByKind(permissionKind)+", 1) >= ?",
 		s.PermissionIndexByKindAndName(permissionKind, permissionName))
 }

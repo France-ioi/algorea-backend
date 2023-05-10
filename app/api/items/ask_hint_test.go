@@ -162,8 +162,8 @@ func TestAskHintRequest_UnmarshalJSON(t *testing.T) {
 			defer func() { _ = db.Close() }()
 
 			if tt.mockDB {
-				mockQuery := mock.ExpectQuery(regexp.QuoteMeta("SELECT public_key " +
-					"FROM `platforms` JOIN items ON items.platform_id = platforms.id WHERE (items.id = ?)")).
+				mockQuery := mock.ExpectQuery(regexp.QuoteMeta("SELECT `public_key` " +
+					"FROM `platforms` JOIN items ON items.platform_id = platforms.id WHERE items.id = ?")).
 					WithArgs(tt.itemID)
 
 				if tt.platform != nil {

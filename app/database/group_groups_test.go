@@ -13,7 +13,7 @@ func TestDB_WhereGroupRelationIsActual(t *testing.T) {
 
 	mock.ExpectQuery(regexp.QuoteMeta(
 		"SELECT * FROM `groups_groups` " +
-			"WHERE (NOW() < groups_groups.expires_at)")).
+			"WHERE NOW() < groups_groups.expires_at")).
 		WillReturnRows(mock.NewRows([]string{"id"}))
 
 	var result []interface{}

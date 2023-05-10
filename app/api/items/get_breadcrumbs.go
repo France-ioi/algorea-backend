@@ -3,10 +3,9 @@ package items
 import (
 	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm/clause"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -124,7 +123,9 @@ func (srv *Service) getBreadcrumbs(w http.ResponseWriter, r *http.Request) servi
 			COALESCE(user_strings.language_tag, default_strings.language_tag) AS language_tag`).
 		JoinsUserAndDefaultItemStrings(user).
 		Where("items.id IN (?)", ids).
-		Order(gorm.Expr("FIELD(items.id"+strings.Repeat(", ?", len(idsInterface))+")", idsInterface...)).
+		Clauses(clause.OrderBy{
+			Expression: clause.Expr{SQL: "FIELD(items.id, ?)", Vars: []interface{}{idsInterface}, WithoutParentheses: true},
+		}).
 		ScanIntoSliceOfMaps(&result).Error())
 
 	for index := range result {

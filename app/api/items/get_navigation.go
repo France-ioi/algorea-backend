@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -197,7 +197,7 @@ func resolveAttemptIDForNavigationData(store *database.DataStore, httpReq *http.
 				JOIN items_items ON items_items.parent_item_id = ? AND items_items.child_item_id = child_result.item_id`, itemID).
 			PluckFirst("IF(child_attempt.root_item_id = child_result.item_id, child_attempt.parent_attempt_id, child_attempt.id)", &attemptID).
 			Error()
-		if gorm.IsRecordNotFoundError(err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return 0, service.InsufficientAccessRightsError
 		}
 		service.MustNotBeError(err)

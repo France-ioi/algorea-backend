@@ -57,7 +57,8 @@ func (s *DataStore) createNewAncestors(objectName, singleObjectName string) { /*
 				FOR UPDATE
 			) has_undone_parents FOR UPDATE
 		)`
-	markAsProcessing, err := s.db.CommonDB().Prepare(query)
+	sqlDB := s.db.Statement.ConnPool.(*sql.Tx)
+	markAsProcessing, err := sqlDB.Prepare(query)
 	mustNotBeError(err)
 	defer func() { mustNotBeError(markAsProcessing.Close()) }()
 
@@ -130,7 +131,7 @@ func (s *DataStore) createNewAncestors(objectName, singleObjectName string) { /*
 
 	recomputeAncestors := make([]*sql.Stmt, len(recomputeQueries))
 	for i := 0; i < len(recomputeQueries); i++ {
-		recomputeAncestors[i], err = s.db.CommonDB().Prepare(recomputeQueries[i])
+		recomputeAncestors[i], err = sqlDB.Prepare(recomputeQueries[i])
 		mustNotBeError(err)
 
 		defer func(i int) { mustNotBeError(recomputeAncestors[i].Close()) }(i)
@@ -141,7 +142,7 @@ func (s *DataStore) createNewAncestors(objectName, singleObjectName string) { /*
 		UPDATE ` + objectName + `_propagate
 		SET ancestors_computation_state = 'done'
 		WHERE ancestors_computation_state = 'processing'` // #nosec
-	markAsDone, err := s.db.CommonDB().Prepare(query)
+	markAsDone, err := sqlDB.Prepare(query)
 	mustNotBeError(err)
 	defer func() { mustNotBeError(markAsDone.Close()) }()
 

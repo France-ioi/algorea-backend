@@ -15,8 +15,8 @@ import (
 
 	"github.com/SermoDigital/jose/crypto"
 	"github.com/SermoDigital/jose/jws"
-	"github.com/jinzhu/gorm"
 	"github.com/spf13/viper"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/logging"
@@ -155,7 +155,7 @@ func UnmarshalDependingOnItemPlatform(store *database.DataStore, itemID int64,
 	if err = store.Platforms().Select("public_key").
 		Joins("JOIN items ON items.platform_id = platforms.id").
 		Where("items.id = ?", itemID).
-		Scan(&platformInfo).Error(); gorm.IsRecordNotFoundError(err) {
+		Take(&platformInfo).Error(); errors.Is(err, gorm.ErrRecordNotFound) {
 		return fmt.Errorf("cannot find the platform for item %d", itemID)
 	}
 	mustNotBeError(err)

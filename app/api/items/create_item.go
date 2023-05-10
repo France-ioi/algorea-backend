@@ -9,7 +9,7 @@ import (
 
 	"github.com/France-ioi/validator"
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/formdata"
@@ -291,8 +291,8 @@ func constructParentItemIDValidator(
 			JoinsPermissionsForGroupToItemsWherePermissionAtLeast(user.GroupID, "view", "content").
 			WherePermissionIsAtLeast("edit", "children").
 			Where("items.id = ?", fl.Field().Interface().(int64)).Select("items.type").
-			Limit(1).Scan(&parentInfo).Error()
-		if gorm.IsRecordNotFoundError(err) {
+			Limit(1).Take(&parentInfo).Error()
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return false
 		}
 		service.MustNotBeError(err)

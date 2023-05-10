@@ -6,7 +6,7 @@ import (
 
 	"github.com/France-ioi/validator"
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/formdata"
@@ -140,9 +140,9 @@ func (srv *Service) updateItem(w http.ResponseWriter, r *http.Request) service.A
 				items.participants_group_id, items.type, MAX(can_edit_generated_value) AS can_edit_generated_value,
 				items.duration, items.requires_explicit_entry`).
 			Group("item_id").
-			Scan(&itemInfo).Error()
+			Take(&itemInfo).Error()
 
-		if gorm.IsRecordNotFoundError(err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			apiError = service.ErrForbidden(errors.New("no access rights to edit the item"))
 			return apiError.Error // rollback
 		}
@@ -204,7 +204,7 @@ func updateItemInDB(itemData map[string]interface{}, participantsGroupID *int64,
 		itemData["participants_group_id"] = createdParticipantsGroupID
 	}
 
-	err := store.Items().Where("id = ?", itemID).UpdateColumn(itemData).Error()
+	err := store.Items().Where("id = ?", itemID).UpdateColumns(itemData).Error()
 	if err != nil {
 		if database.IsDuplicateEntryError(err) {
 			return service.ErrForbidden(formdata.FieldErrors{"text_id": []string{

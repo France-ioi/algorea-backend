@@ -30,9 +30,9 @@ type grantedPermissionsViewResultPermissions struct {
 // swagger:model grantedPermissionsViewResultRow
 type grantedPermissionsViewResultRow struct {
 	// required: true
-	SourceGroup grantedPermissionsViewResultRowGroup `json:"source_group" gorm:"embedded;embedded_prefix:source_group__"`
+	SourceGroup grantedPermissionsViewResultRowGroup `json:"source_group" gorm:"embedded;embeddedPrefix:source_group__"`
 	// required: true
-	Group grantedPermissionsViewResultRowGroup `json:"group" gorm:"embedded;embedded_prefix:group__"`
+	Group grantedPermissionsViewResultRowGroup `json:"group" gorm:"embedded;embeddedPrefix:group__"`
 	// required: true
 	Item struct {
 		// required: true
@@ -47,9 +47,9 @@ type grantedPermissionsViewResultRow struct {
 		LanguageTag string `json:"language_tag"`
 		// required: true
 		RequiresExplicitEntry bool `json:"requires_explicit_entry"`
-	} `json:"item" gorm:"embedded;embedded_prefix:item__"`
+	} `json:"item" gorm:"embedded;embeddedPrefix:item__"`
 	// required: true
-	Permissions grantedPermissionsViewResultPermissions `json:"permissions" gorm:"embedded;embedded_prefix:permissions__"`
+	Permissions grantedPermissionsViewResultPermissions `json:"permissions" gorm:"embedded;embeddedPrefix:permissions__"`
 }
 
 // swagger:operation GET /groups/{group_id}/granted_permissions groups grantedPermissionsView

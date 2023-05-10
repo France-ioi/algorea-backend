@@ -89,7 +89,7 @@ func (srv *Service) updateGroupManager(w http.ResponseWriter, r *http.Request) s
 		return store.GroupManagers().
 			Where("group_id = ?", groupID).
 			Where("manager_id = ?", managerID).
-			UpdateColumn(values).Error()
+			UpdateColumns(values).Error()
 	})
 
 	if apiError != service.NoError {

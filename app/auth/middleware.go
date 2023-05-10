@@ -2,10 +2,11 @@ package auth
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strings"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/logging"
@@ -62,7 +63,7 @@ func UserMiddleware(service GetStorer) func(next http.Handler) http.Handler {
 					Where("expires_at > NOW()").Take(&user).
 					Error()
 				authorized = err == nil
-				if err != nil && !gorm.IsRecordNotFoundError(err) {
+				if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
 					logging.Errorf("Can't validate an access token: %s", err)
 					w.Header().Set("Content-Type", "application/json; charset=utf-8")
 					w.WriteHeader(http.StatusInternalServerError)

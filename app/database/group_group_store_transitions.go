@@ -3,7 +3,7 @@ package database
 import (
 	"strings"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // GroupMembershipAction represents an action that changes relation between two groups.
@@ -479,12 +479,12 @@ func enforceMaxSize(dataStore *DataStore, action GroupGroupTransitionAction, par
 	for id := range idsChanged {
 		changedIDsList = append(changedIDsList, id)
 	}
-	var activeRelationsCount int
+	var activeRelationsCount int64
 	mustNotBeError(dataStore.ActiveGroupGroups().Where("parent_group_id = ?", parentGroupID).
 		Joins("JOIN `groups` ON groups.id = child_group_id").
 		Where("groups.type IN ('User', 'Team')").
 		Where("child_group_id NOT IN(?)", changedIDsList).WithWriteLock().Count(&activeRelationsCount).Error())
-	var invitationsCount int
+	var invitationsCount int64
 	mustNotBeError(dataStore.GroupPendingRequests().
 		Where("group_id = ?", parentGroupID).
 		Where("type = 'invitation'").Where("member_id NOT IN(?)", changedIDsList).
@@ -496,7 +496,7 @@ func enforceMaxSize(dataStore *DataStore, action GroupGroupTransitionAction, par
 			membersCount++
 		}
 	}
-	if membersCount > limits.MaxParticipants || membersCount == limits.MaxParticipants && action == UserCreatesJoinRequest {
+	if membersCount > int64(limits.MaxParticipants) || membersCount == int64(limits.MaxParticipants) && action == UserCreatesJoinRequest {
 		deleteIDsFromTransitionPlan(changedIDsList, Full, results,
 			idsToInsertPending, idsToInsertRelation, idsToDeletePending, idsToDeleteRelation, idsChanged)
 	}

@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -256,14 +256,14 @@ type rawItem struct {
 	SupportedLanguageTags string
 
 	// from items_strings: in the user’s default language or (if not available) default language of the item
-	StringLanguageTag string  `sql:"column:language_tag"`
-	StringTitle       *string `sql:"column:title"`
-	StringImageURL    *string `sql:"column:image_url"`
-	StringSubtitle    *string `sql:"column:subtitle"`
-	StringDescription *string `sql:"column:description"`
-	StringEduComment  *string `sql:"column:edu_comment"`
+	StringLanguageTag string  `gorm:"column:language_tag"`
+	StringTitle       *string `gorm:"column:title"`
+	StringImageURL    *string `gorm:"column:image_url"`
+	StringSubtitle    *string `gorm:"column:subtitle"`
+	StringDescription *string `gorm:"column:description"`
+	StringEduComment  *string `gorm:"column:edu_comment"`
 
-	WatchedGroupPermissions        *database.RawGeneratedPermissionFields `gorm:"embedded;embedded_prefix:watched_group_permissions_"`
+	WatchedGroupPermissions        *database.RawGeneratedPermissionFields `gorm:"embedded;embeddedPrefix:watched_group_permissions_"`
 	CanViewWatchedGroupPermissions bool
 	WatchedGroupAverageScore       float32
 	CanWatchForGroupResults        bool
@@ -408,8 +408,8 @@ func getRawItemData(s *database.ItemStore, rootID, groupID int64, languageTag st
 	// nolint:gosec
 	query = query.Select(columnsBuffer.String(), columnValues...)
 
-	err := query.Scan(&result).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	err := query.Take(&result).Error()
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil
 	}
 	service.MustNotBeError(err)

@@ -119,14 +119,14 @@ type RawListItem struct {
 	*RawCommonItemFields
 
 	// from items_strings: in the user’s default language or (if not available) default language of the item
-	StringLanguageTag string  `sql:"column:language_tag"`
-	StringTitle       *string `sql:"column:title"`
-	StringImageURL    *string `sql:"column:image_url"`
-	StringSubtitle    *string `sql:"column:subtitle"`
+	StringLanguageTag string  `gorm:"column:language_tag"`
+	StringTitle       *string `gorm:"column:title"`
+	StringImageURL    *string `gorm:"column:image_url"`
+	StringSubtitle    *string `gorm:"column:subtitle"`
 
 	// items_items
 	Category string
-	Order    int32 `sql:"column:child_order"`
+	Order    int32 `gorm:"column:child_order"`
 
 	// max from results of the current participant
 	BestScore float32
@@ -292,7 +292,7 @@ func constructItemChildrenQuery(dataStore *database.DataStore, parentItemID, gro
 		func(db *database.DB) *database.DB {
 			return db.
 				Where(
-					"WHERE attempts.id IS NULL OR IF(attempts.root_item_id <=> results.item_id, attempts.parent_attempt_id, attempts.id) = ?",
+					"attempts.id IS NULL OR IF(attempts.root_item_id <=> results.item_id, attempts.parent_attempt_id, attempts.id) = ?",
 					attemptID)
 		})
 }

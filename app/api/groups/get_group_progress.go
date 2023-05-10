@@ -8,7 +8,8 @@ import (
 
 	"github.com/France-ioi/mapstructure"
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -185,8 +186,9 @@ func (srv *Service) getGroupProgress(w http.ResponseWriter, r *http.Request) ser
 		Where("groups.type = 'Team' OR groups.type = 'User'").
 		Group("groups.id")
 
-	endMembersStats := store.Raw(`
-		SELECT
+	endMembersStats := store.
+		Table("(?) AS end_members", endMembers.SubQuery()).
+		Select(`
 			end_members.id,
 			items.id AS item_id,
 			IFNULL(result_with_best_score.score, 0) AS score,
@@ -203,9 +205,8 @@ func (srv *Service) getGroupProgress(w http.ResponseWriter, r *http.Request) ser
 					FROM results
 					WHERE participant_id = end_members.id AND item_id = items.id
 				)
-			) AS time_spent
-		FROM ? AS end_members`, endMembers.SubQuery()).
-		Joins("JOIN ? AS items", itemsSubQuery).
+			) AS time_spent`).
+		Joins("JOIN (?) AS items", itemsSubQuery).
 		Joins(`
 			LEFT JOIN LATERAL (
 				SELECT score_computed AS score, validated, hints_cached, submissions, participant_id
@@ -227,12 +228,18 @@ func (srv *Service) getGroupProgress(w http.ResponseWriter, r *http.Request) ser
 				AVG(member_stats.hints_cached) AS avg_hints_requested,
 				AVG(member_stats.submissions) AS avg_submissions,
 				AVG(member_stats.time_spent) AS avg_time_spent`).
-			Joins("JOIN ? AS member_stats ON member_stats.id = groups_ancestors_active.child_group_id", endMembersStats.SubQuery()).
+			Joins("JOIN (?) AS member_stats ON member_stats.id = groups_ancestors_active.child_group_id", endMembersStats.SubQuery()).
 			Where("groups_ancestors_active.ancestor_group_id IN (?)", ancestorGroupIDs).
 			Group("groups_ancestors_active.ancestor_group_id, member_stats.item_id").
-			Order(gorm.Expr(
-				"FIELD(groups_ancestors_active.ancestor_group_id"+strings.Repeat(", ?", len(ancestorGroupIDs))+")",
-				ancestorGroupIDs...)),
+			Clauses(
+				clause.OrderBy{
+					Expression: clause.Expr{
+						SQL:                "FIELD(groups_ancestors_active.ancestor_group_id, ?)",
+						Vars:               []interface{}{ancestorGroupIDs},
+						WithoutParentheses: true,
+					},
+				},
+			),
 		orderedItemIDListWithDuplicates, len(uniqueItemIDs), &result,
 	)
 

@@ -31,7 +31,7 @@ type contestAdminListRow struct {
 	// required: true
 	AllowsMultipleAttempts bool `json:"allows_multiple_attempts"`
 	// required: true
-	Parents []parentTitle `json:"parents"`
+	Parents []parentTitle `gorm:"-" json:"parents"`
 }
 
 // swagger:operation GET /contests/administered contests contestAdminList

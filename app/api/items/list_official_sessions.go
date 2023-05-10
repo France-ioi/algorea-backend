@@ -2,10 +2,9 @@ package items
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm/clause"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -103,7 +102,7 @@ type rawOfficialSession struct {
 		IsPublic             bool
 		CurrentUserIsManager bool
 		CurrentUserIsMember  bool
-	} `gorm:"embedded;embedded_prefix:parent__"`
+	} `gorm:"embedded;embeddedPrefix:parent__"`
 }
 
 // swagger:operation GET /items/{item_id}/official-sessions items officialSessionsList
@@ -219,8 +218,13 @@ func (srv *Service) listOfficialSessions(w http.ResponseWriter, r *http.Request)
 			Joins("LEFT JOIN groups_groups_active ON groups_groups_active.child_group_id = groups.id").
 			Joins("LEFT JOIN `groups` AS parent ON parent.id = groups_groups_active.parent_group_id").
 			Having("parent.id IS NULL OR parent.is_public OR parent__current_user_is_member OR parent__current_user_is_manager").
-			Order(gorm.Expr("FIELD(groups.id"+strings.Repeat(", ?", len(ids))+")", ids...)).
-			Order("parent.name, parent.id").
+			Clauses(clause.OrderBy{
+				Expression: clause.Expr{
+					SQL:                "FIELD(groups.id, ?), parent.name, parent.id",
+					Vars:               []interface{}{ids},
+					WithoutParentheses: true,
+				},
+			}).
 			Scan(&rawData).Error())
 	}
 

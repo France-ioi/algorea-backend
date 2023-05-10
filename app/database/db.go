@@ -4,7 +4,6 @@ package database
 import (
 	"context"
 	"database/sql"
-	"database/sql/driver"
 	"errors"
 	"fmt"
 	"reflect"
@@ -15,8 +14,10 @@ import (
 	"unsafe"
 
 	"github.com/go-sql-driver/mysql"
-	"github.com/jinzhu/gorm"
 	"github.com/luna-duclos/instrumentedsql"
+	gormMysql "gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	log "github.com/France-ioi/AlgoreaBackend/app/logging"
 	"github.com/France-ioi/AlgoreaBackend/app/rand"
@@ -31,6 +32,32 @@ type DB struct {
 // ErrLockWaitTimeoutExceeded is returned when we cannot acquire a lock.
 var ErrLockWaitTimeoutExceeded = errors.New("lock wait timeout exceeded")
 
+type suppressFromClause struct{}
+
+func (s *suppressFromClause) Build(clause.Builder) {}
+func (s *suppressFromClause) ModifyStatement(statement *gorm.Statement) {
+	statement.Clauses["FROM"] = clause.Clause{Expression: s, Builder: func(c clause.Clause, builder clause.Builder) {
+		c.Expression.Build(builder)
+	}}
+}
+
+var (
+	_ gorm.StatementModifier = &suppressFromClause{}
+	_ clause.Expression      = &suppressFromClause{}
+)
+
+type suppressSelectClause struct{}
+
+func (s *suppressSelectClause) Build(clause.Builder) {}
+func (s *suppressSelectClause) ModifyStatement(statement *gorm.Statement) {
+	statement.Clauses["SELECT"] = clause.Clause{Expression: s}
+}
+
+var (
+	_ gorm.StatementModifier = &suppressSelectClause{}
+	_ clause.Expression      = &suppressSelectClause{}
+)
+
 // newDB wraps *gorm.DB.
 func newDB(ctx context.Context, db *gorm.DB) *DB {
 	return &DB{db: db, ctx: ctx}
@@ -41,25 +68,30 @@ func newDB(ctx context.Context, db *gorm.DB) *DB {
 func Open(source interface{}) (*DB, error) {
 	var err error
 	var dbConn *gorm.DB
-	driverName := "mysql"
-	logger, logMode, _ := log.SharedLogger.NewDBLogger()
+	logger, _ := log.SharedLogger.NewDBLogger()
 
-	var rawConnection gorm.SQLCommon
+	var rawConnection gorm.ConnPool
 	switch src := source.(type) {
 	case string:
 		rawConnection, err = OpenRawDBConnection(src)
 		if err != nil {
 			return nil, err
 		}
-	case gorm.SQLCommon:
+	case gorm.ConnPool:
 		rawConnection = src
 	default:
 		return nil, fmt.Errorf("unknown database source type: %T (%v)", src, src)
 	}
-	dbConn, err = gorm.Open(driverName, rawConnection)
-
-	dbConn.LogMode(logMode)
-	dbConn.SetLogger(logger)
+	dbConn, err = gorm.Open(gormMysql.New(gormMysql.Config{
+		Conn:                      rawConnection,
+		SkipInitializeWithVersion: true,
+	}), &gorm.Config{
+		Logger:            logger,
+		AllowGlobalUpdate: true,
+	})
+	if err != nil {
+		return nil, err
+	}
 
 	return newDB(context.Background(), dbConn), err
 }
@@ -75,8 +107,8 @@ func OpenRawDBConnection(sourceDSN string) (*sql.DB, error) {
 	}
 
 	if registerDriver {
-		logger, _, rawLogMode := log.SharedLogger.NewDBLogger()
-		rawDBLogger := log.NewRawDBLogger(logger, rawLogMode)
+		rawLogMode := log.SharedLogger.GetRawSQLLogMode()
+		rawDBLogger := log.NewRawDBLogger(log.SharedLogger.Logger, rawLogMode)
 		sql.Register("instrumented-mysql",
 			instrumentedsql.WrapDriver(&mysql.MySQLDriver{}, instrumentedsql.WithLogger(rawDBLogger)))
 	}
@@ -85,7 +117,9 @@ func OpenRawDBConnection(sourceDSN string) (*sql.DB, error) {
 
 // New clones a new db connection without search conditions.
 func (conn *DB) New() *DB {
-	return newDB(conn.ctx, conn.db.New())
+	return newDB(conn.ctx, conn.db.Session(&gorm.Session{
+		NewDB: true,
+	}))
 }
 
 func (conn *DB) inTransaction(txFunc func(*DB) error) (err error) {
@@ -153,7 +187,7 @@ func (conn *DB) handleDeadLock(txFunc func(*DB) error, count int64, errToHandle,
 }
 
 func (conn *DB) isInTransaction() bool {
-	if _, ok := interface{}(conn.db.CommonDB()).(driver.Tx); ok {
+	if _, ok := conn.db.Statement.ConnPool.(gorm.TxCommitter); ok {
 		return true
 	}
 	return false
@@ -181,65 +215,104 @@ func (conn *DB) withNamedLock(lockName string, timeout time.Duration, txFunc fun
 
 // Close close current db connection.  If database connection is not an io.Closer, returns an error.
 func (conn *DB) Close() error {
-	return conn.db.Close()
+	sqlDB, err := conn.db.DB()
+	if err == nil {
+		err = sqlDB.Close()
+	}
+	return err
 }
 
 // Limit specifies the number of records to be retrieved.
-func (conn *DB) Limit(limit interface{}) *DB {
-	return newDB(conn.ctx, conn.db.Limit(limit))
+func (conn *DB) Limit(limit int) *DB {
+	return newDB(conn.ctx, conn.db.Limit(limit).Session(&gorm.Session{}))
 }
 
 // Where returns a new relation, filters records with given conditions, accepts `map`,
 // `struct` or `string` as conditions, refer http://jinzhu.github.io/gorm/crud.html#query
 func (conn *DB) Where(query interface{}, args ...interface{}) *DB {
-	return newDB(conn.ctx, conn.db.Where(query, args...))
+	return newDB(conn.ctx, conn.db.Where(query, args...).Session(&gorm.Session{}))
 }
 
 // Joins specifies Joins conditions
 //
 //	db.Joins("JOIN emails ON emails.user_id = users.id AND emails.email = ?", "jinzhu@example.org").Find(&user)
 func (conn *DB) Joins(query string, args ...interface{}) *DB {
-	return newDB(conn.ctx, conn.db.Joins(query, args...))
+	return newDB(conn.ctx, conn.db.Joins(query, args...).Session(&gorm.Session{}))
+}
+
+// Or filters records that match before conditions or this one, similar to `Where`.
+func (conn *DB) Or(query interface{}, args ...interface{}) *DB {
+	return newDB(conn.ctx, conn.db.Or(query, args...).Session(&gorm.Session{}))
 }
 
 // Select specifies fields that you want to retrieve from database when querying, by default, will select all fields;
 // When creating/updating, specify fields that you want to save to database.
 func (conn *DB) Select(query interface{}, args ...interface{}) *DB {
-	return newDB(conn.ctx, conn.db.Select(query, args...))
+	oldSelectClause, hadPreviousSelectClause := conn.db.Statement.Clauses["SELECT"]
+	newGormDB := conn.db.Select(query, args...).Session(&gorm.Session{})
+	if hadPreviousSelectClause {
+		newSelectClause := newGormDB.Statement.Clauses["SELECT"]
+		newSelectClause.BeforeExpression = oldSelectClause.BeforeExpression
+		newGormDB.Statement.Clauses["SELECT"] = newSelectClause
+	}
+	return newDB(conn.ctx, newGormDB)
+}
+
+// AddSelect appends fields that you want to retrieve from the database when querying.
+func (conn *DB) AddSelect(query interface{}, args ...interface{}) *DB {
+	previousSelects := conn.db.Statement.Selects
+	newDB := conn.Select(query, args...)
+	previousSelects = append(previousSelects, newDB.db.Statement.Selects...)
+	newDB.db.Statement.Selects = previousSelects
+	return newDB
+}
+
+// With adds a CTE.
+func (conn *DB) With(query interface{}, args ...interface{}) *DB {
+	if conditions := conn.db.Statement.BuildCondition(query, args...); len(conditions) > 0 {
+		return conn.Clauses(&withClause{expressions: conditions})
+	}
+	return conn
 }
 
 // Table specifies the table you would like to run db operations.
-func (conn *DB) Table(name string) *DB {
-	return newDB(conn.ctx, conn.db.Table(name))
+func (conn *DB) Table(name string, args ...interface{}) *DB {
+	return newDB(conn.ctx, conn.db.Table(name, args...).Session(&gorm.Session{}))
 }
 
 // Group specifies the group method on the find.
 func (conn *DB) Group(query string) *DB {
-	return newDB(conn.ctx, conn.db.Group(query))
+	return newDB(conn.ctx, conn.db.Group(query).Session(&gorm.Session{}))
 }
 
-// Order specifies order when retrieve records from database, set reorder to `true` to overwrite defined conditions
+// Order specify order when retrieve records from database
 //
 //	db.Order("name DESC")
-//	db.Order("name DESC", true) // reorder
-//	db.Order(gorm.SqlExpr("name = ? DESC", "first")) // sql expression
-func (conn *DB) Order(value interface{}, reorder ...bool) *DB {
-	return newDB(conn.ctx, conn.db.Order(value, reorder...))
+//	db.Order(clause.OrderByColumn{Column: clause.Column{Name: "name"}, Desc: true})
+func (conn *DB) Order(value interface{}) *DB {
+	return newDB(conn.ctx, conn.db.Order(value).Session(&gorm.Session{}))
+}
+
+// Clauses adds clauses.
+func (conn *DB) Clauses(conds ...clause.Expression) *DB {
+	return newDB(conn.ctx, conn.db.Clauses(conds...).Session(&gorm.Session{}))
 }
 
 // Having specifies HAVING conditions for GROUP BY.
 func (conn *DB) Having(query interface{}, args ...interface{}) *DB {
-	return newDB(conn.ctx, conn.db.Having(query, args...))
+	return newDB(conn.ctx, conn.db.Having(query, args...).Session(&gorm.Session{}))
 }
 
 // Union specifies UNION of two queries (receiver UNION query).
 func (conn *DB) Union(query interface{}) *DB {
-	return conn.New().Raw("? UNION ?", conn.db.SubQuery(), query)
+	return conn.New().Table("(?) UNION (?)", conn.SubQuery(), query).Joins("").
+		Clauses(&suppressFromClause{}, &suppressSelectClause{})
 }
 
 // UnionAll specifies UNION ALL of two queries (receiver UNION ALL query).
 func (conn *DB) UnionAll(query interface{}) *DB {
-	return conn.New().Raw("? UNION ALL ?", conn.db.SubQuery(), query)
+	return conn.New().Table("(?) UNION ALL (?)", conn.SubQuery(), query).Joins("").
+		Clauses(&suppressFromClause{}, &suppressSelectClause{})
 }
 
 // Raw uses raw sql as conditions
@@ -247,34 +320,48 @@ func (conn *DB) UnionAll(query interface{}) *DB {
 //	db.Raw("SELECT name, age FROM users WHERE name = ?", 3).Scan(&result)
 func (conn *DB) Raw(query string, args ...interface{}) *DB {
 	// db.Raw("").Joins(...) is a hack for making db.Raw("...").Joins(...) work better
-	return newDB(conn.ctx, conn.db.Raw("").Joins(query, args...))
+	return newDB(conn.ctx, conn.db.Raw(query, args...).Session(&gorm.Session{}))
 }
 
-// Updates update attributes with callbacks, refer: https://jinzhu.github.io/gorm/crud.html#update
-func (conn *DB) Updates(values interface{}, ignoreProtectedAttrs ...bool) *DB {
-	return newDB(conn.ctx, conn.db.Updates(values, ignoreProtectedAttrs...))
+// Updates update attributes with callbacks, refer: https://gorm.io/docs/update.html#Update-Changed-Fields
+func (conn *DB) Updates(values interface{}) *DB {
+	return newDB(conn.ctx, conn.db.Updates(values))
 }
 
-// UpdateColumn updates attributes without callbacks, refer: https://jinzhu.github.io/gorm/crud.html#update
-func (conn *DB) UpdateColumn(attrs ...interface{}) *DB {
-	return newDB(conn.ctx, conn.db.UpdateColumn(attrs...))
+// UpdateColumn updates one attribute without callbacks.
+func (conn *DB) UpdateColumn(column string, value interface{}) *DB {
+	return newDB(conn.ctx, conn.db.UpdateColumn(column, value))
 }
 
-// SubQuery returns the query as sub query.
+// UpdateColumns updates attributes without callbacks.
+func (conn *DB) UpdateColumns(values interface{}) *DB {
+	return newDB(conn.ctx, conn.db.UpdateColumns(values))
+}
+
+// SubQuery returns the query as sub query
+// Passing a query as an argument require passing the internal *gorm.db.
 func (conn *DB) SubQuery() interface{} {
 	mustNotBeError(conn.Error())
-	return conn.db.SubQuery()
+	return conn.db
 }
 
-// QueryExpr returns the query as expr object.
+// QueryExpr is just a synonym for SubQuery().
 func (conn *DB) QueryExpr() interface{} {
-	mustNotBeError(conn.Error())
-	return conn.db.QueryExpr()
+	return conn.SubQuery()
 }
 
 // Scan scans value to a struct.
 func (conn *DB) Scan(dest interface{}) *DB {
-	return newDB(conn.ctx, conn.db.Scan(dest))
+	result := newDB(conn.ctx, conn.db.Scan(dest))
+
+	if result.Error() == nil {
+		reflSlice := reflect.ValueOf(dest).Elem()
+		if reflSlice.Type().Kind() == reflect.Slice && reflSlice.IsNil() {
+			reflSlice.Set(reflect.MakeSlice(reflSlice.Type(), 0, 0))
+		}
+	}
+
+	return result
 }
 
 // ScanIntoSlices scans multiple columns into slices.
@@ -381,7 +468,7 @@ func (conn *DB) readRowIntoMap(cols []string, rows *sql.Rows) map[string]interfa
 }
 
 // Count gets how many records for a model.
-func (conn *DB) Count(dest interface{}) *DB {
+func (conn *DB) Count(dest *int64) *DB {
 	if conn.Error() != nil {
 		return conn
 	}
@@ -436,21 +523,24 @@ func (conn *DB) PluckFirst(column string, value interface{}) *DB {
 }
 
 // Take returns a record that match given conditions, the order will depend on the database implementation.
-func (conn *DB) Take(out interface{}, where ...interface{}) *DB {
-	return newDB(conn.ctx, conn.db.Take(out, where...))
+func (conn *DB) Take(dest interface{}, conds ...interface{}) *DB {
+	return newDB(conn.ctx, conn.db.Take(dest, conds...))
 }
 
 // HasRows returns true if at least one row is found.
 func (conn *DB) HasRows() (bool, error) {
 	var result int64
-	err := conn.PluckFirst("1", &result).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if conn.db.Statement.Table == "" {
+		conn = conn.Clauses(&suppressFromClause{}).Table("to_be_ignored")
+	}
+	err := conn.Select("1").Limit(1).PluckFirst("1 AS `1`", &result).Error()
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false, nil
 	}
 	return err == nil, err
 }
 
-// Delete deletes value matching given conditions, if the value has primary key, then will including the primary key as condition.
+// Delete deletes value matching given conditions.
 func (conn *DB) Delete(where ...interface{}) *DB {
 	return newDB(conn.ctx, conn.db.Delete(nil, where...))
 }
@@ -568,7 +658,7 @@ func (conn *DB) Set(name string, value interface{}) *DB {
 	return newDB(conn.ctx, conn.db.Set(name, value))
 }
 
-// ErrNoTransaction means that a called method/function cannot work outside of a transaction.
+// ErrNoTransaction means that a called method/function cannot work outside a transaction.
 var ErrNoTransaction = errors.New("should be executed in a transaction")
 
 func (conn *DB) mustBeInTransaction() {
@@ -580,7 +670,7 @@ func (conn *DB) mustBeInTransaction() {
 // WithWriteLock converts "SELECT ..." statement into "SELECT ... FOR UPDATE" statement.
 func (conn *DB) WithWriteLock() *DB {
 	conn.mustBeInTransaction()
-	return conn.Set("gorm:query_option", "FOR UPDATE")
+	return newDB(conn.ctx, conn.db.Clauses(clause.Locking{Strength: "UPDATE"}).Session(&gorm.Session{}))
 }
 
 const keyTriesCount = 10

@@ -10,7 +10,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/formdata"
@@ -118,7 +118,7 @@ func (srv *Service) askHint(w http.ResponseWriter, r *http.Request) service.APIE
 		// Get the previous hints requested JSON data
 		var hintsRequestedParsed []formdata.Anything
 		hintsRequestedParsed, err = queryAndParsePreviouslyRequestedHints(requestData.TaskToken, store, r)
-		if gorm.IsRecordNotFoundError(err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			apiError = service.ErrNotFound(errors.New("no result or the attempt is expired"))
 			return apiError.Error // rollback
 		}
@@ -141,7 +141,7 @@ func (srv *Service) askHint(w http.ResponseWriter, r *http.Request) service.APIE
 			Where("participant_id = ?", requestData.TaskToken.Converted.ParticipantID).
 			Where("attempt_id = ?", requestData.TaskToken.Converted.AttemptID).
 			Where("item_id = ?", requestData.TaskToken.Converted.LocalItemID).
-			UpdateColumn(map[string]interface{}{
+			UpdateColumns(map[string]interface{}{
 				"tasks_with_help":    1,
 				"latest_activity_at": database.Now(),
 				"latest_hint_at":     database.Now(),

@@ -38,7 +38,7 @@ type itemActivityLogResponseRow struct {
 		// required: true
 		// enum: Team,User
 		Type string `json:"type"`
-	} `json:"participant" gorm:"embedded;embedded_prefix:participant__"`
+	} `json:"participant" gorm:"embedded;embeddedPrefix:participant__"`
 	User *struct {
 		// required: true
 		ID *int64 `json:"id,string"`
@@ -47,7 +47,7 @@ type itemActivityLogResponseRow struct {
 
 		*structures.UserPersonalInfo
 		ShowPersonalInfo bool `json:"-"`
-	} `json:"user,omitempty" gorm:"embedded;embedded_prefix:user__"`
+	} `json:"user,omitempty" gorm:"embedded;embeddedPrefix:user__"`
 	// required: true
 	Item struct {
 		// required: true
@@ -60,8 +60,8 @@ type itemActivityLogResponseRow struct {
 			// Nullable
 			// required: true
 			Title *string `json:"title"`
-		} `json:"string" gorm:"embedded;embedded_prefix:string__"`
-	} `json:"item" gorm:"embedded;embedded_prefix:item__"`
+		} `json:"string" gorm:"embedded;embeddedPrefix:string__"`
+	} `json:"item" gorm:"embedded;embeddedPrefix:item__"`
 }
 
 // swagger:operation GET /items/{ancestor_item_id}/log items itemActivityLogForItem
@@ -335,7 +335,7 @@ func (srv *Service) constructActivityLogQuery(store *database.DataStore, r *http
 	if itemID != nil {
 		itemDescendants := store.ItemAncestors().DescendantsOf(*itemID).Select("child_item_id")
 		visibleItemDescendants = visibleItemDescendants.
-			Where("item_id = ? OR item_id IN ?", *itemID, itemDescendants.SubQuery())
+			Where("item_id = ? OR item_id IN (?)", *itemID, itemDescendants.SubQuery())
 	}
 
 	if ok {
@@ -380,6 +380,11 @@ func (srv *Service) constructActivityLogQuery(store *database.DataStore, r *http
 			Where("answers.item_id >= (SELECT MIN(id) FROM items_to_show)")
 	}
 	answersQuery = answersQuery.Select(answersQuerySelect)
+
+	answersQuery = store.
+		Table("(?) AS limited_answers", answersQuery.SubQuery()).
+		Select("limited_answers.*, gradings.score").
+		Joins("LEFT JOIN gradings ON gradings.answer_id = limited_answers.answer_id")
 
 	startedResultsQuery := store.Table("results AS started_results").
 		Select(`
@@ -473,9 +478,8 @@ func (srv *Service) constructActivityLogQuery(store *database.DataStore, r *http
 			StartFromRowSubQuery: startFromRowSubQuery,
 		})
 
-	unionCTEQuery := store.Raw("SELECT * FROM (? UNION ALL ? UNION ALL ?) AS un",
+	unionQuery := store.Table("((?) UNION ALL (?) UNION ALL (?)) AS un",
 		answersQuery.SubQuery(), startedResultsQuery.SubQuery(), validatedResultsQuery.SubQuery())
-	unionQuery := store.Table("un")
 	unionQuery = service.NewQueryLimiter().Apply(r, unionQuery)
 	unionQuery, _ = service.ApplySortingAndPaging(
 		nil, unionQuery,
@@ -493,9 +497,16 @@ func (srv *Service) constructActivityLogQuery(store *database.DataStore, r *http
 			StartFromRowSubQuery: startFromRowSubQuery,
 		})
 
-	query := store.Raw(`
-		WITH items_to_show AS ?, participants AS ?, start_from_row AS ?, un AS ?
-		SELECT STRAIGHT_JOIN
+	query := store.
+		With(
+			"items_to_show AS (?), participants AS (?), start_from_row AS (?), un AS (?)",
+			visibleItemDescendants.SubQuery(),
+			participantsQuery.SubQuery(),
+			startFromRowCTESubQuery,
+			unionQuery.SubQuery(),
+		).
+		Table("(?) AS activities", unionQuery.SubQuery()).
+		Select(`STRAIGHT_JOIN
 			CASE activity_type_int
 				WHEN 1 THEN 'result_started'
 				WHEN 2 THEN 'submission'
@@ -513,10 +524,8 @@ func (srv *Service) constructActivityLogQuery(store *database.DataStore, r *http
 			users.group_id = ? OR personal_info_view_approvals.approved AS user__show_personal_info,
 			IF(users.group_id = ? OR personal_info_view_approvals.approved, users.first_name, NULL) AS user__first_name,
 			IF(users.group_id = ? OR personal_info_view_approvals.approved, users.last_name, NULL) AS user__last_name,
-			IF(user_strings.language_tag IS NULL, default_strings.title, user_strings.title) AS item__string__title
-		FROM ? AS activities`, visibleItemDescendantsSubQuery, participantsQuerySubQuery,
-		startFromRowCTESubQuery, unionCTEQuery.SubQuery(), user.GroupID, user.GroupID, user.GroupID,
-		unionQuery.SubQuery()).
+			IF(user_strings.language_tag IS NULL, default_strings.title, user_strings.title) AS item__string__title`,
+			user.GroupID, user.GroupID, user.GroupID).
 		Joins("JOIN items ON items.id = item_id").
 		Joins("JOIN `groups` ON groups.id = participant_id").
 		Joins("LEFT JOIN users ON users.group_id = user_id").

@@ -1,10 +1,11 @@
 package contests
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/service"
 )
@@ -76,7 +77,7 @@ func (srv *Service) getGroupByName(w http.ResponseWriter, r *http.Request) servi
 
 	store := srv.GetStore(r)
 	participantType, err := getParticipantTypeForContestManagedByUser(store, itemID, user)
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return service.InsufficientAccessRightsError
 	}
 	service.MustNotBeError(err)
@@ -101,7 +102,7 @@ func (srv *Service) getGroupByName(w http.ResponseWriter, r *http.Request) servi
 		Joins(`
 			LEFT JOIN groups_contest_items AS main_group_contest_item ON main_group_contest_item.group_id = groups.id AND
 				main_group_contest_item.item_id = ?`, itemID).
-		Where("groups.id IN ?", groupsManagedByUserSubQuery).
+		Where("groups.id IN (?)", groupsManagedByUserSubQuery).
 		Where("groups.type = ?", participantType).
 		Select(`
 			groups.id AS group_id,
@@ -132,7 +133,7 @@ func (srv *Service) getGroupByName(w http.ResponseWriter, r *http.Request) servi
 	}
 
 	var result contestInfo
-	if err = query.Take(&result).Error(); gorm.IsRecordNotFoundError(err) {
+	if err = query.Take(&result).Error(); errors.Is(err, gorm.ErrRecordNotFound) {
 		return service.InsufficientAccessRightsError
 	}
 	service.MustNotBeError(err)

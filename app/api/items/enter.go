@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/logging"
@@ -116,7 +116,7 @@ func (srv *Service) enter(w http.ResponseWriter, r *http.Request) service.APIErr
 
 		user := srv.GetUser(r)
 		service.MustNotBeError(store.Attempts().InsertMap(map[string]interface{}{
-			"id": gorm.Expr("(SELECT * FROM ? AS max_attempt)", store.Attempts().Select("IFNULL(MAX(id)+1, 0)").
+			"id": gorm.Expr("(SELECT * FROM (?) AS max_attempt)", store.Attempts().Select("IFNULL(MAX(id)+1, 0)").
 				Where("participant_id = ?", entryState.groupID).WithWriteLock().SubQuery()),
 			"participant_id": entryState.groupID, "created_at": itemInfo.Now,
 			"creator_id": user.GroupID, "parent_attempt_id": parentAttemptID, "root_item_id": entryState.itemID,

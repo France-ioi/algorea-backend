@@ -9,8 +9,8 @@ import (
 	"testing"
 
 	"github.com/DATA-DOG/go-sqlmock"
-	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 )
@@ -223,7 +223,7 @@ func TestApplySorting(t *testing.T) {
 				},
 			},
 			wantSQL: "SELECT id FROM `users` " +
-				"WHERE ((name < ?) OR (name = ? AND id > ?) OR (name = ? AND id = ? AND bFlag > ?)) " +
+				"WHERE (name < ?) OR (name = ? AND id > ?) OR (name = ? AND id = ? AND bFlag > ?) " +
 				"ORDER BY name DESC, id ASC, bFlag ASC",
 			wantSQLArguments: []driver.Value{"Joe", "Joe", 1, "Joe", 1, true},
 			wantAPIError:     NoError,
@@ -231,7 +231,7 @@ func TestApplySorting(t *testing.T) {
 		{
 			name: "sorting + paging with a nullable field",
 			args: args{
-				urlParameters: "?from.id=1",
+				urlParameters: "?from.id=1&from.name=Joe&from.flag=1",
 				sortingAndPagingParameters: &SortingAndPagingParameters{
 					Fields: map[string]*FieldSortingParams{
 						"name": {ColumnName: "name", Nullable: true},
@@ -239,6 +239,24 @@ func TestApplySorting(t *testing.T) {
 						"flag": {ColumnName: "bFlag"},
 					},
 					DefaultRules: "-name,id,flag",
+					TieBreakers:  SortingAndPagingTieBreakers{"id": FieldTypeInt64},
+				},
+			},
+			wantSQL:          "SELECT id FROM `users` WHERE (id > ?) ORDER BY id ASC",
+			wantSQLArguments: []driver.Value{1},
+			wantAPIError:     NoError,
+		},
+		{
+			name: "sorting + paging by a nullable field",
+			args: args{
+				urlParameters: "?from.id=1&from.name=Joe&from.flag=1",
+				sortingAndPagingParameters: &SortingAndPagingParameters{
+					Fields: map[string]*FieldSortingParams{
+						"name": {ColumnName: "name", Nullable: true},
+						"id":   {ColumnName: "id"},
+						"flag": {ColumnName: "bFlag"},
+					},
+					DefaultRules: "-name$,id,flag",
 					TieBreakers:  SortingAndPagingTieBreakers{"id": FieldTypeInt64},
 				},
 			},
@@ -293,9 +311,9 @@ func TestApplySorting(t *testing.T) {
 			wantSQL: "SELECT id FROM `users` " +
 				"JOIN (SELECT bFlag AS flag, name AS name, id AS id FROM `users` WHERE (id <=> ?) " +
 				"  ORDER BY bFlag ASC, name IS NULL, name DESC, id ASC LIMIT 1) AS from_page " +
-				"WHERE ((bFlag > from_page.flag) OR " +
+				"WHERE (bFlag > from_page.flag) OR " +
 				"  (bFlag <=> from_page.flag AND IF(from_page.name IS NULL, FALSE, name IS NULL OR name < from_page.name)) OR " +
-				"  (bFlag <=> from_page.flag AND name <=> from_page.name AND id > from_page.id)) " +
+				"  (bFlag <=> from_page.flag AND name <=> from_page.name AND id > from_page.id) " +
 				"ORDER BY bFlag ASC, name IS NULL, name DESC, id ASC",
 			wantSQLArguments: []driver.Value{1},
 			wantAPIError:     NoError,
@@ -340,7 +358,28 @@ func TestApplySorting(t *testing.T) {
 				"  (bFlag <=> from_page.flag AND IF(from_page.name IS NULL, FALSE, name IS NULL OR name < from_page.name)) OR " +
 				"  (bFlag <=> from_page.flag AND name <=> from_page.name AND id > from_page.id)) " +
 				"ORDER BY bFlag ASC, name IS NULL, name DESC, id ASC",
-			wantAPIError: NoError,
+			wantSQLArguments: []driver.Value{1, 1, true},
+			wantAPIError:     NoError,
+		},
+		{
+			name: "sorting + paging by a nullable field (from value is null, null last, nullable field is the last field)",
+			args: args{
+				urlParameters: "?from.id=1&from.name=[NULL]&from.flag=1",
+				sortingAndPagingParameters: &SortingAndPagingParameters{
+					Fields: map[string]*FieldSortingParams{
+						"name": {ColumnName: "name", Nullable: true},
+						"id":   {ColumnName: "id"},
+						"flag": {ColumnName: "bFlag"},
+					},
+					DefaultRules: "id,flag,name$",
+					TieBreakers:  SortingAndPagingTieBreakers{"id": FieldTypeInt64},
+				},
+			},
+			wantSQL: "SELECT id FROM `users` " +
+				"WHERE (id > ?) OR (id = ? AND bFlag > ?) OR (id = ? AND bFlag = ? AND name IS NULL) " +
+				"ORDER BY id ASC, bFlag ASC, name IS NULL, name ASC",
+			wantSQLArguments: []driver.Value{1, 1, true},
+			wantAPIError:     NoError,
 		},
 		{
 			name: "wrong value in from.id field",
@@ -444,7 +483,7 @@ func TestApplySorting(t *testing.T) {
 					TieBreakers:  SortingAndPagingTieBreakers{"id": FieldTypeInt64, "submitted_at": FieldTypeTime},
 				},
 			},
-			wantSQL: "SELECT id FROM `users`  WHERE ((submitted_at > ?) OR (submitted_at = ? AND id > ?)) " +
+			wantSQL: "SELECT id FROM `users`  WHERE (submitted_at > ?) OR (submitted_at = ? AND id > ?) " +
 				"ORDER BY submitted_at ASC, id ASC",
 			wantSQLArguments: []driver.Value{"2006-01-02 12:04:05", "2006-01-02 12:04:05", 1},
 			wantAPIError:     NoError,

@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/loginmodule"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -83,7 +83,7 @@ func (srv *Service) publishResult(w http.ResponseWriter, r *http.Request) servic
 
 	var score float32
 	err = store.Results().ByID(user.GroupID, attemptID, itemID).PluckFirst("score_computed", &score).Error()
-	if !gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		service.MustNotBeError(err)
 	}
 

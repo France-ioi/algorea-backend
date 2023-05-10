@@ -15,17 +15,17 @@ func TestGroupAncestorStore_ManagedByUser(t *testing.T) {
 	}{
 		{
 			tableName: "groups_ancestors",
-			expectedQuery: "SELECT `groups_ancestors`.* FROM `groups_ancestors` " +
+			expectedQuery: "SELECT * FROM `groups_ancestors` " +
 				"JOIN group_managers ON group_managers.group_id = `groups_ancestors`.ancestor_group_id " +
 				"JOIN groups_ancestors_active AS group_ancestors " +
 				"ON group_ancestors.ancestor_group_id = group_managers.manager_id AND " +
 				"group_ancestors.child_group_id = ? " +
-				"WHERE (NOW() < `groups_ancestors`.expires_at)",
+				"WHERE NOW() < `groups_ancestors`.expires_at",
 			storeFunc: func(db *DB) *GroupAncestorStore { return NewDataStore(db).GroupAncestors() },
 		},
 		{
 			tableName: "groups_ancestors_active",
-			expectedQuery: "SELECT `groups_ancestors_active`.* FROM `groups_ancestors_active` " +
+			expectedQuery: "SELECT * FROM `groups_ancestors_active` " +
 				"JOIN group_managers ON group_managers.group_id = `groups_ancestors_active`.ancestor_group_id " +
 				"JOIN groups_ancestors_active AS group_ancestors " +
 				"ON group_ancestors.ancestor_group_id = group_managers.manager_id AND " +

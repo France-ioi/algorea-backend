@@ -43,5 +43,5 @@ func (ql *QueryLimiter) Apply(r *http.Request, db *database.DB) *database.DB {
 	if limit > ql.maxAllowedLimit {
 		limit = ql.maxAllowedLimit
 	}
-	return db.Limit(limit)
+	return db.Limit(int(limit))
 }

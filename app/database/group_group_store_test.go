@@ -19,13 +19,13 @@ func TestGroupGroupStore_WhereUserIsMember(t *testing.T) {
 		{
 			tableName: "groups_groups",
 			expectedQuery: "SELECT * FROM `groups_groups` " +
-				"WHERE (`groups_groups`.child_group_id = ?) AND (NOW() < groups_groups.expires_at)",
+				"WHERE `groups_groups`.child_group_id = ? AND NOW() < groups_groups.expires_at",
 			storeFunc: func(db *DB) *GroupGroupStore { return NewDataStore(db).GroupGroups() },
 		},
 		{
 			tableName: "groups_groups_active",
 			expectedQuery: "SELECT * FROM `groups_groups_active` " +
-				"WHERE (`groups_groups_active`.child_group_id = ?)",
+				"WHERE `groups_groups_active`.child_group_id = ?",
 			storeFunc: func(db *DB) *GroupGroupStore { return NewDataStore(db).ActiveGroupGroups() },
 		},
 	} {
@@ -68,17 +68,17 @@ func TestGroupGroupStore_CreateRelation(t *testing.T) {
 		WillReturnRows(sqlmock.NewRows([]string{"SELECT GET_LOCK(?, ?)"}).AddRow(int64(1)))
 	mock.ExpectQuery("^"+
 		regexp.QuoteMeta("SELECT 1 FROM `groups_ancestors`  "+
-			"WHERE (child_group_id = ? AND ancestor_group_id = ?) LIMIT 1 FOR UPDATE")+"$").
+			"WHERE child_group_id = ? AND ancestor_group_id = ? LIMIT 1 FOR UPDATE")+"$").
 		WithArgs(parentGroupID, childGroupID).
 		WillReturnRows(sqlmock.NewRows([]string{"1"}))
 	mock.ExpectExec("^"+
 		regexp.QuoteMeta("DELETE FROM `groups_groups`  "+
-			"WHERE (child_group_id = ? AND parent_group_id = ?)")+"$").
+			"WHERE child_group_id = ? AND parent_group_id = ?")+"$").
 		WithArgs(childGroupID, parentGroupID).
 		WillReturnResult(sqlmock.NewResult(-1, 1))
 	mock.ExpectExec("^"+
 		regexp.QuoteMeta("DELETE FROM `group_pending_requests`  "+
-			"WHERE (group_id = ? AND member_id = ?)")+"$").
+			"WHERE group_id = ? AND member_id = ?")+"$").
 		WithArgs(parentGroupID, childGroupID).
 		WillReturnResult(sqlmock.NewResult(-1, 1))
 
@@ -141,7 +141,7 @@ func TestGroupGroupStore_CreateRelation_PreventsRelationCycles(t *testing.T) {
 		WillReturnRows(sqlmock.NewRows([]string{"SELECT GET_LOCK(?, ?)"}).AddRow(int64(1)))
 	mock.ExpectQuery("^"+
 		regexp.QuoteMeta("SELECT 1 FROM `groups_ancestors`  "+
-			"WHERE (child_group_id = ? AND ancestor_group_id = ?) LIMIT 1 FOR UPDATE")+"$").
+			"WHERE child_group_id = ? AND ancestor_group_id = ? LIMIT 1 FOR UPDATE")+"$").
 		WithArgs(parentGroupID, childGroupID).
 		WillReturnRows(sqlmock.NewRows([]string{"id"}).AddRow(int64(1)))
 	mock.ExpectExec("^" + regexp.QuoteMeta("SELECT RELEASE_LOCK(?)") + "$").

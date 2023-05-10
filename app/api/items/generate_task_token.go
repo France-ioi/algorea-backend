@@ -1,13 +1,14 @@
 package items
 
 import (
+	"errors"
 	"fmt"
 	"hash/crc64"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -126,7 +127,7 @@ func (srv *Service) generateTaskToken(w http.ResponseWriter, r *http.Request) se
 					hints_allowed, text_id, url, supported_lang_prog`,
 				store.PermissionsGranted().ViewIndexByName("solution")).
 			Take(&itemInfo).Error()
-		if gorm.IsRecordNotFoundError(err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			apiError = service.InsufficientAccessRightsError
 			return apiError.Error // rollback
 		}
@@ -145,7 +146,7 @@ func (srv *Service) generateTaskToken(w http.ResponseWriter, r *http.Request) se
 			Where("results.started").
 			Take(&resultInfo).Error()
 
-		if gorm.IsRecordNotFoundError(err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			apiError = service.InsufficientAccessRightsError
 			return err // rollback
 		}

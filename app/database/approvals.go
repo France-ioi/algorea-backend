@@ -5,7 +5,7 @@ package database
 // (`groups_groups.personal_info_view_approved` is true for a group managed by the given manager).
 // The approvals can be checked as `personal_info_view_approvals.approved`.
 func (conn *DB) WithPersonalInfoViewApprovals(manager *User) *DB {
-	return conn.Joins("LEFT JOIN LATERAL ? AS personal_info_view_approvals ON 1",
+	return conn.Joins("LEFT JOIN LATERAL (?) AS personal_info_view_approvals ON 1",
 		NewDataStore(conn.New()).ActiveGroupAncestors().ManagedByUser(manager).
 			Joins(`
 				JOIN groups_groups_active

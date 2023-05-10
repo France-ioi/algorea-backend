@@ -117,8 +117,8 @@ func (srv *Service) searchForAvailableGroups(w http.ResponseWriter, r *http.Requ
 			groups.description`).
 		Where("groups.is_public").
 		Where("type != 'User' AND type != 'ContestParticipants'").
-		Where("groups.id NOT IN ?", skipGroups).
-		Where("groups.id NOT IN ?", skipPending).
+		Where("groups.id NOT IN (?)", skipGroups).
+		Where("groups.id NOT IN (?)", skipPending).
 		Where("groups.name LIKE CONCAT('%', ?, '%') ESCAPE '|'", escapedSearchString)
 
 	query = service.NewQueryLimiter().Apply(r, query)

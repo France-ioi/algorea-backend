@@ -74,8 +74,8 @@ func (srv *Service) getAnswer(rw http.ResponseWriter, httpReq *http.Request) ser
 		// 1) the user is the participant or a member of the participant group able to view the item,
 		// 2) or an observer with required permissions
 		Where(`
-			(? AND (answers.participant_id = ? OR answers.participant_id IN ?)) OR
-			(? AND ?)`,
+			((?) AND (answers.participant_id = ? OR answers.participant_id IN (?))) OR
+			((?) AND (?))`,
 			participantItemPerms.SubQuery(), user.GroupID, usersGroupsQuery.SubQuery(),
 			observerItemPerms.SubQuery(), observerParticipantPerms.SubQuery())).
 		ScanIntoSliceOfMaps(&result).Error()

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -33,7 +33,7 @@ type membershipsViewResponseRow struct {
 		// required: true
 		// enum: Class,Team,Club,Friends,Other,Session,Base
 		Type string `json:"type"`
-	} `json:"group" gorm:"embedded;embedded_prefix:group__"`
+	} `json:"group" gorm:"embedded;embeddedPrefix:group__"`
 
 	// required: true
 	IsMembershipLocked bool `json:"is_membership_locked"`
@@ -96,7 +96,7 @@ func (srv *Service) getGroupMemberships(w http.ResponseWriter, r *http.Request) 
 			IF(groups.type = 'Team',
 				IF(groups.frozen_membership,
 					'frozen_membership',
-					IF(?,
+					IF((?),
 						'would_break_entry_conditions',
 						'free_to_leave'
 					)

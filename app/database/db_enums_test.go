@@ -18,13 +18,13 @@ func TestDB_getFromEnumUnderLock_WipesOutAllMapsOnError(t *testing.T) {
 	expectedError := errors.New("some error")
 	mock.ExpectQuery("^"+regexp.QuoteMeta(
 		"SELECT SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE)-6) FROM `information_schema`.`COLUMNS`  "+
-			"WHERE (TABLE_SCHEMA = DATABASE()) AND (TABLE_NAME = ?) AND (COLUMN_NAME = ?) LIMIT 1")+"$").
+			"WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ? LIMIT 1")+"$").
 		WithArgs("permissions_granted", "can_view").
 		WillReturnRows(mock.NewRows([]string{"value"}).
 			AddRow("'none','info','content','content_with_descendants','solution'"))
 	mock.ExpectQuery("^"+regexp.QuoteMeta(
 		"SELECT SUBSTRING(COLUMN_TYPE, 6, LENGTH(COLUMN_TYPE)-6) FROM `information_schema`.`COLUMNS`  "+
-			"WHERE (TABLE_SCHEMA = DATABASE()) AND (TABLE_NAME = ?) AND (COLUMN_NAME = ?) LIMIT 1")+"$").
+			"WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ? AND COLUMN_NAME = ? LIMIT 1")+"$").
 		WithArgs("permissions_granted", "can_grant_view").
 		WillReturnError(expectedError)
 

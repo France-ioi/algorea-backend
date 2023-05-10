@@ -82,7 +82,7 @@ func findGroupPath(store *database.DataStore, groupID int64, user *database.User
 	var pathStrings []string
 	service.MustNotBeError(store.Raw(`
 			WITH RECURSIVE paths (path, length, last_group_id) AS (
-				WITH visible_ancestors AS ?
+				WITH visible_ancestors AS (?)
 				(SELECT CAST(id AS CHAR(1024)), 1, id FROM visible_ancestors
 				WHERE NOT EXISTS(
 					SELECT 1 FROM groups_groups_active

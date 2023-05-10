@@ -13,8 +13,8 @@ import (
 
 // swagger:model thread
 type thread struct {
-	Item        item        `json:"item" gorm:"embedded;embedded_prefix:item__"`
-	Participant participant `json:"participant" gorm:"embedded;embedded_prefix:participant__"`
+	Item        item        `json:"item" gorm:"embedded;embeddedPrefix:item__"`
+	Participant participant `json:"participant" gorm:"embedded;embeddedPrefix:participant__"`
 
 	// enum: not_started,waiting_for_participant,waiting_for_trainer,closed
 	Status         string         `json:"status"`

@@ -1,10 +1,11 @@
 package groups
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/service"
 )
@@ -39,7 +40,7 @@ type groupNavigationViewResponse struct {
 	// enum: Class,Team,Club,Friends,Other,Session,Base
 	Type string `json:"type"`
 	// required:true
-	Children []groupNavigationViewResponseChild `json:"children"`
+	Children []groupNavigationViewResponseChild `json:"children" gorm:"-"`
 }
 
 // swagger:operation GET /groups/{group_id}/navigation group-memberships groupNavigationView
@@ -92,8 +93,8 @@ func (srv *Service) getNavigation(w http.ResponseWriter, r *http.Request) servic
 	var result groupNavigationViewResponse
 	err = store.Groups().PickVisibleGroups(store.Groups().ByID(groupID), user).
 		Where("groups.type != 'User'").
-		Select("id, name, type").Scan(&result).Error()
-	if gorm.IsRecordNotFoundError(err) {
+		Select("id, name, type").Take(&result).Error()
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return service.InsufficientAccessRightsError
 	}
 	service.MustNotBeError(err)

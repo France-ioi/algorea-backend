@@ -7,8 +7,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/jinzhu/gorm"
 	"golang.org/x/oauth2"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/auth"
 	"github.com/France-ioi/AlgoreaBackend/app/database"
@@ -83,7 +83,7 @@ func (srv *Service) refreshTokens(ctx context.Context, store *database.DataStore
 	var refreshToken string
 	err := store.RefreshTokens().Where("user_id = ?", user.GroupID).
 		PluckFirst("refresh_token", &refreshToken).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		logging.Warnf("No refresh token found in the DB for user %d", user.GroupID)
 		return "", 0, service.ErrNotFound(errors.New("no refresh token found in the DB for the authenticated user"))
 	}

@@ -255,7 +255,7 @@ func getRootItemsFromDB(
 			Where("groups_ancestors_active.child_group_id = ? OR groups_ancestors_active.child_group_id IN(?)",
 				groupID, groupsManagedByUserQuery.SubQuery())
 	} else {
-		groupsQuery := store.Raw("WITH managed_groups AS ? ? UNION ALL ?",
+		groupsQuery := store.Raw("WITH managed_groups AS (?) ? UNION ALL ?",
 			groupsManagedByUserQuery.SubQuery(),
 			store.ActiveGroupAncestors().Where("ancestor_group_id IN(SELECT id FROM managed_groups)").
 				Select("child_group_id").QueryExpr(), // descendants of managed groups
@@ -286,16 +286,16 @@ func getRootItemsFromDB(
 				 WHERE results.item_id = items.id AND results.participant_id = ?), 0) AS best_score,
 			can_grant_view_generated_value, can_watch_generated_value, can_edit_generated_value, is_owner_generated, can_view_generated_value,
 			attempts.allows_submissions_until AS attempt_allows_submissions_until,
-			IFNULL(?, 0) AS has_visible_children,
+			IFNULL((?), 0) AS has_visible_children,
 			results.attempt_id,
 			results.score_computed, results.validated, results.started_at, results.latest_activity_at,
 			attempts.ended_at`, groupID, hasVisibleChildrenQuery).
 		Group("groups.id, results.participant_id, results.attempt_id")
 
-	query := store.Raw(`
-		SELECT items.*, items.id AS item_id, COALESCE(user_strings.title, default_strings.title) AS title,
-			IF(user_strings.title IS NOT NULL, user_strings.language_tag, default_strings.language_tag) AS language_tag
-		FROM ? AS items`, itemsWithResultsSubquery.SubQuery()).
+	query := store.Table("(?) AS items", itemsWithResultsSubquery.SubQuery()).
+		Select(`
+			items.*, items.id AS item_id, COALESCE(user_strings.title, default_strings.title) AS title,
+			IF(user_strings.title IS NOT NULL, user_strings.language_tag, default_strings.language_tag) AS language_tag`).
 		JoinsUserAndDefaultItemStrings(user).
 		Order("items.created_at, items.group_id, items.attempt_id")
 

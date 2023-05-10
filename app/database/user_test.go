@@ -1,11 +1,12 @@
 package database
 
 import (
+	"errors"
 	"testing"
 	"time"
 
-	"github.com/jinzhu/gorm"
 	"github.com/stretchr/testify/assert"
+	"gorm.io/gorm"
 )
 
 func TestUser_Clone(t *testing.T) {
@@ -42,7 +43,7 @@ func (u *User) LoadByID(dataStore *DataStore, userID int64) error {
 						users.login, users.login_id, users.is_admin, users.group_id, users.access_group_id,
 						users.temp_user, users.notifications_read_at, users.default_language`).
 		Take(&u).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		u.GroupID = userID
 		return nil
 	}

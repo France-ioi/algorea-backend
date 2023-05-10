@@ -154,9 +154,9 @@ type rawAnswersData struct {
 	Type             string
 	CreatedAt        database.Time
 	Score            *float32
-	UserLogin        string  `sql:"column:login"`
-	UserFirstName    *string `sql:"column:first_name"`
-	UserLastName     *string `sql:"column:last_name"`
+	UserLogin        string  `gorm:"column:login"`
+	UserFirstName    *string `gorm:"column:first_name"`
+	UserLastName     *string `gorm:"column:last_name"`
 	ShowPersonalInfo bool
 }
 
@@ -215,7 +215,7 @@ func (srv *Service) checkAccessRightsForGetAnswersByAttemptID(
 	groupsWhereUserIsMember := store.GroupGroups().WhereUserIsMember(user).Select("parent_group_id")
 
 	service.MustNotBeError(store.Attempts().ByID(attemptID).
-		Where("(attempts.participant_id IN ?) OR (attempts.participant_id IN ?) OR attempts.participant_id = ?",
+		Where("(attempts.participant_id IN (?)) OR (attempts.participant_id IN (?)) OR attempts.participant_id = ?",
 			groupsManagedByUser.SubQuery(),
 			groupsWhereUserIsMember.SubQuery(),
 			user.GroupID).

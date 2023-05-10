@@ -1,85 +1,104 @@
 package logging
 
 import (
+	"fmt"
 	"testing"
 
-	"github.com/jinzhu/gorm"
-	assertlib "github.com/stretchr/testify/assert"
-
 	"github.com/spf13/viper"
+	assertlib "github.com/stretchr/testify/assert"
+	"gorm.io/gorm/logger"
 )
 
 func TestNewDBLogger_ErrorFallback(t *testing.T) {
 	assert := assertlib.New(t)
-	logger := createLogger() // no config
-	dbLogger, logMode, rawLogMode := logger.NewDBLogger()
-	assert.IsType(gorm.Logger{}, dbLogger)
+	ourLogger := createLogger() // no config
+	dbLogger, logMode := ourLogger.NewDBLogger()
+	assert.IsType(Logger{}, dbLogger)
 	assert.False(logMode)
+}
+
+func TestLogger_GetRawSQLLogMode_ErrorFallback(t *testing.T) {
+	assert := assertlib.New(t)
+	ourLogger := createLogger() // no config
+	rawLogMode := ourLogger.GetRawSQLLogMode()
 	assert.False(rawLogMode)
 }
 
 func TestLoggerFromConfig_TextLog(t *testing.T) {
 	assert := assertlib.New(t)
-	logger := createLogger()
+	ourLogger := createLogger()
 	config := viper.New()
 	config.Set("Format", "text")
 	config.Set("Output", "file")
-	logger.Configure(config)
-	dbLogger, _, _ := logger.NewDBLogger()
-	assert.IsType(gorm.Logger{}, dbLogger)
+	ourLogger.Configure(config)
+	dbLogger, _ := ourLogger.NewDBLogger()
+	assert.Implements((*logger.Interface)(nil), dbLogger)
 }
 
 func TestLoggerFromConfig_JSONLog(t *testing.T) {
 	assert := assertlib.New(t)
-	logger := createLogger()
+	ourLogger := createLogger()
 	config := viper.New()
 	config.Set("Format", "json")
 	config.Set("Output", "file")
-	logger.Configure(config)
-	dbLogger, _, _ := logger.NewDBLogger()
+	ourLogger.Configure(config)
+	dbLogger, _ := ourLogger.NewDBLogger()
 	assert.IsType(&StructuredDBLogger{}, dbLogger)
 }
 
 func TestLoggerFromConfig_WrongFormat(t *testing.T) {
 	assert := assertlib.New(t)
-	logger := createLogger()
+	ourLogger := createLogger()
 	config := viper.New()
 	config.Set("Format", "yml")
 	config.Set("Output", "file")
-	logger.config = config
-	assert.Panics(func() { logger.NewDBLogger() })
+	ourLogger.config = config
+	assert.Panics(func() { ourLogger.NewDBLogger() })
 }
 
 func TestNewDBLogger_LogMode(t *testing.T) {
 	tests := []struct {
-		name             string
-		format           string
-		logSQLQueries    bool
-		logRawSQLQueries bool
+		name          string
+		format        string
+		logSQLQueries bool
 	}{
-		{name: "text: without SQL", format: "text", logSQLQueries: false, logRawSQLQueries: false},
-		{name: "text: with SQL", format: "text", logSQLQueries: true, logRawSQLQueries: false},
-		{name: "text: only raw SQL", format: "text", logSQLQueries: false, logRawSQLQueries: true},
-		{name: "text: full SQL logging", format: "text", logSQLQueries: true, logRawSQLQueries: true},
-		{name: "json: without SQL", format: "json", logSQLQueries: false, logRawSQLQueries: false},
-		{name: "json: with SQL", format: "json", logSQLQueries: true, logRawSQLQueries: false},
-		{name: "json: only raw SQL", format: "json", logSQLQueries: false, logRawSQLQueries: true},
-		{name: "json: full SQL logging", format: "json", logSQLQueries: true, logRawSQLQueries: true},
+		{name: "text: without SQL", format: "text", logSQLQueries: false},
+		{name: "text: with SQL", format: "text", logSQLQueries: true},
+		{name: "text: only raw SQL", format: "text", logSQLQueries: false},
+		{name: "text: full SQL logging", format: "text", logSQLQueries: true},
+		{name: "json: without SQL", format: "json", logSQLQueries: false},
+		{name: "json: with SQL", format: "json", logSQLQueries: true},
+		{name: "json: only raw SQL", format: "json", logSQLQueries: false},
+		{name: "json: full SQL logging", format: "json", logSQLQueries: true},
 	}
 	for _, test := range tests {
 		test := test
 		t.Run(test.name, func(t *testing.T) {
 			assert := assertlib.New(t)
-			logger := createLogger()
+			ourLogger := createLogger()
 			config := viper.New()
 			config.Set("LogSQLQueries", test.logSQLQueries)
-			config.Set("LogRawSQLQueries", test.logRawSQLQueries)
 			config.Set("Format", test.format)
 			config.Set("Output", "file")
-			logger.Configure(config)
-			_, logMode, rawLogMode := logger.NewDBLogger()
+			ourLogger.Configure(config)
+			_, logMode := ourLogger.NewDBLogger()
 			assert.Equal(test.logSQLQueries, logMode)
-			assert.Equal(test.logRawSQLQueries, rawLogMode)
+		})
+	}
+}
+
+func TestLogger_GetRawSqlLog(t *testing.T) {
+	tests := []bool{false, true}
+	for _, test := range tests {
+		test := test
+		t.Run(fmt.Sprintf("%v", test), func(t *testing.T) {
+			assert := assertlib.New(t)
+			ourLogger := createLogger()
+			config := viper.New()
+			config.Set("LogRawSQLQueries", test)
+			ourLogger.Configure(config)
+			rawLogMode := ourLogger.GetRawSQLLogMode()
+			assert.Equal(test, rawLogMode)
 		})
 	}
 }

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // ItemStore implements database operations on items.
@@ -72,7 +72,7 @@ func (s *ItemStore) participationHierarchyForParentAttempt(
 			MAX(permissions.can_view_generated_value) AS can_view_generated_value`).
 		Group("items.id")
 
-	return s.Raw("WITH visible_items AS ? ?", visibleItems.SubQuery(), subQuery.SubQuery())
+	return s.Raw("WITH visible_items AS (?) ?", visibleItems.SubQuery(), subQuery.SubQuery())
 }
 
 func (s *ItemStore) itemAttemptChainWithoutAttemptForTail(ids []int64, groupID int64,
@@ -95,7 +95,7 @@ func (s *ItemStore) itemAttemptChainWithoutAttemptForTail(ids []int64, groupID i
 	}
 
 	subQuery := s.Table("visible_items as items0").Where("items0.id = ?", ids[0]).
-		Where("items0.id IN ? OR items0.id IN ?", rootActivities.SubQuery(), rootSkills.SubQuery())
+		Where("items0.id IN (?) OR items0.id IN (?)", rootActivities.SubQuery(), rootSkills.SubQuery())
 
 	for i := 1; i < len(ids); i++ {
 		subQuery = subQuery.Joins(fmt.Sprintf(`
@@ -273,7 +273,7 @@ func (s *ItemStore) breadcrumbsHierarchyForAttempt(
 		subQuery = subQuery.WithWriteLock()
 		visibleItems = visibleItems.WithWriteLock()
 	}
-	return s.Raw("WITH visible_items AS ? ?", visibleItems.SubQuery(), subQuery.SubQuery())
+	return s.Raw("WITH visible_items AS (?) ?", visibleItems.SubQuery(), subQuery.SubQuery())
 }
 
 // CheckSubmissionRights checks if the participant group can submit an answer for the given item (task),
@@ -287,7 +287,7 @@ func (s *ItemStore) CheckSubmissionRights(participantID, itemID int64) (hasAcces
 		Where("id = ?", itemID).
 		WithWriteLock().
 		PluckFirst("read_only", &readOnly).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false, errors.New("no access to the task item"), nil
 	}
 	mustNotBeError(err)

@@ -13,7 +13,7 @@ func TestResultStore_ByID(t *testing.T) {
 
 	mock.ExpectQuery(
 		"^"+regexp.QuoteMeta(
-			"SELECT * FROM `results` WHERE (results.participant_id = ? AND results.attempt_id = ? AND results.item_id = ?)")+
+			"SELECT * FROM `results` WHERE results.participant_id = ? AND results.attempt_id = ? AND results.item_id = ?")+
 			"$").
 		WithArgs(int64(1), int64(2), int64(3)).
 		WillReturnRows(mock.NewRows([]string{"id"}).AddRow(123))

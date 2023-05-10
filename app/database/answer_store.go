@@ -59,13 +59,13 @@ func (s *AnswerStore) Visible(user *User) *DB {
 	usersGroupsQuery := s.GroupGroups().WhereUserIsMember(user).Select("parent_group_id")
 
 	// the user should have at least 'content' access to the answers.item_id
-	perms := s.Permissions().MatchingUserAncestors(user).WherePermissionIsAtLeast("view", "content").
+	permsQuery := s.Permissions().MatchingUserAncestors(user).WherePermissionIsAtLeast("view", "content").
 		Select("DISTINCT item_id")
 
 	return s.
 		// the user should have at least 'content' access to the answers.item_id
-		Joins("JOIN ? AS permissions USING(item_id)", perms.SubQuery()).
+		Joins("JOIN (?) AS permissions USING(item_id)", permsQuery.SubQuery()).
 		// attempts.group_id should be one of the authorized user's groups or the user's self group
-		Where("answers.participant_id = ? OR answers.participant_id IN ?",
+		Where("answers.participant_id = ? OR answers.participant_id IN (?)",
 			user.GroupID, usersGroupsQuery.SubQuery())
 }

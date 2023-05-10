@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/service"
 )
@@ -55,7 +55,7 @@ func (srv *Service) getCurrentUserTeamByItem(w http.ResponseWriter, r *http.Requ
 	var teamID int64
 	user := srv.GetUser(r)
 	err = srv.GetStore(r).Groups().TeamGroupForTeamItemAndUser(itemID, user).PluckFirst("groups.id", &teamID).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return service.ErrNotFound(errors.New("no team for this item"))
 	}
 	service.MustNotBeError(err)

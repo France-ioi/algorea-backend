@@ -1,13 +1,14 @@
 package answers
 
 import (
+	"errors"
 	"fmt"
 	"hash/crc64"
 	"net/http"
 	"strconv"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/service"
 	"github.com/France-ioi/AlgoreaBackend/app/token"
@@ -15,30 +16,31 @@ import (
 
 // swagger:operation POST /answers/{answer_id}/generate-task-token answers answerTaskTokenGenerate
 //
-//		---
-//		summary: Generate a task token
-//		description: >
-//	  Generate a read-only task token from an answer
+//	---
+//	summary: Generate a task token
+//	description: >
+//
+//		Generate a read-only task token from an answer
 //
 //
-//	  * Then the service returns a task token for the attempt for the given item.
+//		* Then the service returns a task token for the attempt for the given item.
 //
-//	  * `bAccessSolutions` of the token is true if either the participant has `can_view` >= 'solution' on the item or
-//	    the item has been validated by the participant.
+//		* `bAccessSolutions` of the token is true if either the participant has `can_view` >= 'solution' on the item or
+//		the item has been validated by the participant.
 //
-//				Restrictions:
+//		Restrictions:
 //
-//	    * the answer should exist
-//	    * the item of the answer should be a "Task"
-//	    * the current user must have a started result on the item (whatever the attempt)
-//	    * if the participant of the answer is either the current-user or a team which the current-user is member of,
-//	      the current user must be allowed to "view >= 'content'" the item
-//	    * otherwise:
-//	      the current user must be allowed to "watch" the participant of the answer
-//	      the current user must be allowed to "watch answer" for the item
+//			* the answer should exist
+//			* the item of the answer should be a "Task"
+//			* the current user must have a started result on the item (whatever the attempt)
+//			* if the participant of the answer is either the current-user or a team which the current-user is member of,
+//				the current user must be allowed to "view >= 'content'" the item
+//			* otherwise:
+//				the current user must be allowed to "watch" the participant of the answer
+//				the current user must be allowed to "watch answer" for the item
 //
 //
-//	  otherwise the 'forbidden' error is returned.
+//			otherwise the 'forbidden' error is returned.
 //		parameters:
 //			- name: answer_id
 //				in: path
@@ -149,8 +151,8 @@ func (srv *Service) generateTaskToken(w http.ResponseWriter, r *http.Request) se
 		//    the current user must be allowed to "view >= 'content'" the item
 		// 2) or an observer who can "watch" the participant and "watch answer" the item
 		Where(`
-				(? AND (answers.participant_id = ? OR answers.participant_id IN ?)) OR
-				(? AND ?)`,
+				((?) AND (answers.participant_id = ? OR answers.participant_id IN (?))) OR
+				((?) AND (?))`,
 			participantItemPerms.SubQuery(), user.GroupID, usersGroupsQuery.SubQuery(),
 			observerItemPerms.SubQuery(), observerParticipantPerms.SubQuery()).
 		Where("answers.id = ?", answerID).
@@ -159,7 +161,7 @@ func (srv *Service) generateTaskToken(w http.ResponseWriter, r *http.Request) se
 		Limit(1).
 		Take(&answerInfos).Error()
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return service.InsufficientAccessRightsError
 	}
 	service.MustNotBeError(err)

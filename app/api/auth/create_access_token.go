@@ -13,8 +13,8 @@ import (
 	"time"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
 	"golang.org/x/oauth2"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/auth"
 	"github.com/France-ioi/AlgoreaBackend/app/database"
@@ -335,7 +335,7 @@ func createOrUpdateUser(s *database.UserStore, userData map[string]interface{}, 
 	delete(userData, "badges")
 	defer func() { userData["badges"] = badges }()
 
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		selfGroupID := createGroupsFromLogin(s.Groups(), userData["login"].(string), domainConfig)
 		userData["temp_user"] = 0
 		userData["registered_at"] = database.Now()
@@ -364,7 +364,7 @@ func createOrUpdateUser(s *database.UserStore, userData map[string]interface{}, 
 
 	service.MustNotBeError(s.GroupGroups().CreateRelationsWithoutChecking(groupsToCreate))
 	delete(userData, "default_language")
-	service.MustNotBeError(s.ByID(groupID).UpdateColumn(userData).Error())
+	service.MustNotBeError(s.ByID(groupID).UpdateColumns(userData).Error())
 	return groupID
 }
 

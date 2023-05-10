@@ -153,7 +153,7 @@ func TestResultStore_Propagate_Categories_ValidatedAtShouldBeMaxOfChildrensWithC
 		UpdateColumn("validated_at", oldDate).Error())
 	assert.NoError(t, resultStore.Where("item_id = 4 AND participant_id = 101 AND attempt_id = 2").
 		UpdateColumn("validated_at", expectedDate).Error())
-	assert.NoError(t, resultStore.Attempts().Where("participant_id = 101 AND id = 2").UpdateColumn(map[string]interface{}{
+	assert.NoError(t, resultStore.Attempts().Where("participant_id = 101 AND id = 2").UpdateColumns(map[string]interface{}{
 		"root_item_id": 4, "parent_attempt_id": 1,
 	}).Error())
 	assert.NoError(

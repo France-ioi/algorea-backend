@@ -1,7 +1,7 @@
 package items
 
 import (
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -67,15 +67,17 @@ func getRawNavigationData(dataStore *database.DataStore, rootID, groupID, attemp
 	childrenQuery := constructItemChildrenQuery(dataStore, rootID, groupID, "info", attemptID, watchedGroupIDSet, watchedGroupID,
 		commonAttributes+
 			`, items.requires_explicit_entry, parent_item_id, items.entry_participant_type, items.no_score,
-			 IFNULL(?, 0) AS has_visible_children, child_order`,
+			 IFNULL((?), 0) AS has_visible_children, child_order`,
 		[]interface{}{hasVisibleChildrenQuery}, "",
 	)
 
 	allItemsQuery := itemsQuery.UnionAll(childrenQuery.SubQuery())
 	service.MustNotBeError(allItemsQuery.Error())
 
-	query := dataStore.Raw(`
-		SELECT items.id, items.type, items.requires_explicit_entry, items.entry_participant_type, items.no_score,
+	query := dataStore.
+		Table("(?) AS items", allItemsQuery.SubQuery()).
+		Select(`
+			items.id, items.type, items.requires_explicit_entry, items.entry_participant_type, items.no_score,
 			COALESCE(user_strings.title, default_strings.title) AS title,
 			IF(user_strings.title IS NOT NULL, user_strings.language_tag, default_strings.language_tag) AS language_tag,
 			IF(items.parent_item_id IS NOT NULL,
@@ -94,8 +96,8 @@ func getRawNavigationData(dataStore *database.DataStore, rootID, groupID, attemp
 			items.ended_at,
 			items.has_visible_children,
 			items.can_watch_for_group_results,
-			items.watched_group_can_view, items.watched_group_avg_score, items.watched_group_all_validated
-		FROM ? items`, groupID, allItemsQuery.SubQuery()).
+			items.watched_group_can_view, items.watched_group_avg_score, items.watched_group_all_validated`,
+			groupID).
 		JoinsUserAndDefaultItemStrings(user).
 		Order("parent_item_id, child_order, items.id, attempt_id")
 
@@ -119,41 +121,42 @@ func constructItemListWithoutResultsQuery(dataStore *database.DataStore, groupID
 		// Used to be made with a WITH(), but it failed with MySQL-8.0.26 due to obscure bugs introduced in this version.
 		// It works when we get the groups directly with joins.
 		// See commit 5a25fbded8134c93c72dc853f72071943a1bd24c
-		watchedGroupAvgScoreQuery = dataStore.Raw(
-			"SELECT IFNULL(AVG(score), 0) AS avg_score, COUNT(*) > 0 AND COUNT(*) = SUM(validated) AS all_validated FROM ? AS stats",
-			dataStore.Table("groups_ancestors_active").
-				Joins(`INNER JOIN `+"`groups`"+` AS participant
-                      ON participant.id = groups_ancestors_active.child_group_id AND
+		watchedGroupAvgScoreQuery = dataStore.
+			Table("(?) AS stats",
+				dataStore.Table("groups_ancestors_active").
+					Joins(`INNER JOIN `+"`groups`"+` AS participant
+						ON participant.id = groups_ancestors_active.child_group_id AND
 												 participant.type IN ('User', 'Team')`).
-				Joins(`LEFT JOIN results
-											ON results.participant_id = participant.id AND
-												 results.item_id = items.id`).
-				Select("MAX(IFNULL(results.score_computed, 0)) AS score, MAX(IFNULL(results.validated, 0)) AS validated").
-				Group("participant.id").
-				Where("groups_ancestors_active.ancestor_group_id = ?", watchedGroupID).SubQuery()).SubQuery()
+					Joins(`LEFT JOIN  results
+							ON results.participant_id = participant.id AND
+						 results.item_id = items.id`).
+					Select("MAX(IFNULL(results.score_computed, 0)) AS score, MAX(IFNULL(results.validated, 0)) AS validated").
+					Group("participant.id").
+					Where("groups_ancestors_active.ancestor_group_id = ?", watchedGroupID).SubQuery()).
+			Select("IFNULL(AVG(score), 0) AS avg_score, COUNT(*) > 0 AND COUNT(*) = SUM(validated) AS all_validated").
+			SubQuery()
 	}
 
 	values := make([]interface{}, len(columnListValues), len(columnListValues)+4)
 	copy(values, columnListValues)
 	canWatchResultEnumIndex := dataStore.PermissionsGranted().WatchIndexByName("result")
 	values = append(values, watchedGroupCanViewQuery, canWatchResultEnumIndex, canWatchResultEnumIndex, canWatchResultEnumIndex)
-	itemsWithoutResultsQuery := joinItemRelationsToItemsFunc(
+
+	return joinItemRelationsToItemsFunc(
 		dataStore.Items().
-			Joins("LEFT JOIN ? AS permissions ON items.id = permissions.item_id",
+			Joins("LEFT JOIN (?) AS permissions ON items.id = permissions.item_id",
 				joinItemRelationsToPermissionsFunc(
 					dataStore.Permissions().
 						AggregatedPermissionsForItemsOnWhichGroupHasViewPermission(groupID, requiredViewPermissionOnItems)).SubQuery()).
 			WherePermissionIsAtLeast("view", requiredViewPermissionOnItems)).
 		Select(
 			columnList+`,
-				? AS watched_group_can_view,
+				(?) AS watched_group_can_view,
 				can_watch_generated_value >= ? AS can_watch_for_group_results,
 				IF(can_watch_generated_value >= ?, watched_group_stats.avg_score, 0) AS watched_group_avg_score,
 				IF(can_watch_generated_value >= ?, watched_group_stats.all_validated, 0) AS watched_group_all_validated`,
 			values...).
-		Joins("JOIN LATERAL ? AS watched_group_stats", watchedGroupAvgScoreQuery)
-
-	return itemsWithoutResultsQuery
+		Joins("JOIN LATERAL (?) AS watched_group_stats", watchedGroupAvgScoreQuery)
 }
 
 func constructItemListQuery(dataStore *database.DataStore, groupID int64, requiredViewPermissionOnItems string,
@@ -169,14 +172,13 @@ func constructItemListQuery(dataStore *database.DataStore, groupID int64, requir
 	}
 
 	// nolint:gosec
-	itemsQuery := filterAttemptsFunc(dataStore.Raw(`
-			SELECT items.*, `+externalColumnList+`results.attempt_id,
+	itemsQuery := filterAttemptsFunc(dataStore.Table("(?) AS items", itemsWithoutResultsQuery.SubQuery()).
+		Select(`
+				items.*, `+externalColumnList+`results.attempt_id,
 				results.score_computed, results.validated, results.started_at, results.latest_activity_at,
-				attempts.allows_submissions_until AS attempt_allows_submissions_until, attempts.ended_at
-			FROM ? AS items
-			LEFT JOIN results ON results.participant_id = ? AND results.item_id = items.id
-			LEFT JOIN attempts ON attempts.participant_id = results.participant_id AND attempts.id = results.attempt_id`,
-		itemsWithoutResultsQuery.SubQuery(), groupID)).
+				attempts.allows_submissions_until AS attempt_allows_submissions_until, attempts.ended_at`).
+		Joins("LEFT JOIN results ON results.participant_id = ? AND results.item_id = items.id", groupID).
+		Joins("LEFT JOIN attempts ON attempts.participant_id = results.participant_id AND attempts.id = results.attempt_id")).
 		Order("child_order, items.id, attempt_id")
 	service.MustNotBeError(itemsQuery.Error())
 	return itemsQuery

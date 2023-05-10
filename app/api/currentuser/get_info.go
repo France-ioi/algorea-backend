@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -132,7 +132,7 @@ func (srv *Service) getInfo(w http.ResponseWriter, r *http.Request) service.APIE
 			city, land_line_number, cell_phone_number, default_language, public_first_name, public_last_name,
 			notify_news, notify, free_text, web_site, photo_autoload, lang_prog, basic_editor_mode, spaces_for_tab,
 			step_level_in_site, is_admin, no_ranking`).
-		Scan(&userInfo).Error()
+		Take(&userInfo).Error()
 
 	// This is very unlikely since the user middleware has already checked that the user exists
 	if err == gorm.ErrRecordNotFound {

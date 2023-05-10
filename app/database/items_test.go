@@ -14,7 +14,7 @@ func TestDB_JoinsUserAndDefaultItemStrings(t *testing.T) {
 	mockUser := &User{GroupID: 2, DefaultLanguage: "sl"}
 
 	mock.ExpectQuery(regexp.QuoteMeta(
-		"SELECT `items`.* FROM `items` LEFT JOIN items_strings default_strings " +
+		"SELECT * FROM `items` LEFT JOIN items_strings default_strings " +
 			"ON default_strings.item_id = items.id AND default_strings.language_tag = items.default_language_tag " +
 			"LEFT JOIN items_strings user_strings ON user_strings.item_id=items.id AND user_strings.language_tag = ?")).
 		WithArgs("sl").
@@ -33,9 +33,9 @@ func TestDB_WhereUserHasViewPermissionOnItems(t *testing.T) {
 	MockDBEnumQueries(mock)
 
 	mock.ExpectQuery("^"+regexp.QuoteMeta(
-		"SELECT * FROM `items` WHERE (EXISTS(SELECT 1 FROM permissions_generated AS permissions "+
+		"SELECT * FROM `items` WHERE EXISTS(SELECT 1 FROM permissions_generated AS permissions "+
 			"JOIN groups_ancestors_active AS ancestors ON ancestors.child_group_id = ? AND ancestors.ancestor_group_id = permissions.group_id "+
-			"WHERE (permissions.item_id = items.id) AND (can_view_generated_value >= ?) LIMIT 1))")+"$").
+			"WHERE permissions.item_id = items.id AND can_view_generated_value >= ? LIMIT 1)")+"$").
 		WithArgs(123, NewDataStore(db).PermissionsGranted().ViewIndexByName("content")).
 		WillReturnRows(mock.NewRows([]string{"id"}))
 
@@ -53,9 +53,9 @@ func TestDB_WhereItemsAreVisible(t *testing.T) {
 	MockDBEnumQueries(mock)
 
 	mock.ExpectQuery("^"+regexp.QuoteMeta(
-		"SELECT * FROM `items` WHERE (EXISTS(SELECT 1 FROM permissions_generated AS permissions "+
+		"SELECT * FROM `items` WHERE EXISTS(SELECT 1 FROM permissions_generated AS permissions "+
 			"JOIN groups_ancestors_active AS ancestors ON ancestors.child_group_id = ? AND ancestors.ancestor_group_id = permissions.group_id "+
-			"WHERE (permissions.item_id = items.id) AND (can_view_generated_value >= ?) LIMIT 1))")+"$").
+			"WHERE permissions.item_id = items.id AND can_view_generated_value >= ? LIMIT 1)")+"$").
 		WithArgs(2, NewDataStore(db).PermissionsGranted().ViewIndexByName("info")).
 		WillReturnRows(mock.NewRows([]string{"id"}))
 

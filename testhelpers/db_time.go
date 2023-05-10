@@ -10,7 +10,7 @@ import (
 	"regexp"
 
 	"bou.ke/monkey"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 )
@@ -82,13 +82,13 @@ func patchDatabaseDBMethods(timeStr string) {
 	var orderGuard *monkey.PatchGuard
 	orderGuard = monkey.PatchInstanceMethod(
 		reflect.TypeOf(&database.DB{}), "Order",
-		func(db *database.DB, value interface{}, reorder ...bool) *database.DB {
+		func(db *database.DB, value interface{}) *database.DB {
 			orderGuard.Unpatch()
 			defer orderGuard.Restore()
 			if valueStr, ok := value.(string); ok {
 				value = nowRegexp.ReplaceAllString(valueStr, timeStr)
 			}
-			return db.Order(value, reorder...)
+			return db.Order(value)
 		})
 	patchedMethods = append(patchedMethods, orderGuard)
 
@@ -160,7 +160,7 @@ func patchDatabaseDBMethodsWithIntQuery(timeStr string) {
 
 func patchDatabaseDBMethodsWithStringQuery(timeStr string) {
 	stringDBMethods := [...]string{
-		"Table", "Group",
+		"Group",
 	}
 	stringDBGuards := make(map[string]*monkey.PatchGuard, len(stringDBMethods))
 	for _, methodName := range stringDBMethods {
@@ -182,7 +182,7 @@ func patchDatabaseDBMethodsWithStringQuery(timeStr string) {
 
 func patchDatabaseDBMethodsWithStringQueryAndArgs(timeStr string) {
 	stringAndArgsDBMethods := [...]string{
-		"Joins", "Raw", "Exec",
+		"Table", "Joins", "Raw", "Exec",
 	}
 	stringAndArgsDBGuards := make(map[string]*monkey.PatchGuard, len(stringAndArgsDBMethods))
 	for _, methodName := range stringAndArgsDBMethods {

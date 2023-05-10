@@ -210,9 +210,7 @@ func TestPermissionGeneratedStore_TriggerAfterUpdate_MarksResultsAsChanged(t *te
 				return nil
 			}))
 			result := dataStore.Where("group_id = ?", test.groupID).
-				Where("item_id = ?", test.itemID).UpdateColumn(map[string]interface{}{
-				"can_view_generated": test.canView,
-			})
+				Where("item_id = ?", test.itemID).UpdateColumn("can_view_generated", test.canView)
 			assert.NoError(t, result.Error())
 
 			if test.noChanges {

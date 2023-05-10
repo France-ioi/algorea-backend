@@ -34,10 +34,10 @@ type rawPrerequisiteOrDependencyItem struct {
 	*RawCommonItemFields
 
 	// from items_strings: in the user’s default language or (if not available) default language of the item
-	StringLanguageTag string  `sql:"column:language_tag"`
-	StringTitle       *string `sql:"column:title"`
-	StringSubtitle    *string `sql:"column:subtitle"`
-	StringImageURL    *string `sql:"column:image_url"`
+	StringLanguageTag string  `gorm:"column:language_tag"`
+	StringTitle       *string `gorm:"column:title"`
+	StringSubtitle    *string `gorm:"column:subtitle"`
+	StringImageURL    *string `gorm:"column:image_url"`
 
 	// max from results of the current participant
 	BestScore float32

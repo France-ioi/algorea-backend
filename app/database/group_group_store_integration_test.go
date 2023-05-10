@@ -465,9 +465,7 @@ func TestGroupGroupStore_TriggerAfterUpdate_MarksResultsAsChanged(t *testing.T) 
 			groupGroupStore := dataStore.GroupGroups()
 			result := groupGroupStore.Where("parent_group_id = ?", test.parentGroupID).
 				Where("child_group_id = ?", test.childGroupID).
-				UpdateColumn(map[string]interface{}{
-					"expires_at": test.expiresAt,
-				})
+				UpdateColumn("expires_at", test.expiresAt)
 			assert.NoError(t, result.Error())
 			if test.noChanges {
 				assert.Zero(t, result.RowsAffected())

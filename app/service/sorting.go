@@ -401,7 +401,7 @@ func joinSubQueryForPaging(query *database.DB, usedFields []string, configuredFi
 		startFromRowSubQuery = startFromRowQuery.Limit(1).SubQuery()
 	}
 	query = query.
-		Joins("JOIN ? AS from_page", startFromRowSubQuery).
+		Joins("JOIN (?) AS from_page", startFromRowSubQuery).
 		Where(strings.Join(conditions, " OR "))
 	return query
 }

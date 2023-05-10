@@ -232,7 +232,7 @@ func (srv *Service) getPermissions(w http.ResponseWriter, r *http.Request) servi
 				grp_other.can_make_session_official AS granted_anc_other_can_make_session_official,
 				grp_other.can_enter_from AS granted_anc_other_can_enter_from,
 				grp_other.is_owner AS granted_anc_other_is_owner
-			FROM ? AS grp, ? AS gep, ? AS grp_membership, ? AS grp_unlocking, ? AS grp_self, ? AS grp_other, ? AS grp_aggregated`,
+			FROM (?) AS grp, (?) AS gep, (?) AS grp_membership, (?) AS grp_unlocking, (?) AS grp_self, (?) AS grp_other, (?) AS grp_aggregated`,
 			grantedPermissions.SubQuery(), generatedPermissions.SubQuery(), grantedPermissionsGroupMembership.SubQuery(),
 			grantedPermissionsItemUnlocking.SubQuery(), grantedPermissionsSelf.SubQuery(), grantedPermissionsOther.SubQuery(),
 			aggregatedPermissions.SubQuery()).

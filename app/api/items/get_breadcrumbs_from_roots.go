@@ -187,8 +187,8 @@ func findItemBreadcrumbs(store *database.DataStore, participantID int64, user *d
 	var pathStrings []string
 	service.MustNotBeError(store.Raw(`
 			WITH RECURSIVE paths (path, last_item_id, last_attempt_id) AS (
-				WITH groups_with_root_items AS ?,
-					visible_items AS ?,
+				WITH groups_with_root_items AS (?),
+					visible_items AS (?),
 					root_items AS (
 						SELECT visible_items.id AS id FROM groups_with_root_items JOIN visible_items ON visible_items.id = root_activity_id
 						UNION

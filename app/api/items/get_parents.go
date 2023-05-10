@@ -165,7 +165,7 @@ func constructItemParentsQuery(dataStore *database.DataStore, childItemID, group
 		func(db *database.DB) *database.DB {
 			return db.
 				Where(`
-					WHERE attempts.id IS NULL OR
+					attempts.id IS NULL OR
 						attempts.id = (SELECT IF(root_item_id = ?, parent_attempt_id, id) FROM attempts WHERE id = ? AND participant_id = ?)`,
 					childItemID, attemptID, groupID)
 		})

@@ -5,14 +5,20 @@ import (
 	"database/sql/driver"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/luna-duclos/instrumentedsql"
+	"github.com/sirupsen/logrus" //nolint:depguard
+	"gorm.io/gorm/logger"
 )
 
-var rawArgsRegexp = regexp.MustCompile(`^\[(<nil>|[\w.]+) (.+?)\](?:(?:, \[(?:<nil>|[\w.]+) )|$)`)
+var (
+	rawArgsRegexp = regexp.MustCompile(`^\[(<nil>|[\w.]+) (.+?)\](?:(?:, \[(?:<nil>|[\w.]+) )|$)`)
+	spaceRegexp   = regexp.MustCompile(`\s+`)
+)
 
 // NewRawDBLogger returns a logger for raw database actions using an existing dblogger and rawLogMode setting.
-func NewRawDBLogger(logger DBLogger, rawLogMode bool) instrumentedsql.Logger {
+func NewRawDBLogger(logrusLogger *logrus.Logger, rawLogMode bool) instrumentedsql.Logger {
 	return instrumentedsql.LoggerFunc(func(ctx context.Context, msg string, keyvals ...interface{}) {
 		if !rawLogMode {
 			return
@@ -22,11 +28,13 @@ func NewRawDBLogger(logger DBLogger, rawLogMode bool) instrumentedsql.Logger {
 		if valuesMap["err"] != nil && valuesMap["err"] == driver.ErrSkip { // duplicated message
 			return
 		}
+		valuesMap["type"] = "rawsql"
+		if query, ok := valuesMap["query"]; ok && msg != "sql-prepare" {
+			msg += "\n" + query.(string) + "\n"
+			delete(valuesMap, "query")
+		}
 
-		args := make([]interface{}, 0, 4)
-
-		args = append(args, "rawsql", ctx, msg, valuesMap)
-		logger.Print(args...)
+		logrusLogger.WithFields(valuesMap).Println(msg)
 	})
 }
 
@@ -35,24 +43,27 @@ func prepareRawDBLoggerValuesMap(keyvals []interface{}) map[string]interface{} {
 	for index := 0; index < len(keyvals); index += 2 {
 		valuesMap[keyvals[index].(string)] = keyvals[index+1]
 	}
-	if valuesMap["query"] != nil && valuesMap["args"] != nil {
-		argsString := valuesMap["args"].(string)
-		argsString = argsString[1 : len(argsString)-1]
-		var argsValues []interface{}
-		for argsString != "" {
-			indices := rawArgsRegexp.FindStringSubmatchIndex(argsString)
-			typeStr := argsString[indices[2]:indices[3]]
-			valueCopy := make([]byte, indices[5]-indices[4])
-			copy(valueCopy, argsString[indices[4]:indices[5]])
-			value := string(valueCopy)
-			convertedValue := convertRawSQLArgValue(value, typeStr)
-			argsValues = append(argsValues, convertedValue)
-			if indices[5]+3 >= len(argsString) {
-				break
+	if valuesMap["query"] != nil {
+		if valuesMap["args"] != nil {
+			argsString := valuesMap["args"].(string)
+			argsString = argsString[1 : len(argsString)-1]
+			var argsValues []interface{}
+			for argsString != "" {
+				indices := rawArgsRegexp.FindStringSubmatchIndex(argsString)
+				typeStr := argsString[indices[2]:indices[3]]
+				valueCopy := make([]byte, indices[5]-indices[4])
+				copy(valueCopy, argsString[indices[4]:indices[5]])
+				value := string(valueCopy)
+				convertedValue := convertRawSQLArgValue(value, typeStr)
+				argsValues = append(argsValues, convertedValue)
+				if indices[5]+3 >= len(argsString) {
+					break
+				}
+				argsString = argsString[indices[5]+3:]
 			}
-			argsString = argsString[indices[5]+3:]
+			valuesMap["query"] = logger.ExplainSQL(valuesMap["query"].(string), nil, `"`, argsValues...)
 		}
-		valuesMap["query"] = fillSQLPlaceholders(valuesMap["query"].(string), argsValues)
+		valuesMap["query"] = strings.TrimSpace(spaceRegexp.ReplaceAllString(valuesMap["query"].(string), " "))
 		delete(valuesMap, "args")
 	}
 	return valuesMap

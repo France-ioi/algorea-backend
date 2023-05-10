@@ -114,7 +114,7 @@ func TestDataStore_ByID(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	const id = 123
-	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `tableName` WHERE (tableName.id = ?)")).
+	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `tableName` WHERE tableName.id = ?")).
 		WithArgs(id).
 		WillReturnRows(mock.NewRows([]string{"id"}))
 
@@ -181,7 +181,7 @@ func TestDataStore_InTransaction_DBError(t *testing.T) {
 		return db.Raw("SELECT 1").Scan(&result).Error()
 	})
 
-	assert.Equal(t, expectedError, gotError)
+	assert.Contains(t, gotError.Error(), expectedError.Error())
 	assert.NoError(t, mock.ExpectationsWereMet())
 }
 
@@ -299,7 +299,11 @@ func assertNamedLockMethod(t *testing.T, expectedLockName string, expectedTimeou
 	err := funcToTestGenerator(store)(func(s *DataStore) error {
 		assert.Equal(t, expectedTableName, s.tableName)
 		assert.NotEqual(t, store, s)
-		assert.Equal(t, store.db.DB(), s.db.DB())
+		db1, err := store.db.DB()
+		assert.NoError(t, err)
+		db2, err := s.db.DB()
+		assert.NoError(t, err)
+		assert.Equal(t, db1, db2)
 		var result []interface{}
 		return db.Raw("SELECT 1 AS id").Scan(&result).Error()
 	})

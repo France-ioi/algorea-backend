@@ -37,7 +37,7 @@ func (srv *Service) refresh(w http.ResponseWriter, r *http.Request) service.APIE
 		userProfile["latest_profile_sync_at"] = database.Now()
 		delete(userProfile, "default_language")
 		delete(userProfile, "badges")
-		service.MustNotBeError(store.Users().ByID(user.GroupID).UpdateColumn(userProfile).Error())
+		service.MustNotBeError(store.Users().ByID(user.GroupID).UpdateColumns(userProfile).Error())
 		return nil
 	}))
 

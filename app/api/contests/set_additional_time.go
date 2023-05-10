@@ -1,11 +1,12 @@
 package contests
 
 import (
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -77,7 +78,7 @@ func (srv *Service) setAdditionalTime(w http.ResponseWriter, r *http.Request) se
 		Having("MAX(can_grant_group_access) AND MAX(can_watch_members)").
 		Group("groups.id").
 		PluckFirst("groups.type", &groupType).Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return service.InsufficientAccessRightsError
 	}
 	service.MustNotBeError(err)
@@ -95,7 +96,7 @@ func (srv *Service) setAdditionalTime(w http.ResponseWriter, r *http.Request) se
 				items.entry_participant_type = 'Team' AS is_team_only_contest,
 				items.participants_group_id`).
 			Take(&contestInfo).Error()
-		if gorm.IsRecordNotFoundError(err) || (contestInfo.IsTeamOnlyContest && groupType == "User") {
+		if errors.Is(err, gorm.ErrRecordNotFound) || (contestInfo.IsTeamOnlyContest && groupType == "User") {
 			apiError = service.InsufficientAccessRightsError
 			return apiError.Error
 		}

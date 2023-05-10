@@ -40,7 +40,7 @@ type groupCodeCheckResponseGroup struct {
 		// Nullable
 		// required: true
 		LastName *string `json:"last_name"`
-	} `json:"managers"`
+	} `json:"managers" gorm:"-"`
 }
 
 // swagger:model groupCodeCheckResponse

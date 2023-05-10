@@ -54,7 +54,8 @@ var db *sql.DB
 
 const testAccessToken = "testsessiontestsessiontestsessio"
 
-func (ctx *TestContext) SetupTestContext(pickle *messages.Pickle) { // nolint
+// SetupTestContext setups the test context, called before each scenario.
+func (ctx *TestContext) SetupTestContext(pickle *messages.Pickle) {
 	log.WithField("type", "test").Infof("Starting test scenario: %s", pickle.Name)
 
 	var logHook *test.Hook
@@ -100,7 +101,8 @@ func (ctx *TestContext) tearDownApp() {
 	ctx.application = nil
 }
 
-func (ctx *TestContext) ScenarioTeardown(*messages.Pickle, error) { // nolint
+// ScenarioTeardown is called after each scenario to clean to stubs and close the db connection.
+func (ctx *TestContext) ScenarioTeardown(*messages.Pickle, error) {
 	RestoreDBTime()
 	monkey.UnpatchAll()
 	ctx.logsRestoreFunc()

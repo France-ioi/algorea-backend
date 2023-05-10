@@ -79,7 +79,7 @@ func (srv *Service) removeUserBatch(w http.ResponseWriter, r *http.Request) serv
 	// linked to the group_prefix
 	found, err := store.UserBatches().
 		Joins("JOIN user_batch_prefixes USING(group_prefix)").
-		Joins("JOIN ? AS managed_groups ON managed_groups.id = user_batch_prefixes.group_id", managedByUser.SubQuery()).
+		Joins("JOIN (?) AS managed_groups ON managed_groups.id = user_batch_prefixes.group_id", managedByUser.SubQuery()).
 		Where("group_prefix = ?", groupPrefix).
 		Where("custom_prefix = ?", customPrefix).
 		HasRows()

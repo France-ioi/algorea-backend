@@ -14,6 +14,7 @@ import (
 
 	"bou.ke/monkey"
 	"github.com/DATA-DOG/go-sqlmock"
+	"github.com/sirupsen/logrus/hooks/test" // nolint:depguard
 	assertlib "github.com/stretchr/testify/assert"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
@@ -202,10 +203,8 @@ func TestUserMiddleware(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			assert := assertlib.New(t)
-			logHook, restoreFunc := logging.MockSharedLoggerHook()
-			defer restoreFunc()
 
-			serviceWasCalled, resp, mock := callAuthThroughMiddleware(tt.expectedAccessToken, tt.authHeaders, tt.cookieHeaders,
+			serviceWasCalled, resp, mock, logHook := callAuthThroughMiddleware(tt.expectedAccessToken, tt.authHeaders, tt.cookieHeaders,
 				tt.userIDReturnedByDB, tt.dbError)
 			defer func() { _ = resp.Body.Close() }()
 			bodyBytes, _ := ioutil.ReadAll(resp.Body)
@@ -237,8 +236,10 @@ var _ GetStorer = &storeProvider{}
 
 func callAuthThroughMiddleware(expectedSessionID string, authorizationHeaders, cookieHeaders []string,
 	userID int64, dbError error,
-) (bool, *http.Response, sqlmock.Sqlmock) {
+) (bool, *http.Response, sqlmock.Sqlmock, *test.Hook) {
 	dbmock, mock := database.NewDBMock()
+	logHook, restoreFunc := logging.MockSharedLoggerHook()
+	defer restoreFunc()
 	defer func() { _ = dbmock.Close() }()
 	if expectedSessionID != "" {
 		expectation := mock.ExpectQuery("^" +
@@ -247,7 +248,7 @@ func callAuthThroughMiddleware(expectedSessionID string, authorizationHeaders, c
 					"users.temp_user, users.notifications_read_at, users.default_language "+
 					"FROM `sessions` "+
 					"JOIN users ON users.group_id = sessions.user_id "+
-					"WHERE (access_token = ?) AND (expires_at > NOW()) LIMIT 1") +
+					"WHERE access_token = ? AND expires_at > NOW() LIMIT 1") +
 			"$").WithArgs(expectedSessionID)
 		if dbError != nil {
 			expectation.WillReturnError(dbError)
@@ -292,5 +293,5 @@ func callAuthThroughMiddleware(expectedSessionID string, authorizationHeaders, c
 	client := &http.Client{}
 	resp, _ := client.Do(mainRequest)
 
-	return enteredService, resp, mock
+	return enteredService, resp, mock, logHook
 }

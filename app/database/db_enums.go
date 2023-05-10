@@ -29,7 +29,6 @@ func (conn *DB) loadDBEnum(fullColumnName string) {
 
 	var valuesString string
 	mustNotBeError(NewDataStore(conn.New()).Table("information_schema.COLUMNS").
-		Set("gorm:query_option", "").
 		Where("TABLE_SCHEMA = DATABASE()").
 		Where("TABLE_NAME = ?", tableName).
 		Where("COLUMN_NAME = ?", columnName).

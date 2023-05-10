@@ -1,11 +1,12 @@
 package groups
 
 import (
+	"errors"
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 
 	"github.com/France-ioi/AlgoreaBackend/app/service"
 )
@@ -75,10 +76,12 @@ func (srv *Service) getBreadcrumbs(w http.ResponseWriter, r *http.Request) servi
 	var result []groupBreadcrumbsViewResponseRow
 	err = store.Groups().PickVisibleGroups(store.Groups().Where("id IN(?)", ids), user).
 		Select("id, name, type").
-		Order(gorm.Expr("FIELD(id"+strings.Repeat(", ?", len(idsInterface))+")", idsInterface...)).
+		Clauses(clause.OrderBy{
+			Expression: clause.Expr{SQL: "FIELD(id, ?)", Vars: []interface{}{idsInterface}, WithoutParentheses: true},
+		}).
 		Scan(&result).Error()
 
-	if gorm.IsRecordNotFoundError(err) || len(result) != len(ids) {
+	if errors.Is(err, gorm.ErrRecordNotFound) || len(result) != len(ids) {
 		return service.InsufficientAccessRightsError
 	}
 	service.MustNotBeError(err)

@@ -264,7 +264,8 @@ func (s *ResultStore) propagate() (err error) {
 								ELSE children_stats.average_score
 							END, 0), 100)), 0),
 						target_propagate.state = 'to_be_propagated'`
-				updateStatement, err = s.db.CommonDB().Prepare(updateQuery)
+				sqlDB := s.db.Statement.ConnPool.(*sql.Tx)
+				updateStatement, err = sqlDB.Prepare(updateQuery)
 				mustNotBeError(err)
 				defer func() { mustNotBeError(updateStatement.Close()) }() //nolint:gocritic defer in for loop, possible resource leak.
 			}

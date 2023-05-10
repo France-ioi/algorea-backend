@@ -9,7 +9,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/doc"
@@ -86,7 +86,7 @@ func (srv *Service) submit(rw http.ResponseWriter, httpReq *http.Request) servic
 		hintsInfo, err = store.Results().GetHintsInfoForActiveAttempt(
 			requestData.TaskToken.Converted.ParticipantID, requestData.TaskToken.Converted.AttemptID, requestData.TaskToken.Converted.LocalItemID)
 
-		if gorm.IsRecordNotFoundError(err) {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			apiError = service.ErrForbidden(errors.New("no active attempt found"))
 			return apiError.Error // rollback
 		}
@@ -101,7 +101,7 @@ func (srv *Service) submit(rw http.ResponseWriter, httpReq *http.Request) servic
 		service.MustNotBeError(resultStore.
 			ByID(requestData.TaskToken.Converted.ParticipantID, requestData.TaskToken.Converted.AttemptID,
 				requestData.TaskToken.Converted.LocalItemID).
-			UpdateColumn(map[string]interface{}{
+			UpdateColumns(map[string]interface{}{
 				"submissions":          gorm.Expr("submissions + 1"),
 				"latest_submission_at": database.Now(),
 				"latest_activity_at":   database.Now(),

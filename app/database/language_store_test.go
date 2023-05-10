@@ -12,7 +12,7 @@ func TestLanguageStore_ByTag(t *testing.T) {
 	defer func() { _ = db.Close() }()
 
 	const tag = "sl"
-	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `languages` WHERE (languages.tag = ?)")).
+	mock.ExpectQuery(regexp.QuoteMeta("SELECT * FROM `languages` WHERE languages.tag = ?")).
 		WithArgs(tag).
 		WillReturnRows(mock.NewRows([]string{"tag"}))
 

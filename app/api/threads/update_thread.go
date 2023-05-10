@@ -7,7 +7,7 @@ import (
 
 	"github.com/France-ioi/validator"
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/formdata"
@@ -117,7 +117,7 @@ func (srv *Service) updateThread(w http.ResponseWriter, r *http.Request) service
 			WithWriteLock().
 			Threads().
 			GetThreadInfo(participantID, itemID, &oldThread)
-		if !gorm.IsRecordNotFoundError(err) {
+		if !errors.Is(err, gorm.ErrRecordNotFound) {
 			service.MustNotBeError(err)
 		}
 

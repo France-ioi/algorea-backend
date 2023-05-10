@@ -1,6 +1,9 @@
 package database
 
-import "github.com/jinzhu/gorm"
+import (
+	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
+)
 
 // GroupStore implements database operations on groups.
 type GroupStore struct {
@@ -106,7 +109,7 @@ func (s *GroupStore) CheckIfEntryConditionsStillSatisfiedForAllActiveParticipati
 // (for more info see description of the itemGetEntryState service).
 // The isAdding parameter specifies if we are going to add or remove a user.
 func (s *GroupStore) GenerateQueryCheckingIfActionBreaksEntryConditionsForActiveParticipations(
-	teamGroupIDExpr *gorm.SqlExpr, userID int64, isAdding, withLock bool,
+	teamGroupIDExpr clause.Expr, userID int64, isAdding, withLock bool,
 ) *DB {
 	activeTeamParticipationsQuery := s.Attempts().
 		Joins(`
@@ -136,7 +139,7 @@ func (s *GroupStore) GenerateQueryCheckingIfActionBreaksEntryConditionsForActive
 
 	membersPreconditionsQuery := s.ActiveGroupAncestors().
 		Where("groups_ancestors_active.child_group_id IN (?)", updatedMemberIDsQuery.QueryExpr()).
-		Joins("JOIN ? AS active_participations", activeTeamParticipationsQuery.SubQuery()).
+		Joins("JOIN (?) AS active_participations", activeTeamParticipationsQuery.SubQuery()).
 		Joins("JOIN items ON items.id = active_participations.item_id").
 		Joins(`
 			LEFT JOIN permissions_granted ON permissions_granted.group_id = groups_ancestors_active.ancestor_group_id AND

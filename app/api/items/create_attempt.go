@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -120,7 +120,7 @@ func checkIfAttemptCreationIsPossible(store *database.DataStore, itemID, groupID
 	err := store.Items().ByID(itemID).
 		Where("items.type IN('Task','Chapter')").
 		PluckFirst("items.allows_multiple_attempts", &allowsMultipleAttempts).WithWriteLock().Error()
-	if gorm.IsRecordNotFoundError(err) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return service.InsufficientAccessRightsError
 	}
 	service.MustNotBeError(err)

@@ -7,7 +7,7 @@ type User struct {
 	LoginID             *int64
 	DefaultLanguage     string
 	IsAdmin             bool
-	IsTempUser          bool `sql:"column:temp_user"`
+	IsTempUser          bool `gorm:"column:temp_user"`
 	AccessGroupID       *int64
 	NotificationsReadAt *Time
 }

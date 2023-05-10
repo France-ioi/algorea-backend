@@ -37,7 +37,7 @@ type groupRequestsViewResponseRow struct {
 		// Nullable
 		// required: true
 		Grade *int32 `json:"grade"`
-	} `json:"joining_user" gorm:"embedded;embedded_prefix:joining_user__"`
+	} `json:"joining_user" gorm:"embedded;embeddedPrefix:joining_user__"`
 
 	// Nullable
 	// required: true
@@ -53,7 +53,7 @@ type groupRequestsViewResponseRow struct {
 		// Nullable
 		// required: true
 		LastName *string `json:"last_name"`
-	} `json:"inviting_user" gorm:"embedded;embedded_prefix:inviting_user__"`
+	} `json:"inviting_user" gorm:"embedded;embeddedPrefix:inviting_user__"`
 }
 
 // swagger:operation GET /groups/{group_id}/requests group-memberships groupRequestsView
@@ -230,7 +230,7 @@ func (srv *Service) getRequests(w http.ResponseWriter, r *http.Request) service.
 }
 
 func attachUsersWithApproval(conn *database.DB, user *database.User) *database.DB {
-	return conn.New().Raw("WITH managed_groups AS ?, users_with_approval AS ? ?",
+	return conn.New().Raw("WITH managed_groups AS (?), users_with_approval AS (?) ?",
 		database.NewDataStore(conn.New()).ActiveGroupAncestors().ManagedByUser(user).
 			Select("groups_ancestors_active.child_group_id AS id").SubQuery(),
 		conn.New().Table("managed_groups").

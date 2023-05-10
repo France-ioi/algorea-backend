@@ -108,7 +108,7 @@ func (srv *Service) createTempUser(w http.ResponseWriter, r *http.Request) servi
 			})
 		}))
 
-		service.MustNotBeError(store.Groups().ByID(userID).UpdateColumn(map[string]interface{}{
+		service.MustNotBeError(store.Groups().ByID(userID).UpdateColumns(map[string]interface{}{
 			"name":        login,
 			"description": login,
 		}).Error())

@@ -2,10 +2,9 @@ package groups
 
 import (
 	"net/http"
-	"strings"
 
 	"github.com/go-chi/render"
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm/clause"
 
 	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/service"
@@ -180,7 +179,7 @@ func (srv *Service) getTeamProgress(w http.ResponseWriter, r *http.Request) serv
 					WHERE participant_id = groups.id AND item_id = items.id
 				)
 			) AS time_spent`).
-		Joins(`JOIN items ON items.id IN (SELECT id FROM ? AS item_ids)`, itemsSubQuery).
+		Joins(`OIN items ON items.id IN (SELECT id FROM (?) AS item_ids)`, itemsSubQuery).
 		Joins(`
 			LEFT JOIN LATERAL (
 				SELECT score_computed, validated, hints_cached, submissions, participant_id
@@ -190,9 +189,9 @@ func (srv *Service) getTeamProgress(w http.ResponseWriter, r *http.Request) serv
 				LIMIT 1
 			) AS result_with_best_score ON 1`).
 		Where("groups.id IN (?)", teamIDs).
-		Order(gorm.Expr(
-			"FIELD(groups.id"+strings.Repeat(", ?", len(teamIDs))+")",
-			teamIDs...)),
+		Clauses(clause.OrderBy{
+			Expression: clause.Expr{SQL: "FIELD(groups.id, ?), items.id", Vars: []interface{}{teamIDs}, WithoutParentheses: true},
+		}),
 		orderedItemIDListWithDuplicates, len(uniqueItemIDs), &result,
 	)
 
