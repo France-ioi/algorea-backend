@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/France-ioi/AlgoreaBackend/app/utils"
+
 	"github.com/France-ioi/AlgoreaBackend/app/rand"
 )
 
@@ -176,10 +178,11 @@ func (s *DataStore) NewID() int64 {
 }
 
 type awaitingTriggers struct {
-	ItemAncestors  bool
-	GroupAncestors bool
-	Permissions    bool
-	Results        bool
+	ItemAncestors            bool
+	GroupAncestors           bool
+	Permissions              bool
+	Results                  bool
+	SchedulePropagationTypes []string
 }
 type dbContextKey string
 
@@ -202,6 +205,12 @@ func (s *DataStore) InTransaction(txFunc func(*DataStore) error) error {
 
 	triggersToRun := s.ctx.Value(triggersContextKey).(*awaitingTriggers)
 
+	if len(triggersToRun.SchedulePropagationTypes) > 0 {
+		types := triggersToRun.SchedulePropagationTypes
+		triggersToRun.SchedulePropagationTypes = []string{}
+
+		StartAsyncPropagation(s, s.Context().Value("propagation_endpoint").(string), types)
+	}
 	if triggersToRun.GroupAncestors {
 		triggersToRun.GroupAncestors = false
 		s.createNewAncestors("groups", "group")
@@ -220,6 +229,14 @@ func (s *DataStore) InTransaction(txFunc func(*DataStore) error) error {
 	}
 
 	return err
+}
+
+// SchedulePropagation schedules a run of the propagation for the given types after the transaction commit.
+func (s *DataStore) SchedulePropagation(types []string) {
+	s.mustBeInTransaction()
+
+	triggersToRun := s.DB.ctx.Value(triggersContextKey).(*awaitingTriggers)
+	triggersToRun.SchedulePropagationTypes = utils.UniqueStrings(append(triggersToRun.SchedulePropagationTypes, types...))
 }
 
 // ScheduleResultsPropagation schedules a run of ResultStore::propagate() after the transaction commit.
@@ -260,10 +277,6 @@ func (s *DataStore) WithForeignKeyChecksDisabled(blockFunc func(*DataStore) erro
 	return s.withForeignKeyChecksDisabled(func(db *DB) error {
 		return blockFunc(NewDataStoreWithTable(db, s.tableName))
 	})
-}
-
-func (s *DataStore) IsInTransaction() bool {
-	return s.DB.isInTransaction()
 }
 
 // WithNamedLock wraps the given function in GET_LOCK/RELEASE_LOCK.
@@ -326,4 +339,9 @@ func (s *DataStore) InsertOrUpdateMap(dataMap map[string]interface{}, updateColu
 // If updateColumns is nil, all the columns in dataMaps will be updated.
 func (s *DataStore) InsertOrUpdateMaps(dataMap []map[string]interface{}, updateColumns []string) error {
 	return s.DB.insertOrUpdateMaps(s.tableName, dataMap, updateColumns)
+}
+
+// MustNotBeInTransaction panics if the store is in a transaction.
+func (s *DataStore) MustNotBeInTransaction() {
+	s.DB.mustNotBeInTransaction()
 }

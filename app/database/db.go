@@ -88,6 +88,11 @@ func (conn *DB) New() *DB {
 	return newDB(conn.ctx, conn.db.New())
 }
 
+// Context returns the context of the current db connection.
+func (conn *DB) Context() context.Context {
+	return conn.ctx
+}
+
 func (conn *DB) inTransaction(txFunc func(*DB) error) (err error) {
 	return conn.inTransactionWithCount(txFunc, 0)
 }
@@ -637,6 +642,13 @@ func (conn *DB) withForeignKeyChecksDisabled(blockFunc func(*DB) error) (err err
 	} // else {
 	return innerFunc(conn)
 	//}
+}
+
+// mustNotBeInTransaction panics if the current connection is in a transaction.
+func (conn *DB) mustNotBeInTransaction() {
+	if conn.isInTransaction() {
+		panic("should not be executed in a transaction")
+	}
 }
 
 func mustNotBeError(err error) {

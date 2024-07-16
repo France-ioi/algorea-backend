@@ -1,21 +1,21 @@
-package service_test
+package database_test
 
 import (
 	"fmt"
 	"net/http"
 	"testing"
 
+	"github.com/France-ioi/AlgoreaBackend/app/database"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/thingful/httpmock"
 
-	"github.com/France-ioi/AlgoreaBackend/app/database"
 	"github.com/France-ioi/AlgoreaBackend/app/logging"
 	"github.com/France-ioi/AlgoreaBackend/app/loggingtest"
-	"github.com/France-ioi/AlgoreaBackend/app/service"
 	"github.com/France-ioi/AlgoreaBackend/testhelpers"
 )
 
-func TestSchedulePropagation(t *testing.T) {
+func TestStartAsyncPropagation(t *testing.T) {
 	type args struct {
 		endpoint string
 	}
@@ -103,7 +103,7 @@ func TestSchedulePropagation(t *testing.T) {
 				}
 			}
 
-			service.SchedulePropagation(store, tt.args.endpoint, []string{"permissions"})
+			database.StartAsyncPropagation(store, tt.args.endpoint, []string{"permissions"})
 
 			exists, err := store.Permissions().Where("item_id = 1").HasRows()
 			assert.NoError(t, err)
@@ -121,4 +121,18 @@ func TestSchedulePropagation(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestStartAsyncPropagation_ShouldPanicWhenCalledInsideTransaction(t *testing.T) {
+	db := testhelpers.SetupDBWithFixtureString("")
+	defer func() { _ = db.Close() }()
+	store := database.NewDataStore(db)
+
+	assert.Panics(t, func() {
+		err := store.InTransaction(func(store *database.DataStore) error {
+			database.StartAsyncPropagation(store, "", []string{"permissions"})
+			return nil
+		})
+		assert.NoError(t, err)
+	})
 }

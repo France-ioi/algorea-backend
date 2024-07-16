@@ -103,7 +103,7 @@ func (srv *Service) startResult(w http.ResponseWriter, r *http.Request) service.
 			resultStore := store.Results()
 			service.MustNotBeError(resultStore.MarkAsToBePropagated(participantID, attemptID, itemID, false))
 
-			service.SchedulePropagation(store, srv.GetPropagationEndpoint(), []string{"results"})
+			store.SchedulePropagation([]string{"results"})
 		}
 		return nil
 	})

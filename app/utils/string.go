@@ -13,3 +13,18 @@ func Capitalize(str string) string {
 
 	return string(r)
 }
+
+// UniqueStrings returns a new slice containing only the unique strings from the input slice.
+func UniqueStrings(slice []string) []string {
+	uniques := make(map[string]bool, len(slice))
+	for _, s := range slice {
+		uniques[s] = true
+	}
+
+	result := make([]string, 0, len(uniques))
+	for s := range uniques {
+		result = append(result, s)
+	}
+
+	return result
+}

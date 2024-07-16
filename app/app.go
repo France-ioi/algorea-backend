@@ -2,9 +2,11 @@
 package app
 
 import (
+	"context"
 	crand "crypto/rand"
 	"encoding/binary"
 	"fmt"
+	"net/http"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -96,6 +98,14 @@ func (app *Application) Reset(config *viper.Viper) error {
 
 	router.Use(corsConfig().Handler) // no need for CORS if served through the same domain
 	router.Use(domain.Middleware(domainsConfig, serverConfig.GetString("domainOverride")))
+
+	router.Use(func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			ctx := context.WithValue(r.Context(), "propagation_endpoint", serverConfig.GetString("propagation_endpoint"))
+
+			next.ServeHTTP(w, r.WithContext(ctx))
+		})
+	})
 
 	if appenv.IsEnvDev() {
 		router.Mount("/debug", middleware.Profiler())
