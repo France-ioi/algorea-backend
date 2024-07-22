@@ -161,26 +161,23 @@ func (s *ResultStore) propagate() (err error) {
 			return nil
 		}))
 
-		hasChanges := true
+		s.PropagationStepTransaction(func(store *DataStore) bool {
+			initTransactionTime := time.Now()
 
-		for hasChanges {
-			mustNotBeError(s.InTransaction(func(s *DataStore) error {
-				initTransactionTime := time.Now()
-
-				// We process only those objects that were marked as 'to_be_recomputed' and
-				// that have no children (within the attempt or child attempts) marked as 'to_be_recomputed'.
-				// This way we prevent infinite looping as we never process items that are ancestors of themselves
-				//
-				// For every object, we compute all the characteristics based on the children:
-				//  - latest_activity_at as the max of children's
-				//  - tasks_with_help, tasks_tried as the sum of children's per-item maximums
-				//  - children_validated as the number of children items with validated == 1
-				//  - validated, depending on the items_items.category and items.validation_type
-				//    (an item should have at least one validated child to become validated itself by the propagation)
-				const updateQuery = `
+			// We process only those objects that were marked as 'to_be_recomputed' and
+			// that have no children (within the attempt or child attempts) marked as 'to_be_recomputed'.
+			// This way we prevent infinite looping as we never process items that are ancestors of themselves
+			//
+			// For every object, we compute all the characteristics based on the children:
+			//  - latest_activity_at as the max of children's
+			//  - tasks_with_help, tasks_tried as the sum of children's per-item maximums
+			//  - children_validated as the number of children items with validated == 1
+			//  - validated, depending on the items_items.category and items.validation_type
+			//    (an item should have at least one validated child to become validated itself by the propagation)
+			const updateQuery = `
 					UPDATE results_propagate AS target_propagate ` +
-					// process only those results marked as 'to_be_recomputed' that do not have child results marked as 'to_be_recomputed'
-					`JOIN (
+				// process only those results marked as 'to_be_recomputed' that do not have child results marked as 'to_be_recomputed'
+				`JOIN (
 						SELECT *
 						FROM (
 							WITH marked_to_be_recomputed AS (SELECT participant_id, attempt_id, item_id FROM results_propagate WHERE state='to_be_recomputed')
@@ -229,10 +226,10 @@ func (s *ResultStore) propagate() (err error) {
 							SUM(IFNULL(aggregated_children_results.score_computed, 0) * items_items.score_weight) /
 								COALESCE(NULLIF(SUM(items_items.score_weight), 0), 1) AS average_score
 						FROM items_items ` +
-					// We use LEFT JOIN LATERAL to aggregate results grouped by target_results.participant_id & items_items.child_item_id.
-					// The usual LEFT JOIN conditions in the ON clause would group results before joining which would produce
-					// wrong results.
-					`	LEFT JOIN LATERAL (
+				// We use LEFT JOIN LATERAL to aggregate results grouped by target_results.participant_id & items_items.child_item_id.
+				// The usual LEFT JOIN conditions in the ON clause would group results before joining which would produce
+				// wrong results.
+				`	LEFT JOIN LATERAL (
 							SELECT
 								MAX(validated) AS validated,
 								MIN(validated_at) AS validated_at,
@@ -285,15 +282,12 @@ func (s *ResultStore) propagate() (err error) {
 							END, 0), 100)), 0),
 						target_propagate.state = 'to_be_propagated'`
 
-				rowsAffected := s.Exec(updateQuery).RowsAffected()
+			rowsAffected := store.Exec(updateQuery).RowsAffected()
 
-				logging.Debugf("Duration of step of results propagation: %d rows affected, took %v", rowsAffected, time.Since(initTransactionTime))
+			logging.Debugf("Duration of step of results propagation: %d rows affected, took %v", rowsAffected, time.Since(initTransactionTime))
 
-				hasChanges = rowsAffected > 0
-
-				return nil
-			}))
-		}
+			return rowsAffected == 0
+		})
 
 		mustNotBeError(s.InTransaction(func(s *DataStore) error {
 			initTransactionTime := time.Now()

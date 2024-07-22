@@ -100,23 +100,18 @@ func (s *PermissionGrantedStore) computeAllAccess() {
 	// ------------------------------------------------------------------------------------
 	// Here we execute the statements
 	// ------------------------------------------------------------------------------------
-	hasChanges := true
-	for hasChanges {
-		mustNotBeError(s.InTransaction(func(store *DataStore) error {
-			initTransactionTime := time.Now()
+	s.PropagationStepTransaction(func(store *DataStore) bool {
+		initTransactionTime := time.Now()
 
-			mustNotBeError(store.Exec(queryMarkChildrenOfChildrenAsSelf).Error())
-			mustNotBeError(store.Exec(queryDeleteProcessedChildren).Error())
-			mustNotBeError(store.Exec(queryUpdatePermissionsGenerated).Error())
+		mustNotBeError(store.Exec(queryMarkChildrenOfChildrenAsSelf).Error())
+		mustNotBeError(store.Exec(queryDeleteProcessedChildren).Error())
+		mustNotBeError(store.Exec(queryUpdatePermissionsGenerated).Error())
 
-			rowsAffected := store.Exec(queryMarkSelfAsChildren).RowsAffected()
-			mustNotBeError(store.Error())
+		rowsAffected := store.Exec(queryMarkSelfAsChildren).RowsAffected()
+		mustNotBeError(store.Error())
 
-			logging.Debugf("Duration of permissions propagation step: %d rows affected, took %v", rowsAffected, time.Since(initTransactionTime))
+		logging.Debugf("Duration of permissions propagation step: %d rows affected, took %v", rowsAffected, time.Since(initTransactionTime))
 
-			hasChanges = rowsAffected > 0
-
-			return nil
-		}))
-	}
+		return rowsAffected == 0
+	})
 }

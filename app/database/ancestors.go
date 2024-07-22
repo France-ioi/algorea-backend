@@ -39,25 +39,20 @@ func (s *DataStore) createNewAncestors(objectName, singleObjectName string) { /*
 
 	queries := s.constructCreateNewAncestorsQueries(objectName, singleObjectName)
 
-	hasChanges := true
-	for hasChanges {
-		mustNotBeError(s.InTransaction(func(s *DataStore) error {
-			initStepTransactionTime := time.Now()
+	s.PropagationStepTransaction(func(store *DataStore) bool {
+		initStepTransactionTime := time.Now()
 
-			rowsAffected := s.createNewAncestorsInsideTransactionStep(queries)
+		rowsAffected := store.createNewAncestorsInsideTransactionStep(queries)
 
-			logging.Debugf(
-				"Duration of %v_ancestors propagation step: %d rows affected, took %v",
-				objectName,
-				rowsAffected,
-				time.Since(initStepTransactionTime),
-			)
+		logging.Debugf(
+			"Duration of %v_ancestors propagation step: %d rows affected, took %v",
+			objectName,
+			rowsAffected,
+			time.Since(initStepTransactionTime),
+		)
 
-			hasChanges = rowsAffected > 0
-
-			return nil
-		}))
-	}
+		return rowsAffected == 0
+	})
 }
 
 // createNewAncestorsInsideTransaction does the sql work of createNewAncestors.

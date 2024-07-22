@@ -8,7 +8,10 @@ import (
 	"github.com/France-ioi/AlgoreaBackend/app/logging"
 )
 
-const endpointTimeout = 3 * time.Second
+const (
+	endpointTimeout                   = 3 * time.Second
+	propagationTransactionMinDuration = 100 * time.Millisecond
+)
 
 // StartAsyncPropagation schedules asynchronous propagation of the given types.
 // If endpoint is an empty string, it will be done synchronously.
@@ -53,5 +56,23 @@ func StartAsyncPropagation(store *DataStore, endpoint string, types []string) {
 			return nil
 		})
 		mustNotBeError(err)
+	}
+}
+
+// PropagationStepTransaction runs a step function until it returns true.
+// The steps are run inside a transaction, and the transaction is committed every propagationTransactionMinDuration.
+// This is to avoid overhead from having many small transactions, if we simply do one transaction per step.
+// Typically, small steps will be run in a single larger transaction, and bigger steps in their own transactions.
+func (s *DataStore) PropagationStepTransaction(step func(store *DataStore) bool) {
+	done := false
+	for !done {
+		endTransactionMinimumTime := time.Now().Add(propagationTransactionMinDuration)
+		mustNotBeError(s.InTransaction(func(s *DataStore) error {
+			for !done && time.Now().Before(endTransactionMinimumTime) {
+				done = step(s)
+			}
+
+			return nil
+		}))
 	}
 }
