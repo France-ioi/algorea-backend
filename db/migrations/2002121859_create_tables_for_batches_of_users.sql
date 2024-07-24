@@ -21,7 +21,7 @@ CREATE TABLE `user_batches` (
     `creator_id` BIGINT(20) DEFAULT NULL,
     `created_at` DATETIME NOT NULL DEFAULT NOW(),
     PRIMARY KEY (`group_prefix`, `custom_prefix`),
-    CONSTRAINT `ck_user_batches_custom_prefix` CHECK (BINARY `custom_prefix` REGEXP '^[a-z0-9-]+$'),
+    CONSTRAINT `ck_user_batches_custom_prefix` CHECK (CAST(`custom_prefix` AS BINARY) REGEXP BINARY '^[a-z0-9-]+$'),
     CONSTRAINT `fk_user_batches_group_prefix_user_batch_prefixes_group_prefix`
         FOREIGN KEY (`group_prefix`) REFERENCES `user_batch_prefixes`(`group_prefix`) ON DELETE RESTRICT,
     CONSTRAINT `fk_user_batches_creator_id_users_group_id`

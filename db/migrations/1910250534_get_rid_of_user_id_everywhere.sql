@@ -74,6 +74,9 @@ ALTER TABLE `threads`
     DROP COLUMN `creator_user_id`;
 
 UPDATE `users_answers` LEFT JOIN `users` ON `users`.`id` = `users_answers`.`user_id` SET `users_answers`.`user_id` = `users`.`group_id`;
+
+DELETE FROM users_answers ua WHERE ua.user_id NOT IN (SELECT group_id FROM users);
+
 ALTER TABLE `users_answers`
     ADD CONSTRAINT `fk_users_answers_user_id_users_group_id` FOREIGN KEY (`user_id`) REFERENCES `users`(`group_id`) ON DELETE CASCADE,
     DROP COLUMN `grader_user_id`;

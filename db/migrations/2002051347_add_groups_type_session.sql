@@ -21,7 +21,7 @@ ALTER TABLE `groups`
     ADD COLUMN `address_country` VARCHAR(255) DEFAULT NULL COMMENT 'For sessions or schools',
     ADD COLUMN `expected_start` DATETIME DEFAULT NULL COMMENT 'For sessions, time at which the session is expected to start';
 
-UPDATE `groups` SET `activity_id` = REVERSE(SUBSTRING_INDEX(REVERSE(redirect_path), '/', 1))
+UPDATE `groups` SET `activity_id` = REVERSE(SUBSTRING_INDEX(REVERSE(REVERSE(SUBSTRING_INDEX(REVERSE(redirect_path), '/', 1))), '-', 1))
 WHERE `redirect_path` IS NOT NULL AND `redirect_path` != '';
 
 ALTER TABLE `groups` DROP COLUMN `redirect_path`;

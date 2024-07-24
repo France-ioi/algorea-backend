@@ -4,6 +4,10 @@ ALTER TABLE `platforms`
 
 UPDATE `platforms` SET `public_key` = NULL WHERE NOT uses_tokens OR `public_key` = '';
 
+UPDATE `platforms` p1
+  JOIN (SELECT id, `priority`*10 + row_number() OVER (PARTITION BY `priority` ORDER BY `priority`) -1 as `new_priority` FROM platforms) p2 ON p1.id = p2.id
+  SET p1.`priority` = p2.`new_priority`;
+
 ALTER TABLE `platforms`
     DROP COLUMN `uses_tokens`,
     ADD UNIQUE KEY `priority` (`priority` DESC),
