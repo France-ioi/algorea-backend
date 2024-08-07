@@ -42,18 +42,17 @@ func TestService_refreshAccessToken_NotAllowRefreshTokenRaces(t *testing.T) {
 		response, mock, logs, err := servicetest.GetResponseForRouteWithMockedDBAndUser(
 			"POST", "/auth/token", "", &database.User{GroupID: 2},
 			func(mock sqlmock.Sqlmock) {
-				mock.ExpectQuery("^" +
-					regexp.QuoteMeta(
-						"SELECT "+
-							"token, "+
-							"TIMESTAMPDIFF(SECOND, NOW(), expires_at) AS seconds_until_expiry, "+
-							"issued_at > (NOW() - INTERVAL 5 MINUTE) AS too_new_to_refresh "+
-							"FROM `access_tokens`  WHERE (session_id = ?) ORDER BY expires_at DESC LIMIT 1") + "$").
-					WithArgs(sqlmock.AnyArg()).
-					WillReturnRows(mock.NewRows([]string{"token", "seconds_until_expiry", "too_new_to_refresh"}).
-						AddRow("accesstoken", 600, false))
-
 				if !timeout {
+					mock.ExpectQuery("^" +
+						regexp.QuoteMeta(
+							"SELECT "+
+								"token, "+
+								"TIMESTAMPDIFF(SECOND, NOW(), expires_at) AS seconds_until_expiry, "+
+								"issued_at > (NOW() - INTERVAL 5 MINUTE) AS too_new_to_refresh "+
+								"FROM `access_tokens`  WHERE (session_id = ?) ORDER BY expires_at DESC LIMIT 1") + "$").
+						WithArgs(sqlmock.AnyArg()).
+						WillReturnRows(mock.NewRows([]string{"token", "seconds_until_expiry", "too_new_to_refresh"}).
+							AddRow("accesstoken", 600, false))
 					mock.ExpectQuery("^" +
 						regexp.QuoteMeta("SELECT refresh_token FROM `sessions` WHERE (session_id = ?) LIMIT 1") + "$").
 						WithArgs(sqlmock.AnyArg()).
