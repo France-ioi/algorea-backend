@@ -3,6 +3,7 @@
 package database_test
 
 import (
+	"context"
 	"testing"
 
 	"github.com/jinzhu/gorm"
@@ -94,18 +95,16 @@ func TestResultStore_Propagate(t *testing.T) {
 	}
 }
 
-// Works locally but fails twice for every run on CI, losing 20 minutes each time.
-// Comment for now until the current emergency is over.
-// func TestResultStore_Propagate_Concurrent(t *testing.T) {
-//	db := testhelpers.SetupDBWithFixture("results_propagation/main")
-//	defer func() { _ = db.Close() }()
-//
-//	testhelpers.RunConcurrently(func() {
-//		s := database.NewDataStoreWithContext(context.Background(), db)
-//		err := s.InTransaction(func(st *database.DataStore) error {
-//			st.ScheduleResultsPropagation()
-//			return nil
-//		})
-//		assert.NoError(t, err)
-//	}, 30)
-// }
+func TestResultStore_Propagate_Concurrent(t *testing.T) {
+	db := testhelpers.SetupDBWithFixture("results_propagation/main")
+	defer func() { _ = db.Close() }()
+
+	testhelpers.RunConcurrently(func() {
+		s := database.NewDataStoreWithContext(context.Background(), db)
+		err := s.InTransaction(func(st *database.DataStore) error {
+			st.ScheduleResultsPropagation()
+			return nil
+		})
+		assert.NoError(t, err)
+	}, 30)
+}
