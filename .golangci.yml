@@ -100,7 +100,6 @@ linters:
     - wrapcheck        # For update to go1.20
     - exhaustruct      # For update to go1.20
     - gomoddirectives  # For update to go1.20
-    - dupl             # For update to go1.20
 
 run:
   skip-dirs:
