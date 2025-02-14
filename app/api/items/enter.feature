@@ -304,8 +304,8 @@ Feature: Enters a contest as a group (user self or team) (contestEnter)
       | 0          | 31             | 30      | null                |
       | 1          | 31             | 50      | 3019-10-10 10:10:10 |
     And the table "results_propagate" should be empty
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
     And logs should contain:
       """
       items.participants_group_id is not set for the item with id = 50

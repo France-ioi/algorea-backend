@@ -70,8 +70,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Wrong value for source_group_id (should be int64)"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Invalid group_id
     Given I am the user with id "21"
@@ -83,8 +83,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Invalid item_id
     Given I am the user with id "21"
@@ -96,8 +96,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Wrong value for item_id (should be int64)"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Invalid can_view
     Given I am the user with id "21"
@@ -119,8 +119,8 @@ Feature: Change item access rights for a group - robustness
       "success": false
     }
     """
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The user doesn't exist
     Given I am the user with id "404"
@@ -132,8 +132,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The user doesn't have enough rights to set permissions
     Given I am the user with id "31"
@@ -170,8 +170,8 @@ Feature: Change item access rights for a group - robustness
       "success": false
     }
     """
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The item doesn't exist
     Given I am the user with id "21"
@@ -183,8 +183,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The user is not a manager of the source_group_id
     Given I am the user with id "21"
@@ -196,8 +196,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The user is a manager of the source_group_id, but he doesn't have 'can_grant_group_access' permission
     Given I am the user with id "21"
@@ -209,8 +209,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: source_group_id is not an ancestor of group_id
     Given I am the user with id "31"
@@ -222,8 +222,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: source_group_id is a user group
     Given I am the user with id "31"
@@ -235,8 +235,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The source group doesn't exist
     Given I am the user with id "21"
@@ -248,8 +248,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The group doesn't exist
     Given I am the user with id "21"
@@ -261,8 +261,8 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: There are no item's parents visible to the group
     Given I am the user with id "31"
@@ -274,5 +274,5 @@ Feature: Change item access rights for a group - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged

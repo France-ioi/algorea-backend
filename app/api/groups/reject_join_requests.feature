@@ -55,7 +55,7 @@ Feature: Reject group requests
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged
+    And the table "groups_groups" should remain unchanged
     And the table "group_pending_requests" should be:
       | group_id | member_id | type         | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 13       | 21        | invitation   | 0                                         |
@@ -65,7 +65,7 @@ Feature: Reject group requests
       | group_id | member_id | action               | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 13       | 31        | join_request_refused | 21           | 1                                         |
       | 13       | 141       | join_request_refused | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
   Examples:
     | can_manage            |
     | memberships           |

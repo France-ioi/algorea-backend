@@ -42,8 +42,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Json: cannot unmarshal array into Go value of type items.saveGradeRequest"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Invalid score_token
     Given I send a POST request to "/items/save-grade" with the following body:
@@ -54,8 +54,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid score_token"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Expired score_token
     Given the server time now is "2020-01-01T00:00:00Z"
@@ -110,8 +110,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Missing answer_token"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Platform doesn't use tokens and answer_token is invalid
     When I send a POST request to "/items/save-grade" with the following body:
@@ -123,8 +123,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid answer_token"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Platform doesn't use tokens and answer_token is expired
     Given the server time now is "2020-01-01T00:00:00Z"
@@ -191,8 +191,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid answer_token: wrong idAttempt"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Platform doesn't use tokens and idAttempt in answer_token is wrong (format should be number/number)
     Given "answerToken" is a token signed by the app with the following payload:
@@ -215,8 +215,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid answer_token: wrong idAttempt"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Platform doesn't use tokens and score is missing
     Given "answerToken" is a token signed by the app with the following payload:
@@ -238,8 +238,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Missing score"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Platform doesn't use tokens and idUserAnswer in answer_token is invalid
     Given "answerToken" is a token signed by the app with the following payload:
@@ -262,8 +262,8 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid answer_token: wrong idUserAnswer"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: The answer has been already graded
     Given the database table "attempts" also has the following row:
@@ -301,8 +301,8 @@ Feature: Save grading result - robustness
     """
     {{ quote(`A user tries to replay a score token with a different score value ({"idAttempt":"101/1","idItem":"80","idUser":"101","idUserAnswer":"124","newScore":100,"oldScore":0})`) }}
     """
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: The answer is not found
     Given "scoreToken" is a token signed by the task platform with the following payload:
@@ -324,5 +324,5 @@ Feature: Save grading result - robustness
       """
     Then the response code should be 403
     And the response error message should contain "The answer has been already graded or is not found"
-    And the table "answers" should stay unchanged
-    And the table "attempts" should stay unchanged
+    And the table "answers" should remain unchanged
+    And the table "attempts" should remain unchanged

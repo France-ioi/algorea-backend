@@ -438,8 +438,8 @@ func (ctx *TestContext) TableShouldBe(tableName string, data *godog.Table) error
 	return ctx.tableAtColumnValueShouldBe(tableName, []string{""}, nil, unchanged, data)
 }
 
-// TableShouldStayUnchanged checks that the DB table has not changed.
-func (ctx *TestContext) TableShouldStayUnchanged(tableName string) error {
+// TableShouldRemainUnchanged checks that the DB table has not changed.
+func (ctx *TestContext) TableShouldRemainUnchanged(tableName string) error {
 	data := ctx.dbTableData[tableName]
 	if data == nil {
 		data = &godog.Table{
@@ -451,9 +451,9 @@ func (ctx *TestContext) TableShouldStayUnchanged(tableName string) error {
 	return ctx.tableAtColumnValueShouldBe(tableName, []string{""}, nil, unchanged, data)
 }
 
-// TableShouldStayUnchangedButTheRowWithColumnValue checks that the DB table has not changed except for rows
+// TableShouldStayUnchangedRegardlessOfTheRowsWithColumnValue checks that the DB table has not changed except for rows
 // with the specified values in the specified column.
-func (ctx *TestContext) TableShouldStayUnchangedButTheRowWithColumnValue(tableName, columnName, columnValues string) error {
+func (ctx *TestContext) TableShouldStayUnchangedRegardlessOfTheRowsWithColumnValue(tableName, columnName, columnValues string) error {
 	data := ctx.dbTableData[tableName]
 	if data == nil {
 		data = &godog.Table{Rows: []*messages.PickleTableRow{}}
@@ -461,8 +461,8 @@ func (ctx *TestContext) TableShouldStayUnchangedButTheRowWithColumnValue(tableNa
 	return ctx.tableAtColumnValueShouldBe(tableName, []string{columnName}, parseMultipleValuesString(columnValues), changed, data)
 }
 
-// TableShouldStayUnchangedButTheRowsWithColumnValueShouldBeDeleted checks for row deletion.
-func (ctx *TestContext) TableShouldStayUnchangedButTheRowsWithColumnValueShouldBeDeleted(
+// TableShouldRemainUnchangedExceptThatTheRowsWithColumnValueShouldBeDeleted checks for row deletion.
+func (ctx *TestContext) TableShouldRemainUnchangedExceptThatTheRowsWithColumnValueShouldBeDeleted(
 	tableName, columnNames, columnValues string,
 ) error {
 	data := ctx.dbTableData[tableName]

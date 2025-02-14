@@ -69,7 +69,7 @@ Feature: Start results for an item path
         }
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id   | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | latest_submission_at | score_obtained_at | validated_at | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 0          | 111            | <item_id> | 0              | 0           | 1                                                         | null                 | null              | null         | 1                                                 |
@@ -98,7 +98,7 @@ Feature: Start results for an item path
         }
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | latest_submission_at | score_obtained_at | validated_at | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 0          | 102            | 10      | 0              | 0           | 1                                                         | null                 | null              | null         | null                                              |
@@ -122,7 +122,7 @@ Feature: Start results for an item path
         }
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | latest_submission_at | score_obtained_at | validated_at | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 0          | 102            | 10      | 0              | 0           | 1                                                         | null                 | null              | null         | null                                              |
@@ -152,7 +152,7 @@ Feature: Start results for an item path
         }
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | latest_submission_at | score_obtained_at | validated_at | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 1          | 102            | 10      | 0              | 0           | 0                                                         | null                 | null              | null         | 0                                                 |
@@ -177,7 +177,7 @@ Feature: Start results for an item path
         }
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | latest_submission_at | score_obtained_at | validated_at | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 0          | 102            | 10      | 0              | 0           | 1                                                         | null                 | null              | null         | null                                              |

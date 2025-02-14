@@ -51,9 +51,9 @@ Feature: User sends a request to join a group
     And the table "group_membership_changes" should be:
       | group_id | member_id | action               | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 11       | 21        | join_request_created | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Try to recreate a request that already exists
     Given I am the user with id "21"
@@ -67,10 +67,10 @@ Feature: User sends a request to join a group
       "data": {"changed": false}
     }
     """
-    And the table "group_pending_requests" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Automatically accepts the request if the user can manage group memberships
     Given I am the user with id "21"
@@ -102,7 +102,7 @@ Feature: User sends a request to join a group
       | 11                | 21             | 0       |
       | 14                | 14             | 1       |
       | 21                | 21             | 1       |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 20      |

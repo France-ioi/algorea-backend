@@ -82,7 +82,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "1000"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "1000"
     And the table "threads" at item_id "1000" should be:
       | latest_update_at    | message_count | status              | helper_group_id |
       | 2022-01-01 00:00:00 | 1             | waiting_for_trainer | 100             |
@@ -103,7 +103,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "10"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "10"
     And the table "threads" at item_id "10" should be:
       | latest_update_at    | message_count |
       | 2022-01-01 00:00:00 | 1             |
@@ -121,7 +121,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "20"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "20"
     And the table "threads" at item_id "20" should be:
       | latest_update_at    | message_count |
       | 2022-01-01 00:00:00 | 2             |
@@ -139,7 +139,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "30"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "30"
     And the table "threads" at item_id "30" should be:
       | latest_update_at    | message_count |
       | 2022-01-01 00:00:00 | 3             |
@@ -158,7 +158,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "40"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "40"
     And the table "threads" at item_id "40" should be:
       | latest_update_at    | message_count |
       | 2022-01-01 00:00:00 | 4             |
@@ -174,7 +174,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "50"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "50"
     And the table "threads" at item_id "50" should be:
       | latest_update_at    | message_count |
       | 2022-01-01 00:00:00 | 0             |
@@ -190,7 +190,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "60"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "60"
     And the table "threads" at item_id "60" should be:
       | latest_update_at    | message_count |
       | 2022-01-01 00:00:00 | 0             |
@@ -206,7 +206,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | message_count   |
       | 2022-01-01 00:00:00 | <message_count> |
@@ -228,7 +228,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | status   |
       | 2022-01-01 00:00:00 | <status> |
@@ -253,7 +253,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | status   |
       | 2022-01-01 00:00:00 | <status> |
@@ -278,7 +278,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | status   |
       | 2022-01-01 00:00:00 | <status> |
@@ -300,7 +300,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | status   |
       | 2022-01-01 00:00:00 | <status> |
@@ -323,7 +323,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | status   |
       | 2022-01-01 00:00:00 | <status> |
@@ -361,7 +361,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | status   | helper_group_id   |
       | 2022-01-01 00:00:00 | <status> | <helper_group_id> |
@@ -385,7 +385,7 @@ Feature: Update thread
       }
       """
     Then the response should be "updated"
-    And the table "threads" should stay unchanged but the row with item_id "<item_id>"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "<item_id>"
     And the table "threads" at item_id "<item_id>" should be:
       | latest_update_at    | status   | helper_group_id   |
       | 2022-01-01 00:00:00 | <status> | <helper_group_id> |

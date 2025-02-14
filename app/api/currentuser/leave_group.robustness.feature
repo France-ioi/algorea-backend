@@ -35,16 +35,16 @@ Feature: User leaves a group - robustness
       "error_text": "No such relation"
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the group id is wrong
     Given I am the user with id "21"
     When I send a DELETE request to "/current-user/group-memberships/abc"
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails if the user doesn't exist
     Given I am the user with id "404"

@@ -75,7 +75,7 @@ Feature: List attempts for current user and item_id - robustness
     When I send a GET request to "/items/210/attempts?attempt_id=0&as_team_id=14"
     Then the response code should be 403
     And the response error message should contain "Can't use given as_team_id as a user's team"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Wrong attempt_id
     Given I am the user with id "11"

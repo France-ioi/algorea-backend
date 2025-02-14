@@ -35,8 +35,8 @@ Feature: User sends a request to leave a group
     And the table "group_membership_changes" should be:
       | group_id | member_id | action                | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 11       | 21        | leave_request_created | 21           | 1                                         |
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Try to recreate a request that already exists
     Given I am the user with id "21"
@@ -50,5 +50,5 @@ Feature: User sends a request to leave a group
       "data": {"changed": false}
     }
     """
-    And the table "group_pending_requests" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged

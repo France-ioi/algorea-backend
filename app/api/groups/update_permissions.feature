@@ -80,7 +80,7 @@ Feature: Change item access rights for a group
       | 23       | 101     | info                  | none                        | none                   | none                  | false              |
       | 23       | 102     | <can_view_generated>  | <can_grant_view_generated>  | <can_watch_generated>  | <can_edit_generated>  | <is_owner>         |
       | 23       | 103     | <can_view_propagated> | <can_grant_view_propagated> | <can_watch_propagated> | <can_edit_propagated> | false              |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 102     |
@@ -125,7 +125,7 @@ Feature: Change item access rights for a group
       | 23       | 101     | info               | none                     | none                | none               | false              |
       | 23       | 102     | none               | none                     | none                | none               | false              |
       | 23       | 103     | none               | none                     | none                | none               | false              |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results_propagate" should be:
       | attempt_id | participant_id | item_id | state            |
       | 0          | 21             | 103     | to_be_propagated |
@@ -164,7 +164,7 @@ Feature: Change item access rights for a group
       | 23       | 101     | info                  | none                        | none                   | none                  | false              |
       | 23       | 102     | <can_view_generated>  | <can_grant_view_generated>  | <can_watch_generated>  | <can_edit_generated>  | <is_owner>         |
       | 23       | 103     | <can_view_propagated> | <can_grant_view_propagated> | <can_watch_propagated> | <can_edit_propagated> | false              |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 102     |
@@ -216,7 +216,7 @@ Feature: Change item access rights for a group
       | 31       | 101     | content            | none                     | none                | none               | 0                  |
       | 31       | 102     | solution           | none                     | none                | none               | 0                  |
       | 31       | 103     | content            | none                     | none                | none               | 0                  |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 102     |
@@ -266,7 +266,7 @@ Feature: Change item access rights for a group
       | 31       | 101     | info               | 0                  |
       | 31       | 102     | none               | 0                  |
       | 31       | 103     | none               | 0                  |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 100     |
@@ -318,7 +318,7 @@ Feature: Change item access rights for a group
       | 31       | 101     | info               | 0                  |
       | 31       | 102     | none               | 0                  |
       | 31       | 103     | none               | 0                  |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 100     |
@@ -370,7 +370,7 @@ Feature: Change item access rights for a group
       | 31       | 101     | info               | 0                  |
       | 31       | 102     | none               | 0                  |
       | 31       | 103     | none               | 0                  |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 100     |
@@ -409,7 +409,7 @@ Feature: Change item access rights for a group
       | 23       | 101     | info               | none                     | none                | none               | false              |
       | 23       | 102     | info               | enter                    | none                | none               | false              |
       | 23       | 103     | none               | enter                    | none                | none               | false              |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 102     |

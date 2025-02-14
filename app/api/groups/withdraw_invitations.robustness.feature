@@ -33,45 +33,45 @@ Feature: Withdraw group invitations - robustness
     When I send a POST request to "/groups/13/invitations/withdraw?group_ids=31,141,21,11,13"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the user is a manager of the parent group, but doesn't have enough rights to manage memberships
     Given I am the user with id "12"
     When I send a POST request to "/groups/13/invitations/withdraw?group_ids=31,141,21,11,13"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the user has enough rights to manage memberships, but the group is a user
     Given I am the user with id "12"
     When I send a POST request to "/groups/12/invitations/withdraw?group_ids=31,141,21,11,13"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the user doesn't exist
     Given I am the user with id "404"
     When I send a POST request to "/groups/13/invitations/withdraw?group_ids=31,141,21,11,13"
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the parent group id is wrong
     Given I am the user with id "21"
     When I send a POST request to "/groups/abc/invitations/withdraw?group_ids=31,141,21,11,13"
     Then the response code should be 400
     And the response error message should contain "Wrong value for parent_group_id (should be int64)"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when group_ids is wrong
     Given I am the user with id "21"
     When I send a POST request to "/groups/13/invitations/withdraw?group_ids=31,abc,11,13"
     Then the response code should be 400
     And the response error message should contain "Unable to parse one of the integers given as query args (value: 'abc', param: 'group_ids')"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged

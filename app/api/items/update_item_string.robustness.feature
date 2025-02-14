@@ -34,7 +34,7 @@ Feature: Update an item string entry - robustness
       """
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
 
   Scenario: Invalid item_id
     Given I am the user with id "11"
@@ -46,7 +46,7 @@ Feature: Update an item string entry - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong value for item_id (should be int64)"
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
 
   Scenario: The title is too long
     Given I am the user with id "11"
@@ -68,7 +68,7 @@ Feature: Update an item string entry - robustness
         }
       }
       """
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
 
   Scenario: Image URL is too long
     Given I am the user with id "11"
@@ -90,7 +90,7 @@ Feature: Update an item string entry - robustness
         }
       }
       """
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
 
   Scenario: The subtitle is too long
     Given I am the user with id "11"
@@ -112,7 +112,7 @@ Feature: Update an item string entry - robustness
         }
       }
       """
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
 
   Scenario: Wrong language
     Given I am the user with id "11"
@@ -123,7 +123,7 @@ Feature: Update an item string entry - robustness
       """
     Then the response code should be 400
     And the response error message should contain "No such language"
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
 
   Scenario: The user doesn't have rights to manage the item
     And I am the user with id "11"

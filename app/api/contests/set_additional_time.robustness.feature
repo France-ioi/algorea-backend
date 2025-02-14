@@ -45,117 +45,117 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
     When I send a PUT request to "/contests/abc/groups/13/additional-times?seconds=0"
     Then the response code should be 400
     And the response error message should contain "Wrong value for item_id (should be int64)"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: Wrong group_id
     Given I am the user with id "21"
     When I send a PUT request to "/contests/50/groups/abc/additional-times?seconds=0"
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: Wrong 'seconds'
     Given I am the user with id "21"
     When I send a PUT request to "/contests/50/groups/13/additional-times?seconds=abc"
     Then the response code should be 400
     And the response error message should contain "Wrong value for seconds (should be int64)"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: 'seconds' is too big
     Given I am the user with id "21"
     When I send a PUT request to "/contests/50/groups/13/additional-times?seconds=3020400"
     Then the response code should be 400
     And the response error message should contain "'seconds' should be between -3020399 and 3020399"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: 'seconds' is too small
     Given I am the user with id "21"
     When I send a PUT request to "/contests/50/groups/13/additional-times?seconds=-3020400"
     Then the response code should be 400
     And the response error message should contain "'seconds' should be between -3020399 and 3020399"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: No such item
     Given I am the user with id "21"
     When I send a PUT request to "/contests/404/groups/13/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: No access to the item
     Given I am the user with id "21"
     When I send a PUT request to "/contests/10/groups/13/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: The item is not a timed contest
     Given I am the user with id "21"
     When I send a PUT request to "/contests/60/groups/13/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: The user is not a contest admin (can_view = info)
     Given I am the user with id "21"
     When I send a PUT request to "/contests/95/groups/13/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: The user is not a contest admin (can_grant_view = none)
     Given I am the user with id "21"
     When I send a PUT request to "/contests/50/groups/13/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: The user is not a contest admin (can_watch = none)
     Given I am the user with id "21"
     When I send a PUT request to "/contests/90/groups/13/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: The user cannot grant access to the group
     Given I am the user with id "21"
     When I send a PUT request to "/contests/70/groups/12/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: The user cannot watch group members
     Given I am the user with id "21"
     When I send a PUT request to "/contests/70/groups/14/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: No such group
     Given I am the user with id "21"
     When I send a PUT request to "/contests/70/groups/404/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
 
   Scenario: Team contest and a user
     Given I am the user with id "21"
     When I send a PUT request to "/contests/80/groups/31/additional-times?seconds=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "permissions_generated" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged

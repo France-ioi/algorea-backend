@@ -68,18 +68,18 @@ Feature: Delete an item dependency - robustness
     When I send a DELETE request to "/items/aaaaa/prerequisites/200"
     Then the response code should be 400
     And the response error message should contain "Wrong value for dependent_item_id (should be int64)"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: Invalid prerequisite_item_id
     Given I am the user with id "11"
     When I send a DELETE request to "/items/210/prerequisites/aaa"
     Then the response code should be 400
     And the response error message should contain "Wrong value for prerequisite_item_id (should be int64)"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: No can_edit=all on the dependent item
     Given I am the user with id "11"
     When I send a DELETE request to "/items/210/prerequisites/200"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged

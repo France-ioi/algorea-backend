@@ -103,14 +103,14 @@ Feature: Apply an item dependency
     And the DB time now is "2020-05-30 11:00:00"
     When I send a POST request to "/items/210/prerequisites/200/apply"
     Then the response should be "updated"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
     And the table "permissions_granted" should be:
       | group_id | item_id | source_group_id | origin         | latest_update_at    | can_view                 | can_enter_from      | can_enter_until     | can_grant_view | can_watch | can_edit | can_make_session_official | is_owner |
       | 11       | 210     | 11              | item_unlocking | 2020-05-30 11:00:00 | content                  | 9999-12-31 23:59:59 | 9999-12-31 23:59:59 | none           | none      | none     | false                     | false    |
       | 22       | 200     | 22              | item_unlocking | 2019-05-30 11:00:00 | info                     | 3019-12-31 23:59:59 | 2020-01-31 23:59:59 | none           | none      | none     | false                     | false    |
       | 22       | 210     | 22              | item_unlocking | 2020-05-30 11:00:00 | content                  | 2019-12-31 23:59:59 | 2020-01-31 23:59:59 | none           | none      | none     | false                     | false    |
       | 26       | 210     | 26              | item_unlocking | 2019-05-30 11:00:00 | content_with_descendants | 2019-12-31 23:59:59 | 2020-01-31 23:59:59 | none           | none      | none     | false                     | false    |
-    And the table "permissions_generated" should stay unchanged but the rows with group_id "11,22"
+    And the table "permissions_generated" should remain unchanged, regardless of the rows with group_id "11,22"
     And the table "permissions_generated" at group_id "11" should be:
       | group_id | item_id | can_view_generated | can_grant_view_generated | can_edit_generated | can_watch_generated | is_owner_generated |
       | 11       | 200     | solution           | content                  | children           | result              | true               |
@@ -127,14 +127,14 @@ Feature: Apply an item dependency
     And the DB time now is "2020-05-30 11:00:00"
     When I send a POST request to "/items/200/prerequisites/100/apply"
     Then the response should be "updated"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
     And the table "permissions_granted" should be:
       | group_id | item_id | source_group_id | origin         | latest_update_at    | can_view                 | can_enter_from      | can_enter_until     | can_grant_view | can_watch | can_edit | can_make_session_official | is_owner |
       | 11       | 200     | 11              | item_unlocking | 2020-05-30 11:00:00 | none                     | 2020-05-30 11:00:00 | 9999-12-31 23:59:59 | none           | none      | none     | false                     | false    |
       | 22       | 200     | 22              | item_unlocking | 2020-05-30 11:00:00 | info                     | 2020-05-30 11:00:00 | 2020-01-31 23:59:59 | none           | none      | none     | false                     | false    |
       | 22       | 210     | 22              | item_unlocking | 2019-05-30 11:00:00 | info                     | 2019-12-31 23:59:59 | 2020-01-31 23:59:59 | none           | none      | none     | false                     | false    |
       | 26       | 210     | 26              | item_unlocking | 2019-05-30 11:00:00 | content_with_descendants | 2019-12-31 23:59:59 | 2020-01-31 23:59:59 | none           | none      | none     | false                     | false    |
-    And the table "permissions_generated" should stay unchanged but the rows with group_id "11,22"
+    And the table "permissions_generated" should remain unchanged, regardless of the rows with group_id "11,22"
     And the table "permissions_generated" at group_id "22" should be:
       | group_id | item_id | can_view_generated | can_grant_view_generated | can_edit_generated | can_watch_generated | is_owner_generated |
       | 22       | 200     | info               | none                     | none               | none                | false              |

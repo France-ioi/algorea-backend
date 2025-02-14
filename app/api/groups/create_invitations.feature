@@ -69,9 +69,9 @@ Feature: Invite users
       | group_id | member_id | action             | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 13       | 21        | invitation_created | 21           | 1                                         |
       | 13       | 101       | invitation_created | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: The group is full
     Given I am the user with id "21"
@@ -102,9 +102,9 @@ Feature: Invite users
     And the table "groups_groups" should be empty
     And the table "group_pending_requests" should be empty
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Successfully invite users into a team skipping those who are members of other teams participating in the same contests
     Given I am the user with id "21"
@@ -142,12 +142,12 @@ Feature: Invite users
         "success": true
       }
       """
-    And the table "groups_groups" should stay unchanged
+    And the table "groups_groups" should remain unchanged
     And the table "group_pending_requests" should be empty
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Convert join-requests into invitations or make them accepted depending on approvals
     Given I am the user with id "21"
@@ -197,7 +197,7 @@ Feature: Invite users
       | 444               | 444            | 1       |
       | 555               | 101            | 0       |
       | 555               | 555            | 1       |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 101            | 20      |

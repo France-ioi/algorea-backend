@@ -26,7 +26,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Json: cannot unmarshal array into Go value of type answers.submitRequestWrapper"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: No task_token
     Given I send a POST request to "/answers" with the following body:
@@ -37,7 +37,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Missing task_token"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Wrong task_token
     Given I send a POST request to "/answers" with the following body:
@@ -49,7 +49,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid task_token: illegal base64 data at input byte 8"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Expired task_token
     Given the server time now is "2020-01-01T00:00:00Z"
@@ -71,7 +71,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid task_token: the token has expired"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Falsified task_token with non-matching signature
     Given "userTaskToken" is a falsified token signed by the app with the following payload:
@@ -91,7 +91,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid task_token: invalid token: crypto/rsa: verification error"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Missing answer
     Given "userTaskToken" is a token signed by the app with the following payload:
@@ -111,7 +111,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Missing answer"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Wrong idUser
     Given "userTaskToken" is a token signed by the app with the following payload:
@@ -132,7 +132,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid task_token: wrong idUser"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Wrong idItemLocal
     Given "userTaskToken" is a token signed by the app with the following payload:
@@ -152,7 +152,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid task_token: wrong idItemLocal"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Wrong idAttempt
     Given "userTaskToken" is a token signed by the app with the following payload:
@@ -173,7 +173,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid task_token: wrong idAttempt"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: User not found
     Given "userTaskToken" is a token signed by the app with the following payload:
@@ -194,7 +194,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 403
     And the response error message should contain "No access to the task item"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: No submission rights
     Given "userTaskToken" is a token signed by the app with the following payload:
@@ -215,7 +215,7 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Item is read-only"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: The attempt is expired (doesn't allow submissions anymore)
     Given "userTaskToken" is a token signed by the app with the following payload:
@@ -236,4 +236,4 @@ Feature: Submit a new answer - robustness
       """
     Then the response code should be 403
     And the response error message should contain "No active attempt found"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged

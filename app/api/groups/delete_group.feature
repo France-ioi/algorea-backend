@@ -68,11 +68,11 @@ Feature: Delete a group
       "message": "deleted"
     }
     """
-    And the table "groups_groups" should stay unchanged but the rows with child_group_id "11" should be deleted
-    And the table "group_pending_requests" should stay unchanged but the rows with group_id,member_id "11" should be deleted
-    And the table "group_membership_changes" should stay unchanged but the rows with group_id,member_id "11" should be deleted
-    And the table "groups_ancestors" should stay unchanged but the rows with ancestor_group_id,child_group_id "11" should be deleted
-    And the table "groups" should stay unchanged but the rows with id "11" should be deleted
+    And the table "groups_groups" should remain unchanged, except that the rows with child_group_id "11" should be deleted
+    And the table "group_pending_requests" should remain unchanged, except that the rows with group_id,member_id "11" should be deleted
+    And the table "group_membership_changes" should remain unchanged, except that the rows with group_id,member_id "11" should be deleted
+    And the table "groups_ancestors" should remain unchanged, except that the rows with ancestor_group_id,child_group_id "11" should be deleted
+    And the table "groups" should remain unchanged, except that the rows with id "11" should be deleted
 
   Scenario: User deletes a group ignoring an expired parent-child relation
     Given I am the user with id "21"
@@ -85,11 +85,11 @@ Feature: Delete a group
       "message": "deleted"
     }
     """
-    And the table "groups_groups" should stay unchanged but the rows with parent_group_id,child_group_id "13" should be deleted
-    And the table "group_membership_changes" should stay unchanged but the rows with group_id,member_id "13" should be deleted
-    And the table "group_pending_requests" should stay unchanged but the rows with group_id,member_id "13" should be deleted
-    And the table "groups_ancestors" should stay unchanged but the rows with ancestor_group_id,child_group_id "13" should be deleted
-    And the table "groups" should stay unchanged but the row with id "13" should be deleted
+    And the table "groups_groups" should remain unchanged, except that the rows with parent_group_id,child_group_id "13" should be deleted
+    And the table "group_membership_changes" should remain unchanged, except that the rows with group_id,member_id "13" should be deleted
+    And the table "group_pending_requests" should remain unchanged, except that the rows with group_id,member_id "13" should be deleted
+    And the table "groups_ancestors" should remain unchanged, except that the rows with ancestor_group_id,child_group_id "13" should be deleted
+    And the table "groups" should remain unchanged, except that the row with id "13" should be deleted
 
   Scenario: User deletes a group that is the helper_group_id of a thread should change the helper group to AllUsers
     Given I am the user with id "21"
@@ -102,7 +102,7 @@ Feature: Delete a group
       "message": "deleted"
     }
     """
-    And the table "threads" should stay unchanged but the row with item_id "1"
+    And the table "threads" should remain unchanged, regardless of the row with item_id "1"
     And the table "threads" at item_id "1" should be:
       | participant_id | item_id | status                  | helper_group_id |
       | 21             | 1       | waiting_for_participant | 31               |

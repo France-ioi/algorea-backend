@@ -65,12 +65,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Missing language_tag
     Given I am the user with id "11"
@@ -94,12 +94,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Missing title
     Given I am the user with id "11"
@@ -123,12 +123,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Both parent_item_id & as_root_of_group_id are missing
     Given I am the user with id "11"
@@ -142,12 +142,12 @@ Feature: Create item - robustness
       """
     Then the response code should be 400
     And the response error message should contain "At least one of parent and as_root_of_group_id should be given"
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: language_tag is not a string
     Given I am the user with id "11"
@@ -172,12 +172,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: language_tag doesn't exist
     Given I am the user with id "11"
@@ -202,12 +202,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: parent.item_id is not a number
     Given I am the user with id "11"
@@ -233,12 +233,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Non-existing parent
     Given I am the user with id "11"
@@ -263,12 +263,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario Outline: Not enough perm on parent
     Given I am the user with id "11"
@@ -293,12 +293,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
   Examples:
     | parent_item |
     | 22          |
@@ -317,12 +317,12 @@ Feature: Create item - robustness
       """
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The user is temporary
     And I am the user with id "12"
@@ -337,12 +337,12 @@ Feature: Create item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario Outline: Wrong optional field value
     Given I am the user with id "11"
@@ -368,12 +368,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | field                            | value       | error                                                                     |
       | full_screen                      | wrong value | full_screen must be one of [forceYes forceNo default]                     |
@@ -419,12 +419,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | field                  | value | error                                                                          |
       | category               | wrong | category must be one of [Undefined Discovery Application Validation Challenge] |
@@ -453,12 +453,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: A child is a skill while the item is not a skill
     Given I am the user with id "11"
@@ -486,12 +486,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario Outline: Parent item cannot have children
     Given I am the user with id "11"
@@ -522,12 +522,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | type   |
       | Task   |
@@ -558,12 +558,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | type   |
       | Task   |
@@ -592,12 +592,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario Outline: Wrong optional field value in the array of children
     Given I am the user with id "11"
@@ -627,12 +627,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | field        | value   | error                                                                          |
       | category     | "wrong" | category must be one of [Undefined Discovery Application Validation Challenge] |
@@ -669,12 +669,12 @@ Feature: Create item - robustness
         "error_text": "<error>"
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | field                         | value                       | permission_column        | permission_value         | error                                                            |
       | content_view_propagation      | as_content                  | can_grant_view_generated | none                     | Not enough permissions for setting content_view_propagation      |
@@ -713,12 +713,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Children items are not visible to the user
     Given I am the user with id "11"
@@ -747,12 +747,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The parent is a child item
     Given I am the user with id "11"
@@ -770,12 +770,12 @@ Feature: Create item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "An item cannot become an ancestor of itself"
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: The parent is a descendant of a child item
     Given I am the user with id "11"
@@ -793,12 +793,12 @@ Feature: Create item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "An item cannot become an ancestor of itself"
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario Outline: A skill cannot have a duration or require an explicit entry
     Given I am the user with id "11"
@@ -824,12 +824,12 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
   Examples:
     | field                   | value      |
     | duration                | "00:00:01" |
@@ -859,4 +859,4 @@ Feature: Create item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
+    And the table "items" should remain unchanged

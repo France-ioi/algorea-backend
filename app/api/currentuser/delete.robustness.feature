@@ -33,10 +33,10 @@ Feature: Delete the current user - robustness
       """
       A user with group_id = 21 tried to delete himself, but he is a member of a group with lock_user_deletion_until >= NOW()
       """
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Login module fails
     Given I am the user with id "21"

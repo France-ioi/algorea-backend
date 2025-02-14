@@ -50,7 +50,7 @@ Feature: User accepts an invitation to join a group
       "data": {"changed": true}
     }
     """
-    And the table "groups_groups" should stay unchanged but the row with parent_group_id "11"
+    And the table "groups_groups" should remain unchanged, regardless of the row with parent_group_id "11"
     And the table "groups_groups" at parent_group_id "11" should be:
       | parent_group_id | child_group_id | personal_info_view_approved_at | lock_membership_approved_at | watch_approved_at |
       | 11              | 21             | null                           | null                        | null              |
@@ -67,7 +67,7 @@ Feature: User accepts an invitation to join a group
       | 15                | 15             | 1       |
       | 21                | 21             | 1       |
       | 22                | 22             | 1       |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 20      |
@@ -89,7 +89,7 @@ Feature: User accepts an invitation to join a group
       "data": {"changed": true}
     }
     """
-    And the table "groups_groups" should stay unchanged but the row with parent_group_id "15"
+    And the table "groups_groups" should remain unchanged, regardless of the row with parent_group_id "15"
     And the table "groups_groups" at parent_group_id "15" should be:
       | parent_group_id | child_group_id | ABS(TIMESTAMPDIFF(SECOND, personal_info_view_approved_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, lock_membership_approved_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, watch_approved_at, NOW())) < 3 |
       | 15              | 21             | 1                                                                     | 1                                                                  | 1                                                        |
@@ -106,7 +106,7 @@ Feature: User accepts an invitation to join a group
       | 15                | 21             | 0       |
       | 21                | 21             | 1       |
       | 22                | 22             | 1       |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 21             | 20      |

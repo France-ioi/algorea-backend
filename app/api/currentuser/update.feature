@@ -17,7 +17,7 @@ Feature: Update user data
         "message": "updated"
       }
       """
-    And the table "users" should stay unchanged but the row with group_id "11"
+    And the table "users" should remain unchanged, regardless of the row with group_id "11"
     And the table "users" at group_id "11" should be:
       | group_id | latest_login_at     | latest_activity_at  | registered_at       | default_language   |
       | 11       | 2019-06-16 21:01:25 | 2019-06-16 22:05:44 | 2019-05-10 10:42:11 | sl                 |

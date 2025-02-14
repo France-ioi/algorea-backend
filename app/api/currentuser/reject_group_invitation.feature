@@ -29,4 +29,4 @@ Feature: User rejects an invitation to join a group
     And the table "group_membership_changes" should be:
       | group_id | member_id | action             | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 11       | 21        | invitation_refused | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged

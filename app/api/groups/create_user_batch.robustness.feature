@@ -60,11 +60,11 @@ Feature: Create a user batch - robustness
       }
     }
     """
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Wrong field values
     Given I am the user with id "21"
@@ -94,11 +94,11 @@ Feature: Create a user batch - robustness
       }
     }
     """
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Wrong field values (another set)
     Given I am the user with id "21"
@@ -129,11 +129,11 @@ Feature: Create a user batch - robustness
       }
     }
     """
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Wrong field values (one more set)
     Given I am the user with id "21"
@@ -163,11 +163,11 @@ Feature: Create a user batch - robustness
       }
     }
     """
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario Outline: Wrong group prefix
     Given I am the user with id "21"
@@ -183,11 +183,11 @@ Feature: Create a user batch - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
     Examples:
       | group_prefix |
       | 404          |
@@ -208,11 +208,11 @@ Feature: Create a user batch - robustness
     """
     Then the response code should be 400
     And the response error message should contain "'postfix_length' is too small"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: subgroups[...].group_id is not a descendant of the prefix group
     Given I am the user with id "21"
@@ -228,11 +228,11 @@ Feature: Create a user batch - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: subgroups[...].group_id is a user
     Given I am the user with id "21"
@@ -248,11 +248,11 @@ Feature: Create a user batch - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: user_batch_prefix.max_users exceeded
     Given I am the user with id "21"
@@ -268,11 +268,11 @@ Feature: Create a user batch - robustness
     """
     Then the response code should be 400
     And the response error message should contain "'user_batch_prefix.max_users' exceeded"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: (group_prefix, custom_prefix) pair already exists
     Given I am the user with id "21"
@@ -288,11 +288,11 @@ Feature: Create a user batch - robustness
     """
     Then the response code should be 400
     And the response error message should contain "'custom_prefix' already exists for the given 'group_prefix'"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Login module failed
     Given I am the user with id "21"
@@ -312,11 +312,11 @@ Feature: Create a user batch - robustness
     """
     Then the response code should be 500
     And the response error message should contain "Login module failed"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
     And logs should contain:
       """
       The login module returned an error for /platform_api/accounts_manager/create: some error

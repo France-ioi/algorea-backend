@@ -51,81 +51,81 @@ Feature: Generate a task token with a refreshed attempt for an item - robustness
     When I send a POST request to "/items/50/attempts/abc/generate-task-token"
     Then the response code should be 400
     And the response error message should contain "Wrong value for attempt_id (should be int64)"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Invalid item_id
     Given I am the user with id "101"
     When I send a POST request to "/items/abc/attempts/0/generate-task-token"
     Then the response code should be 400
     And the response error message should contain "Wrong value for item_id (should be int64)"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Invalid as_team_id
     Given I am the user with id "101"
     When I send a POST request to "/items/50/attempts/0/generate-task-token?as_team_id=abc"
     Then the response code should be 400
     And the response error message should contain "Wrong value for as_team_id (should be int64)"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: User not found
     Given I am the user with id "404"
     When I send a POST request to "/items/50/attempts/0/generate-task-token"
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No attempt
     Given I am the user with id "101"
     When I send a POST request to "/items/50/attempts/404/generate-task-token"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No access to the item (info access)
     Given I am the user with id "101"
     When I send a POST request to "/items/50/attempts/0/generate-task-token"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No access to the item (type='Chapter')
     Given I am the user with id "101"
     When I send a POST request to "/items/90/attempts/0/generate-task-token"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: User is not a team member
     Given I am the user with id "101"
     When I send a POST request to "/items/60/attempts/0/generate-task-token?as_team_id=102"
     Then the response code should be 403
     And the response error message should contain "Can't use given as_team_id as a user's team"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Attempt group is not a team
     Given I am the user with id "101"
     When I send a POST request to "/items/60/attempts/0/generate-task-token?as_team_id=103"
     Then the response code should be 403
     And the response error message should contain "Can't use given as_team_id as a user's team"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No result in the DB
     Given I am the user with id "101"
     When I send a POST request to "/items/60/attempts/0/generate-task-token"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: The attempt is expired (doesn't allow submissions)
     Given I am the user with id "101"
     When I send a POST request to "/items/60/attempts/1/generate-task-token"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: The result is not started
     Given I am the user with id "101"
     When I send a POST request to "/items/60/attempts/2/generate-task-token"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged

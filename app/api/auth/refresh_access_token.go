@@ -106,6 +106,18 @@ func (srv *Service) refreshTokens(
 	oldToken := &oauth2.Token{RefreshToken: refreshToken}
 	oauthConfig := auth.GetOAuthConfig(srv.AuthConfig)
 	token, err := oauthConfig.TokenSource(ctx, oldToken).Token()
+
+	var retrieveError *oauth2.RetrieveError
+	if errors.As(err, &retrieveError) &&
+		retrieveError.Response.StatusCode == http.StatusUnauthorized {
+		// The refresh token is invalid
+		logging.SharedLogger.WithContext(ctx).
+			Warnf("The refresh token is invalid for user %d", user.GroupID)
+
+		service.MustNotBeError(store.Sessions().Delete("session_id = ?", sessionID).Error())
+		return "", 0, service.ErrNotFound(errors.New("the refresh token is invalid"))
+	}
+
 	service.MustNotBeError(err)
 	service.MustNotBeError(store.InTransaction(func(store *database.DataStore) error {
 		// insert the new access token

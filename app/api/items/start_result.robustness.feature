@@ -35,14 +35,14 @@ Feature: Start a result for an item - robustness
     When I send a POST request to "/items/11111111111111111111111111111/222222222222/start-result?attempt_id=0"
     Then the response code should be 400
     And the response error message should contain "Unable to parse one of the integers given as query args (value: '11111111111111111111111111111', param: 'ids')"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Invalid attempt_id
     Given I am the user with id "101"
     When I send a POST request to "/items/50/start-result?attempt_id=abc"
     Then the response code should be 400
     And the response error message should contain "Wrong value for attempt_id (should be int64)"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Invalid as_team_id
     Given I am the user with id "101"
@@ -55,42 +55,42 @@ Feature: Start a result for an item - robustness
     When I send a POST request to "/items/50/start-result?attempt_id=0"
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No access to the item (no item)
     Given I am the user with id "101"
     When I send a POST request to "/items/404/start-result?attempt_id=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No access to the item (info access)
     Given I am the user with id "101"
     When I send a POST request to "/items/50/start-result?attempt_id=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No access to the item (as a team)
     Given I am the user with id "101"
     When I send a POST request to "/items/50/start-result?as_team_id=104&attempt_id=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: User is not a team member
     Given I am the user with id "101"
     When I send a POST request to "/items/60/start-result?as_team_id=102&attempt_id=0"
     Then the response code should be 403
     And the response error message should contain "Can't use given as_team_id as a user's team"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: as_team_id is not a team
     Given I am the user with id "101"
     When I send a POST request to "/items/60/start-result?as_team_id=103&attempt_id=0"
     Then the response code should be 403
     And the response error message should contain "Can't use given as_team_id as a user's team"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Not enough permissions for the last item in the path
     Given I am the user with id "101"
@@ -100,11 +100,11 @@ Feature: Start a result for an item - robustness
     When I send a POST request to "/items/50/start-result?as_team_id=104&attempt_id=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: The item requires explicit entry
     Given I am the user with id "101"
     When I send a POST request to "/items/70/start-result?attempt_id=0"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged

@@ -35,7 +35,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with language_tag "en"
+    And the table "items_strings" should remain unchanged, regardless of the row with language_tag "en"
     And the table "items_strings" at language_tag "en" should be:
       | item_id | language_tag | title     | image_url                   | subtitle     | description     |
       | 50      | en           | The title | http://mysite.com/image.jpg | The subtitle | The description |
@@ -52,7 +52,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with language_tag "en"
+    And the table "items_strings" should remain unchanged, regardless of the row with language_tag "en"
     And the table "items_strings" at language_tag "en" should be:
       | item_id | language_tag | title     | image_url                                                                                                                        | subtitle     | description     |
       | 50      | en           | The title | http://mysite.com/image-1234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890.jpg | The subtitle | The description |
@@ -69,7 +69,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with language_tag "sl"
+    And the table "items_strings" should remain unchanged, regardless of the row with language_tag "sl"
     And the table "items_strings" at language_tag "sl" should be:
       | item_id | language_tag | title     | image_url                   | subtitle     | description     |
       | 50      | sl           | The title | http://mysite.com/image.jpg | The subtitle | The description |
@@ -86,7 +86,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with item_id "60"
+    And the table "items_strings" should remain unchanged, regardless of the row with item_id "60"
     And the table "items_strings" at item_id "60" should be:
       | item_id | language_tag | title     | image_url                   | subtitle     | description     |
       | 60      | sl           | The title | http://mysite.com/image.jpg | The subtitle | The description |
@@ -103,7 +103,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with item_id "60"
+    And the table "items_strings" should remain unchanged, regardless of the row with item_id "60"
     And the table "items_strings" at item_id "60" should be:
       | item_id | language_tag | title     | image_url                   | subtitle     | description     |
       | 60      | en           | The title | http://mysite.com/image.jpg | The subtitle | The description |
@@ -120,7 +120,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with item_id "60"
+    And the table "items_strings" should remain unchanged, regardless of the row with item_id "60"
     And the table "items_strings" at item_id "60" should be:
       | item_id | language_tag | title     | image_url | subtitle | description |
       | 60      | en           | The title | null      | null     | null        |
@@ -137,7 +137,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with item_id "60"
+    And the table "items_strings" should remain unchanged, regardless of the row with item_id "60"
     And the table "items_strings" at item_id "60" should be:
       | item_id | language_tag | title | image_url | subtitle | description |
       | 60      | en           |       |           |          |             |
@@ -154,7 +154,7 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged but the row with language_tag "sl"
+    And the table "items_strings" should remain unchanged, regardless of the row with language_tag "sl"
     And the table "items_strings" at language_tag "sl" should be:
       | item_id | language_tag | title     | image_url | subtitle | description |
       | 50      | sl           | The title | null      | null     | null        |
@@ -167,4 +167,4 @@ Feature: Update an item string entry
       }
       """
     Then the response should be "updated"
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged

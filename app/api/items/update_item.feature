@@ -62,16 +62,16 @@ Background:
       }
       """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "50"
+    And the table "items" should remain unchanged, regardless of the row with id "50"
     And the table "items" at id "50" should be:
       | id | type    | url                  | options   | default_language_tag | no_score | text_id | title_bar_visible | display_details_in_parent | uses_api | read_only | full_screen | children_layout | hints_allowed | fixed_ranks | validation_type | entry_min_admitted_members_ratio | entry_frozen_teams | entry_max_team_size | allows_multiple_attempts | duration | show_user_infos | prompt_to_join_group_by_code | entering_time_min   | entering_time_max   | participants_group_id |
       | 50 | Chapter | http://someurl3.com/ | {"opt":3} | en                   | 1        | Task2   | 0                 | 1                         | 0        | 1         | forceNo     | List            | 1             | 1           | One             | Half                             | 0                  | 10                  | 1                        | 01:20:30 | 1               | 1                            | 2007-01-01 01:02:03 | 3007-01-01 01:02:03 | null                  |
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: Valid (set nullable fields to null)
     Given I am the user with id "11"
@@ -82,16 +82,16 @@ Background:
       }
       """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "50"
+    And the table "items" should remain unchanged, regardless of the row with id "50"
     And the table "items" at id "50" should be:
       | id | type    | url  | options | default_language_tag | no_score | text_id | title_bar_visible | display_details_in_parent | uses_api | read_only | full_screen | children_layout | hints_allowed | fixed_ranks | validation_type | entry_min_admitted_members_ratio | entry_frozen_teams | entry_max_team_size | allows_multiple_attempts | duration | show_user_infos | prompt_to_join_group_by_code | entering_time_min   | entering_time_max   | participants_group_id |
       | 50 | Chapter | null | null    | en                   | 1        | null    | 0                 | 1                         | 0        | 1         | forceNo     | List            | 1             | 1           | One             | Half                             | 0                  | 10                  | 1                        | null     | 1               | 1                            | 2007-01-01 01:02:03 | 3007-01-01 01:02:03 | null                  |
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: Valid (all the fields are set)
     Given I am the user with id "11"
@@ -146,11 +146,11 @@ Background:
       }
       """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "50"
+    And the table "items" should remain unchanged, regardless of the row with id "50"
     And the table "items" at id "50" should be:
       | id | type    | url               | options      | default_language_tag | entry_frozen_teams | no_score | text_id     | title_bar_visible | display_details_in_parent | uses_api | read_only | full_screen | children_layout | hints_allowed | fixed_ranks | validation_type | entry_min_admitted_members_ratio | entry_frozen_teams | entry_max_team_size | allows_multiple_attempts | duration | requires_explicit_entry | show_user_infos | prompt_to_join_group_by_code | participants_group_id |
       | 50 | Chapter | http://myurl.com/ | {"opt":true} | sl                   | 1                  | 0        | Tasknumber1 | 1                 | 0                         | 1        | 0         | forceYes    | Grid            | 0             | 0           | AllButOne       | All                              | 1                  | 2345                | 0                        | 01:02:03 | 1                       | 0               | 0                            | 5577006791947779410   |
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
     And the table "items_items" should be:
       | parent_item_id | child_item_id | category    | score_weight | content_view_propagation | upper_view_levels_propagation | grant_view_propagation | watch_propagation | edit_propagation |
       | 21             | 60            | Undefined   | 1            | none                     | use_content_view_propagation  | 0                      | 0                 | 0                |
@@ -190,8 +190,8 @@ Background:
       | 5577006791947779410 | 50      | content            | none                     | none                | none               | false              |
       | 5577006791947779410 | 112     | info               | none                     | none                | none               | false              |
       | 5577006791947779410 | 134     | info               | none                     | none                | none               | false              |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the row with item_id "50"
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the row with item_id "50"
     And the table "results" at item_id "50" should be:
       | attempt_id | participant_id | item_id | score_computed |
       | 0          | 11             | 50      | 56.666668      |
@@ -228,11 +228,11 @@ Background:
       }
       """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "70"
+    And the table "items" should remain unchanged, regardless of the row with id "70"
     And the table "items" at id "70" should be:
       | id | type  | url                  | options   | default_language_tag | entry_frozen_teams | no_score | text_id | title_bar_visible | display_details_in_parent | uses_api | read_only | full_screen | children_layout | hints_allowed | fixed_ranks | validation_type | entry_min_admitted_members_ratio | entry_frozen_teams | entry_max_team_size | allows_multiple_attempts | duration | show_user_infos | prompt_to_join_group_by_code | participants_group_id |
       | 70 | Skill | http://someurl3.com/ | {"opt":3} | en                   | 0                  | 0        | null    | 0                 | 1                         | 0        | 1         | forceNo     | List            | 1             | 1           | One             | Half                             | 0                  | 10                  | 1                        | 01:20:30 | 1               | 1                            | 1234                  |
-    And the table "items_strings" should stay unchanged
+    And the table "items_strings" should remain unchanged
     And the table "items_items" should be:
       | parent_item_id | child_item_id | category    | score_weight | content_view_propagation | upper_view_levels_propagation | grant_view_propagation | watch_propagation | edit_propagation |
       | 21             | 60            | Undefined   | 1            | none                     | use_content_view_propagation  | 0                      | 0                 | 0                |
@@ -250,7 +250,7 @@ Background:
       | id | type | name |
       | 10 | Club | Club |
       | 11 | User | jdoe |
-    And the table "permissions_granted" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
     And the table "permissions_generated" should be:
       | group_id | item_id | can_view_generated | can_grant_view_generated | can_watch_generated | can_edit_generated | is_owner_generated |
       | 10       | 21      | none               | none                     | none                | none               | false              |
@@ -262,8 +262,8 @@ Background:
       | 11       | 70      | solution           | solution_with_grant      | answer_with_grant   | all_with_grant     | true               |
       | 11       | 112     | solution           | content                  | answer              | all                | false              |
       | 11       | 134     | solution           | solution_with_grant      | answer_with_grant   | all_with_grant     | true               |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the row with item_id "70"
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the row with item_id "70"
     And the table "results" at item_id "70" should be:
       | attempt_id | participant_id | item_id | score_computed |
       | 0          | 11             | 70      | 56.666668      |
@@ -289,8 +289,8 @@ Background:
       }
       """
     Then the response should be "updated"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
     And the table "items_items" should be:
       | parent_item_id | child_item_id | category  | score_weight | content_view_propagation | upper_view_levels_propagation | grant_view_propagation | watch_propagation | edit_propagation |
       | 21             | 112           | Undefined | 1            | as_info                  | use_content_view_propagation  | 0                      | 0                 | 0                |
@@ -304,7 +304,7 @@ Background:
       | id | type | name |
       | 10 | Club | Club |
       | 11 | User | jdoe |
-    And the table "permissions_granted" should stay unchanged
+    And the table "permissions_granted" should remain unchanged
     And the table "permissions_generated" should be:
       | group_id | item_id | can_view_generated | can_grant_view_generated | can_watch_generated | can_edit_generated | is_owner_generated |
       | 10       | 21      | none               | none                     | none                | none               | false              |
@@ -315,8 +315,8 @@ Background:
       | 11       | 60      | solution           | solution_with_grant      | answer_with_grant   | all_with_grant     | true               |
       | 11       | 70      | solution           | solution_with_grant      | answer_with_grant   | all_with_grant     | true               |
       | 11       | 112     | solution           | content                  | answer              | all                | false              |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the rows with item_ids "21,50"
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the rows with item_ids "21,50"
     And the table "results" at item_ids "21,50" should be:
       | attempt_id | participant_id | item_id | score_computed |
       | 0          | 11             | 21      | 0              |
@@ -331,12 +331,12 @@ Background:
     }
     """
     Then the response should be "updated"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: Valid with empty children array
     Given I am the user with id "11"
@@ -347,18 +347,18 @@ Background:
     }
     """
     Then the response should be "updated"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
     And the table "items_items" should be:
       | parent_item_id | child_item_id |
       | 50             | 21            |
     And the table "items_ancestors" should be:
       | ancestor_item_id | child_item_id |
       | 50               | 21            |
-    And the table "groups" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the rows with item_ids "21,50"
+    And the table "groups" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the rows with item_ids "21,50"
     And the table "results" at item_ids "21,50" should be:
       | attempt_id | participant_id | item_id | score_computed |
       | 0          | 11             | 21      | 0              |
@@ -375,15 +375,15 @@ Background:
     }
     """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "60"
+    And the table "items" should remain unchanged, regardless of the row with id "60"
     And the table "items" at id "60" should be:
       | id | duration | requires_explicit_entry | participants_group_id |
       | 60 | null     | false                   | 1234                  |
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
     When I send a PUT request to "/items/60" with the following body:
     """
     {
@@ -391,11 +391,11 @@ Background:
     }
     """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "60"
+    And the table "items" should remain unchanged, regardless of the row with id "60"
     And the table "items" at id "60" should be:
       | id | duration | requires_explicit_entry | participants_group_id |
       | 60 | null     | true                    | 1234                  |
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
 
   Scenario: Recomputes results if no_score is given
     Given I am the user with id "11"
@@ -406,17 +406,17 @@ Background:
     }
     """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "50"
+    And the table "items" should remain unchanged, regardless of the row with id "50"
     And the table "items" at id "50" should be:
       | id | no_score |
       | 50 | false    |
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the row with item_id "50"
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the row with item_id "50"
     And the table "results" at item_id "50" should be:
       | attempt_id | participant_id | item_id | score_computed |
       | 0          | 11             | 50      | 0              |
@@ -431,17 +431,17 @@ Background:
     }
     """
     Then the response should be "updated"
-    And the table "items" should stay unchanged but the row with id "50"
+    And the table "items" should remain unchanged, regardless of the row with id "50"
     And the table "items" at id "50" should be:
       | id | validation_type |
       | 50 | All             |
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the row with item_id "50"
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the row with item_id "50"
     And the table "results" at item_id "50" should be:
       | attempt_id | participant_id | item_id | score_computed |
       | 0          | 11             | 50      | 0              |

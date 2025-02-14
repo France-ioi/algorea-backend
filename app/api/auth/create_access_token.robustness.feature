@@ -9,35 +9,35 @@ Feature: Login callback - robustness
     When I send a POST request to "/auth/token?code=somecode"
     Then the response code should be 400
     And the response error message should contain "Only one of the 'code' parameter and the 'Authorization' header can be given"
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: Should be an error when nor code given, nor auth token given, and we don't want to create a temporary user
     When I send a POST request to "/auth/token"
     Then the response code should be 401
     And the response error message should contain "No access token provided"
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: Should be an error when no code given, and auth token is invalid (could have expired), and we don't want to create a temporary user
     When I send a POST request to "/auth/token"
     And the "Authorization" request header is "invalid"
     Then the response code should be 401
     And the response error message should contain "No access token provided"
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: Invalid JSON data
     Given the "Content-Type" request header is "application/json"
@@ -47,12 +47,12 @@ Feature: Login callback - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Invalid character 'c' looking for beginning of value"
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: Invalid form data
     Given the "Content-Type" request header is "application/x-www-form-urlencoded"
@@ -62,12 +62,12 @@ Feature: Login callback - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Invalid URL escape "%%%""
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: Invalid request content type
     Given the "Content-Type" request header is "application/xml"
@@ -76,12 +76,12 @@ Feature: Login callback - robustness
     <code>1234</code>
     """
     Then the response code should be 415
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: OAuth error
     Given the DB time now is "2019-07-16 22:02:28"
@@ -93,12 +93,12 @@ Feature: Login callback - robustness
     Then the response code should be 500
     And the response error message should contain "Oauth2: cannot fetch token: 500"
     And the response error message should contain "Response: Unknown error"
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: User API error
     Given the DB time now is "2019-07-16 22:02:28"
@@ -122,12 +122,12 @@ Feature: Login callback - robustness
       """
       {{ quote(`Can't retrieve user's profile (status code = 500, response = "Unknown error")`) }}
       """
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario: User profile can't be parsed
     Given the DB time now is "2019-07-16 22:02:28"
@@ -151,12 +151,12 @@ Feature: Login callback - robustness
       """
       {{ quote(`Can't parse user's profile (response = "Not a JSON", error = "invalid character 'N' looking for beginning of value")`)}}
       """
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
 
   Scenario Outline: User profile is invalid
     Given the DB time now is "2019-07-16 22:02:28"
@@ -180,12 +180,12 @@ Feature: Login callback - robustness
       """
       {{ quote(`User's profile is invalid (response = ` + quote(`<profile_body>`) + `, error = "<error_text>")`) }}
       """
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
   Examples:
     | profile_body      | error_text                 |
     | {"login":"login"} | no id in user's profile    |
@@ -195,12 +195,12 @@ Feature: Login callback - robustness
     Given I send a POST request to "/auth/token<query>"
     Then the response code should be 400
     And the response error message should contain "<expected_error>"
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "sessions" should stay unchanged
-    And the table "access_tokens" should stay unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "sessions" should remain unchanged
+    And the table "access_tokens" should remain unchanged
   Examples:
     | query                                            | expected_error                                                                 |
     | ?use_cookie=1                                    | One of cookie_secure and cookie_same_site must be true when use_cookie is true |

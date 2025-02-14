@@ -23,4 +23,4 @@ Feature: Update user data - robustness
          }
       }
       """
-    And the table "users" should stay unchanged
+    And the table "users" should remain unchanged

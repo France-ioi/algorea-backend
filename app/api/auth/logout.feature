@@ -35,7 +35,7 @@ Feature: Sign the current user out
       | session_id | token                     | expires_at          |
       | 2          | accesstokenforjane        | 2019-07-16 22:02:29 |
       | 2          | anotheraccesstokenforjane | 2019-07-16 22:02:31 |
-    And the table "users" should stay unchanged
+    And the table "users" should remain unchanged
 
   Scenario: Should delete only the current session on log out when there is more than one session opened for the user
     Given the database table "sessions" also has the following row:
@@ -64,7 +64,7 @@ Feature: Sign the current user out
       | 2          | accesstokenforjane         | 2019-07-16 22:02:29 |
       | 2          | anotheraccesstokenforjane  | 2019-07-16 22:02:31 |
       | 3          | anothersessiontokenforjohn | 2019-07-16 22:02:40 |
-    And the table "users" should stay unchanged
+    And the table "users" should remain unchanged
 
   Scenario Outline: The user logs out successfully with the session cookie provided
     Given the server time now is "2019-07-16T22:02:28Z"
@@ -90,7 +90,7 @@ Feature: Sign the current user out
       | session_id | token                     | expires_at          |
       | 2          | accesstokenforjane        | 2019-07-16 22:02:29 |
       | 2          | anotheraccesstokenforjane | 2019-07-16 22:02:31 |
-    And the table "users" should stay unchanged
+    And the table "users" should remain unchanged
     Examples:
       | access_token_cookie                    | expected_cookie                                                                                                                  |
       | 0!someaccesstoken!!                    | access_token=; Expires=Tue, 16 Jul 2019 21:45:48 GMT; Max-Age=0; HttpOnly; SameSite=None                                         |

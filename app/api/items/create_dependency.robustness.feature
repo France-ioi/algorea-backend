@@ -70,7 +70,7 @@ Feature: Create an item dependency - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Wrong value for dependent_item_id (should be int64)"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: Invalid prerequisite_item_id
     Given I am the user with id "11"
@@ -80,7 +80,7 @@ Feature: Create an item dependency - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Wrong value for prerequisite_item_id (should be int64)"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: The score is too small
     Given I am the user with id "11"
@@ -100,7 +100,7 @@ Feature: Create an item dependency - robustness
         }
       }
       """
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: The score is too big
     Given I am the user with id "11"
@@ -120,7 +120,7 @@ Feature: Create an item dependency - robustness
         }
       }
       """
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: No can_view >= info on the prerequisite item
     Given I am the user with id "11"
@@ -130,7 +130,7 @@ Feature: Create an item dependency - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: No can_edit >= all on the dependent item
     Given I am the user with id "11"
@@ -140,7 +140,7 @@ Feature: Create an item dependency - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: can_grant_view < 'content' on the dependent_item_id item when grant_content_view is true
     Given I am the user with id "11"
@@ -152,7 +152,7 @@ Feature: Create an item dependency - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged
 
   Scenario: The dependency already exists
     Given I am the user with id "11"
@@ -167,4 +167,4 @@ Feature: Create an item dependency - robustness
     """
     Then the response code should be 422
     And the response error message should contain "The dependency already exists"
-    And the table "item_dependencies" should stay unchanged
+    And the table "item_dependencies" should remain unchanged

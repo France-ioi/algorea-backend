@@ -56,7 +56,7 @@ Feature: Add a parent-child relation between two groups
       | 13                | 13             | 1       |
       | 14                | 14             | 1       |
       | 21                | 21             | 1       |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 11             | 20      |

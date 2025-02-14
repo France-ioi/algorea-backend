@@ -68,9 +68,9 @@ Feature: Create item
       | group_id | item_id             | can_view_generated | can_grant_view_generated | can_watch_generated | can_edit_generated | is_owner_generated |
       | 11       | 21                  | solution           | none                     | none                | children           | 0                  |
       | 11       | 5577006791947779410 | solution           | solution_with_grant      | answer_with_grant   | all_with_grant     | 1                  |
-    And the table "groups" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Valid when as_root_of_group_id is given, but parent_item_id is not given (not a skill)
     Given I am the user with id "11"
@@ -118,8 +118,8 @@ Feature: Create item
       | id | name    | type    | root_activity_id    | root_skill_id |
       | 10 | Friends | Friends | 5577006791947779410 | null          |
       | 11 | jdoe    | User    | null                | null          |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Valid when as_root_of_group_id is given, but parent_item_id is not given (skill with children)
     Given I am the user with id "11"
@@ -185,8 +185,8 @@ Feature: Create item
       | id | name    | type    | root_activity_id | root_skill_id       |
       | 10 | Friends | Friends | null             | 5577006791947779410 |
       | 11 | jdoe    | User    | null             | null                |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Set can_request_help for children
     Given I am the user with id "11"
@@ -365,7 +365,7 @@ Feature: Create item
       | 8674665223082153551 | 12                  | info               | none                                              | none                | none               | 0                  |
       | 8674665223082153551 | 34                  | info               | none                                              | none                | none               | 0                  |
       | 8674665223082153551 | 5577006791947779410 | content            | none                                              | none                | none               | 0                  |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id |
       | 0          | 11             | 12      |

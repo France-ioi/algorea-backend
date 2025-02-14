@@ -21,7 +21,7 @@ Feature: Create a new code for the given group
     """
     {"code":"newpassword"}
     """
-    And the table "groups" should stay unchanged but the row with id "13"
+    And the table "groups" should remain unchanged, regardless of the row with id "13"
     And the table "groups" at id "13" should be:
       | id | name    | description     | created_at          | type  | code        | code_lifetime | code_expires_at     |
       | 13 | Group B | Group B is here | 2019-03-06 09:26:40 | Class | newpassword | 3600          | 2017-10-14 05:39:48 |

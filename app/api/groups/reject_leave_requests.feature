@@ -59,7 +59,7 @@ Feature: Reject requests to leave a group
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged
+    And the table "groups_groups" should remain unchanged
     And the table "group_pending_requests" should be:
       | group_id | member_id | type         |
       | 13       | 21        | invitation   |
@@ -70,4 +70,4 @@ Feature: Reject requests to leave a group
       | group_id | member_id | action                | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 13       | 31        | leave_request_refused | 21           | 1                                         |
       | 13       | 141       | leave_request_refused | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged

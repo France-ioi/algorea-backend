@@ -95,11 +95,11 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "13"
+    And the table "groups" should remain unchanged, regardless of the row with id "13"
     And the table "groups" at id "13" should be:
       | id | name   | grade | description    | created_at          | type  | root_activity_id   | root_skill_id | is_open | is_public | code       | code_lifetime | code_expires_at     | open_activity_when_joining | require_members_to_join_parent | organizer              | address_line1               | address_line2        | address_postcode | address_city | address_country | expected_start      | require_personal_info_access_approval | require_lock_membership_approval_until | require_watch_approval | max_participants | enforce_max_participants |
       | 13 | Team B | 10    | Team B is here | 2019-03-06 09:26:40 | Class | <root_activity_id> | 4567          | false   | false     | ybabbxnlyo | 2147483647    | 2019-12-31 23:59:59 | false                      | true                           | Association France-ioi | Chez Jacques-Henri Jourdan, | 42, rue de Cronstadt | 75015            | Paris        | France          | 2019-05-03 11:00:00 | view                                  | 2018-05-30 11:00:00                    | true                   | 8                | true                     |
-    And the table "groups_groups" should stay unchanged
+    And the table "groups_groups" should remain unchanged
     And the table "group_pending_requests" should be:
       | group_id | member_id | type          |
       | 13       | 21        | invitation    |
@@ -135,7 +135,7 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "13"
+    And the table "groups" should remain unchanged, regardless of the row with id "13"
     And the table "groups" at id "13" should be:
       | id | name   | grade | description | created_at          | type  | root_activity_id | is_open | is_public | code       | code_lifetime | code_expires_at | open_activity_when_joining | require_lock_membership_approval_until | max_participants |
       | 13 | Club B | 0     | null        | 2019-03-06 09:26:40 | Class | null             | false   | false     | ybabbxnlyo | null          | null            | false                      | null                                   | null             |
@@ -157,13 +157,13 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "13"
+    And the table "groups" should remain unchanged, regardless of the row with id "13"
     And the table "groups" at id "13" should be:
       | id | name   | grade | description | created_at          | type  | root_activity_id | is_open | is_public | code       | code_lifetime | code_expires_at | open_activity_when_joining |
       | 13 | Club B | 0     | null        | 2019-03-06 09:26:40 | Class | null             | false   | true      | ybabbxnlyo | null          | null            | false                      |
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
 
   Scenario: User is a manager of the group, does not update group_pending_requests (is_public is not changed)
     Given I am the user with id "21"
@@ -181,13 +181,13 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "13"
+    And the table "groups" should remain unchanged, regardless of the row with id "13"
     And the table "groups" at id "13" should be:
       | id | name   | grade | description | created_at          | type  | root_activity_id | is_open | is_public | code       | code_lifetime | code_expires_at | open_activity_when_joining |
       | 13 | Club B | 0     | null        | 2019-03-06 09:26:40 | Class | null             | false   | true      | ybabbxnlyo | null          | null            | false                      |
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
 
   Scenario: User is a manager of the group, does not update group_pending_requests (is_public changes from false to true)
     Given I am the user with id "21"
@@ -198,13 +198,13 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "14"
+    And the table "groups" should remain unchanged, regardless of the row with id "14"
     And the table "groups" at id "14" should be:
       | id | name    | grade | description | created_at          | type | root_activity_id | is_official_session | is_open | is_public | code | code_lifetime | code_expires_at | open_activity_when_joining |
       | 14 | Group C | -4    | Group C     | 2019-04-06 09:26:40 | Club | null             | false               | true    | true      | null | null          | null            | false                      |
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
 
   Scenario: User is a manager of the group, but no fields provided
     Given I am the user with id "21"
@@ -214,8 +214,8 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: User attaches the group to the activity as an official session
     Given I am the user with id "21"
@@ -227,11 +227,11 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "14"
+    And the table "groups" should remain unchanged, regardless of the row with id "14"
     And the table "groups" at id "14" should be:
       | id | name    | grade | description | created_at          | type | root_activity_id | is_official_session | is_open | is_public | code | code_lifetime | code_expires_at | open_activity_when_joining |
       | 14 | Group C | -4    | Group C     | 2019-04-06 09:26:40 | Club | 123              | true                | true    | false     | null | null          | null            | false                      |
-    And the table "groups_groups" should stay unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: User replaces the activity of the official session
     Given I am the user with id "24"
@@ -242,11 +242,11 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "15"
+    And the table "groups" should remain unchanged, regardless of the row with id "15"
     And the table "groups" at id "15" should be:
       | id | name    | grade | description | created_at          | type    | root_activity_id | is_official_session | is_open | is_public | code | code_lifetime | code_expires_at | open_activity_when_joining |
       | 15 | Group D | -4    | Group D     | 2019-04-06 09:26:40 | Session | 123              | true                | true    | false     | null | null          | null            | false                      |
-    And the table "groups_groups" should stay unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: Pending requests stay unchanged when 'frozen_membership' is not changed
     Given I am the user with id "21"
@@ -257,10 +257,10 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "14"
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "groups" should remain unchanged, regardless of the row with id "14"
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
 
   Scenario: Removes pending requests and invitations when 'frozen_membership' becomes true
     Given I am the user with id "21"
@@ -271,8 +271,8 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "13"
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged, regardless of the row with id "13"
+    And the table "groups_groups" should remain unchanged
     And the table "group_pending_requests" should be:
       | group_id | member_id | type          |
       | 14       | 31        | join_request  |
@@ -318,10 +318,10 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
 
   Scenario: Should be able to update the description, root_activity_id and root_skill_id from a value to null
     Given I am the user with id "100"
@@ -389,10 +389,10 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
 
   Scenario: User is a manager of the group with can_manage=memberships: allows changing all the membership-related fields
     Given I am the user with id "25"
@@ -407,10 +407,10 @@ Feature: Update a group (groupEdit)
     }
     """
     Then the response should be "updated"
-    And the table "groups" should stay unchanged but the row with id "18"
+    And the table "groups" should remain unchanged, regardless of the row with id "18"
     And the table "groups" at id "18" should be:
       | code_lifetime | code_expires_at     | frozen_membership | max_participants | enforce_max_participants |
       | 3723          | 2030-05-30 11:00:00 | true              | 15               | true                     |
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged

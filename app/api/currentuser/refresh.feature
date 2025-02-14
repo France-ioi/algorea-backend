@@ -73,7 +73,7 @@ Feature: Update the local user info cache
         "message": "updated"
       }
       """
-    And the table "users" should stay unchanged but the row with group_id "11"
+    And the table "users" should remain unchanged, regardless of the row with group_id "11"
     And the table "users" at group_id "11" should be:
       | group_id | latest_login_at     | latest_activity_at  | latest_profile_sync_at | temp_user | registered_at       | login_id  | login | email   | first_name   | last_name   | student_id   | country_code   | birth_date   | graduation_year   | grade   | address | zipcode | city | land_line_number | cell_phone_number | default_language | free_text   | web_site   | sex   | email_verified   | last_ip     | time_zone   | notify_news   | photo_autoload   | public_first_name   | public_last_name    |
       | 11       | 2019-06-16 21:01:25 | 2019-07-16 22:02:28 | 2019-07-16 22:02:28    | 0         | 2019-05-10 10:42:11 | 100000001 | jane  | <email> | <first_name> | <last_name> | <student_id> | <country_code> | <birth_date> | <graduation_year> | <grade> | null    | null    | null | null             | null              | en               | <free_text> | <web_site> | <sex> | <email_verified> | 192.168.0.1 | <time_zone> | <notify_news> | <photo_autoload> | <real_name_visible> | <real_name_visible> |

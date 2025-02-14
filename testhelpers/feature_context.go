@@ -110,11 +110,11 @@ func InitializeScenario(s *godog.ScenarioContext) {
 	s.Step(`^the table "([^"]*)" at (\w+?)s? "([^"]*)" should be:$`, ctx.TableAtColumnValueShouldBe)
 	s.Step(`^the table "([^"]*)" at (\w+?)s? "([^"]*)" should be empty$`, ctx.TableAtColumnValueShouldBeEmpty)
 	s.Step(`^the table "([^"]*)" should not contain (\w+?)s? "([^"]*)"$`, ctx.TableShouldNotContainColumnValue)
-	s.Step(`^the table "([^"]*)" should stay unchanged$`, ctx.TableShouldStayUnchanged)
-	s.Step(`^the table "([^"]*)" should stay unchanged but the rows? with (\w+?)s? "([^"]*)"$`,
-		ctx.TableShouldStayUnchangedButTheRowWithColumnValue)
-	s.Step(`^the table "([^"]*)" should stay unchanged but the rows? with ([^"]*) "([^"]*)" should be deleted$`,
-		ctx.TableShouldStayUnchangedButTheRowsWithColumnValueShouldBeDeleted)
+	s.Step(`^the table "([^"]*)" should remain unchanged$`, ctx.TableShouldRemainUnchanged)
+	s.Step(`^the table "([^"]*)" should remain unchanged, regardless of the rows? with (\w+?)s? "([^"]*)"$`,
+		ctx.TableShouldStayUnchangedRegardlessOfTheRowsWithColumnValue)
+	s.Step(`^the table "([^"]*)" should remain unchanged, except that the rows? with ([^"]*) "([^"]*)" should be deleted$`,
+		ctx.TableShouldRemainUnchangedExceptThatTheRowsWithColumnValueShouldBeDeleted)
 	s.Step(`^the DB time now is "([^"]*)"$`, ctx.DBTimeNow)
 
 	s.Step(`^"([^"]+)" is a token signed by (.+) with the following payload:$`, ctx.SignedTokenIsDistributed)

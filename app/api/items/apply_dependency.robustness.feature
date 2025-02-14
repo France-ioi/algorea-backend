@@ -103,42 +103,42 @@ Feature: Apply an item dependency - robustness
     When I send a POST request to "/items/aaaaa/prerequisites/200/apply"
     Then the response code should be 400
     And the response error message should contain "Wrong value for dependent_item_id (should be int64)"
-    And the table "results" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "results" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: Invalid prerequisite_item_id
     Given I am the user with id "11"
     When I send a POST request to "/items/210/prerequisites/aaa/apply"
     Then the response code should be 400
     And the response error message should contain "Wrong value for prerequisite_item_id (should be int64)"
-    And the table "results" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "results" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: No such dependency (grant_content_view=false)
     Given I am the user with id "11"
     When I send a POST request to "/items/220/prerequisites/220/apply"
     Then the response code should be 404
     And the response error message should contain "No such dependency"
-    And the table "results" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "results" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: No can_edit=all on the dependent item
     Given I am the user with id "11"
     When I send a POST request to "/items/210/prerequisites/200/apply"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "results" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "results" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: No can_grant_view=content on the dependent item
     Given I am the user with id "11"
     When I send a POST request to "/items/200/prerequisites/100/apply"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "results" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "results" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged

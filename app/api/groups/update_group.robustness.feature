@@ -51,8 +51,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: Should fail if the user is not found
     Given I am the user with id "404"
@@ -62,8 +62,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: User is a manager of the group, but required fields are not filled in correctly
     Given I am the user with id "21"
@@ -130,8 +130,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: The group id is not a number
     Given I am the user with id "21"
@@ -142,8 +142,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: The root activity does not exist
     Given I am the user with id "21"
@@ -155,8 +155,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "No access to the root activity or it is a skill"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: The user cannot view the root activity
     Given I am the user with id "21"
@@ -168,8 +168,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "No access to the root activity or it is a skill"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: The root activity is visible, but it is a skill
     Given I am the user with id "21"
@@ -181,8 +181,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "No access to the root activity or it is a skill"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: The root skill does not exist
     Given I am the user with id "21"
@@ -194,8 +194,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "No access to the root skill or it is not a skill"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: The user cannot view the root skill
     Given I am the user with id "21"
@@ -207,8 +207,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "No access to the root skill or it is not a skill"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: The root skill is visible, but it is not a skill
     Given I am the user with id "21"
@@ -220,8 +220,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "No access to the root skill or it is not a skill"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: is_official_session becomes true & root_activity_id becomes not null while the user doesn't have the permission
     Given I am the user with id "21"
@@ -234,8 +234,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Not enough permissions for attaching the group to the activity as an official session"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: is_official_session becomes true & root_activity_id is set in the db while the user doesn't have the permission
     Given I am the user with id "21"
@@ -247,8 +247,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Not enough permissions for attaching the group to the activity as an official session"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: is_official_session is true in the db & root_activity_id becomes not null while the user doesn't have the permission
     Given I am the user with id "21"
@@ -260,8 +260,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Not enough permissions for attaching the group to the activity as an official session"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: is_official_session is true in the db & root_activity_id becomes not null while the user doesn't have the permission because of expired membership
     Given I am the user with id "21"
@@ -273,8 +273,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 403
     And the response error message should contain "Not enough permissions for attaching the group to the activity as an official session"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: is_official_session becomes true, but root_activity_id is null in the db
     Given I am the user with id "21"
@@ -286,8 +286,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 400
     And the response error message should contain "The root_activity_id should be set for official sessions"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: is_official_session becomes true, but the new root_activity_id is null
     Given I am the user with id "21"
@@ -300,8 +300,8 @@ Feature: Update a group (groupEdit) - robustness
     """
     Then the response code should be 400
     And the response error message should contain "The root_activity_id should be set for official sessions"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: frozen_membership changes from true to false
     Given I am the user with id "21"
@@ -323,8 +323,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario Outline: Should return an error if a require_* field is strengthened, and there is at least one user in the group, but approval_change_action is not given
     Given I am the user with id "21"
@@ -365,8 +365,8 @@ Feature: Update a group (groupEdit) - robustness
       }
       """
     And the response code should be 400
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
     Examples:
       | error_field                            | require_watch_approval_old | require_watch_approval_new | require_personal_info_access_approval_old | require_personal_info_access_approval_new | require_lock_membership_approval_until_old | require_lock_membership_approval_until_new |
       | require_watch_approval                 | false                      | true                       | none                                      | none                                      | null                                       | null                                       |
@@ -397,8 +397,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario Outline: Should return an error if no field is strengthened, and approval_change_action is given
     Given I am the user with id "21"
@@ -420,8 +420,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
     Examples:
       | approval_change_action |
       | empty                  |
@@ -447,8 +447,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: Doesn't allow setting enforce_max_participants to true when max_participant is null
     Given I am the user with id "21"
@@ -470,8 +470,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: Doesn't allow setting enforce_max_participants to true and max_participant to null
     Given I am the user with id "41"
@@ -495,8 +495,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: Doesn't allow changing fields requiring can_manage>=memberships_and_group for managers with can_manage=memberships
     Given I am the user with id "21"
@@ -562,8 +562,8 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
 
   Scenario: Doesn't allow changing fields requiring can_manage>=memberships_and_group for managers with can_manage=none
     Given I am the user with id "31"
@@ -635,5 +635,5 @@ Feature: Update a group (groupEdit) - robustness
       "success": false
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged

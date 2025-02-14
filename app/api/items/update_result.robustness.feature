@@ -97,7 +97,7 @@ Feature: Update an attempt result - robustness
         }
       }
       """
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Wrong data (unknown fields)
     Given I am the user with id "11"
@@ -121,4 +121,4 @@ Feature: Update an attempt result - robustness
         }
       }
       """
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged

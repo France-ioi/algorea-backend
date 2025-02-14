@@ -93,22 +93,22 @@ Feature: Delete an item
         "message": "deleted"
       }
       """
-    And the table "items" should stay unchanged but the rows with id "22" should be deleted
+    And the table "items" should remain unchanged, except that the rows with id "22" should be deleted
 
-    And the table "items_strings" should stay unchanged but the rows with item_id "22" should be deleted
+    And the table "items_strings" should remain unchanged, except that the rows with item_id "22" should be deleted
     And the table "permissions_propagate" should be empty
-    And the table "items_items" should stay unchanged but the rows with parent_item_id,child_item_id "22" should be deleted
-    And the table "items_propagate" should stay unchanged but the rows with id "22" should be deleted
-    And the table "items_ancestors" should stay unchanged but the rows with ancestor_item_id,child_item_id "22" should be deleted
-    And the table "permissions_granted" should stay unchanged but the rows with item_id "22" should be deleted
-    And the table "permissions_generated" should stay unchanged but the rows with item_id "22" should be deleted
-    And the table "item_dependencies" should stay unchanged but the rows with item_id,dependent_item_id "22" should be deleted
-    And the table "groups_contest_items" should stay unchanged but the rows with item_id "22" should be deleted
-    And the table "attempts" should stay unchanged but the rows with id "1"
+    And the table "items_items" should remain unchanged, except that the rows with parent_item_id,child_item_id "22" should be deleted
+    And the table "items_propagate" should remain unchanged, except that the rows with id "22" should be deleted
+    And the table "items_ancestors" should remain unchanged, except that the rows with ancestor_item_id,child_item_id "22" should be deleted
+    And the table "permissions_granted" should remain unchanged, except that the rows with item_id "22" should be deleted
+    And the table "permissions_generated" should remain unchanged, except that the rows with item_id "22" should be deleted
+    And the table "item_dependencies" should remain unchanged, except that the rows with item_id,dependent_item_id "22" should be deleted
+    And the table "groups_contest_items" should remain unchanged, except that the rows with item_id "22" should be deleted
+    And the table "attempts" should remain unchanged, regardless of the rows with id "1"
     And the table "attempts" at id "1" should be:
       | id | participant_id | root_item_id |
       | 1  | 10             | null         |
-    And the table "results" should stay unchanged but the rows with item_id "22" should be deleted
+    And the table "results" should remain unchanged, except that the rows with item_id "22" should be deleted
     And the table "results_propagate" should be empty
-    And the table "answers" should stay unchanged but the rows with item_id "22" should be deleted
-    And the table "filters" should stay unchanged
+    And the table "answers" should remain unchanged, except that the rows with item_id "22" should be deleted
+    And the table "filters" should remain unchanged

@@ -42,7 +42,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Json: cannot unmarshal array into Go value of type items.askHintRequestWrapper"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Expired task_token
     Given the server time now is "2020-01-01T00:00:00Z"
@@ -138,7 +138,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong itemUrl in hint_requested token"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: idUser in hint_requested token doesn't match the idUser in the task token
     Given "priorUserTaskToken" is a token signed by the app with the following payload:
@@ -170,7 +170,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Token in hint_requested doesn't correspond to user session: got idUser=20, expected 10"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: idAttempt in hint_requested & task_token don't match
     Given "priorUserTaskToken" is a token signed by the app with the following payload:
@@ -202,7 +202,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong idAttempt in hint_requested token"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: idItemLocal in hint_requested & task_token don't match
     Given "priorUserTaskToken" is a token signed by the app with the following payload:
@@ -234,7 +234,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong idItemLocal in hint_requested token"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: No submission rights
     Given "priorUserTaskToken" is a token signed by the app with the following payload:
@@ -266,7 +266,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Item is read-only"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: idAttempt not found
     Given "priorUserTaskToken" is a token signed by the app with the following payload:
@@ -298,7 +298,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 404
     And the response error message should contain "No result or the attempt is expired"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: missing askedHint
     Given "priorUserTaskToken" is a token signed by the app with the following payload:
@@ -329,7 +329,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Asked hint should not be empty"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: The attempt is expired (doesn't allow submissions anymore)
     Given "priorUserTaskToken" is a token signed by the app with the following payload:
@@ -361,7 +361,7 @@ Feature: Ask for a hint - robustness
       """
     Then the response code should be 404
     And the response error message should contain "No result or the attempt is expired"
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario: Should return an error if there is a public key and the hint token's content is sent in clear JSON
     Given "priorUserTaskToken" is a token signed by the app with the following payload:

@@ -85,7 +85,7 @@ Feature: Ask for a hint
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | tasks_with_help | hints_cached | hints_requested                    | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_hint_at, NOW())) < 3 |
       | 0          | 101            | 10      | 1               | 0            | null                               | 1                                                         | null                                                  |
@@ -148,7 +148,7 @@ Feature: Ask for a hint
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | tasks_with_help | hints_cached | hints_requested                    | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_hint_at, NOW())) < 3 |
       | 0          | 201            | 10      | 1               | 0            | null                               | 1                                                         | null                                                  |
@@ -211,7 +211,7 @@ Feature: Ask for a hint
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | tasks_with_help | hints_cached | hints_requested                    | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_hint_at, NOW())) < 3 |
       | 0          | 101            | 10      | 1               | 0            | null                               | 1                                                         | null                                                  |
@@ -274,7 +274,7 @@ Feature: Ask for a hint
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | tasks_with_help | hints_cached | hints_requested   | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_hint_at, NOW())) < 3 |
       | 0          | 101            | 10      | 1               | 0            | null              | 1                                                         | null                                                  |
@@ -337,7 +337,7 @@ Feature: Ask for a hint
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | tasks_with_help | hints_cached | hints_requested    | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_hint_at, NOW())) < 3 |
       | 0          | 101            | 10      | 1               | 0            | null               | 1                                                         | null                                                  |

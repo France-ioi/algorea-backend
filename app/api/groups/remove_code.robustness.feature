@@ -24,28 +24,28 @@ Feature: Remove the code of the given group - robustness
     When I send a DELETE request to "/groups/13/code"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
 
   Scenario: User is a manager of the group, but doesn't have enough permissions to manage the group
     Given I am the user with id "31"
     When I send a DELETE request to "/groups/13/code"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
 
   Scenario: User has enough permissions to manage the group, but the group is a user
     Given I am the user with id "31"
     When I send a DELETE request to "/groups/21/code"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
 
   Scenario: User doesn't exist
     Given I am the user with id "404"
     When I send a DELETE request to "/groups/13/code"
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
 
   Scenario: The group id is not a number
     Given I am the user with id "21"

@@ -32,4 +32,4 @@ Feature: User withdraws a request to join a group
       | group_id | member_id | action                 | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 11       | 21        | join_request_withdrawn | 21           | 1                                         |
     And the table "groups_groups" should be empty
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged

@@ -88,38 +88,38 @@ Feature: Delete an item - robustness
     When I send a DELETE request to "/items/123456789012345678901234567890"
     Then the response code should be 400
     And the response error message should contain "Wrong value for item_id (should be int64)"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_propagate" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
-    And the table "item_dependencies" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
-    And the table "answers" should stay unchanged
-    And the table "filters" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_propagate" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "item_dependencies" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
+    And the table "answers" should remain unchanged
+    And the table "filters" should remain unchanged
 
   Scenario: The user is not an owner of the item
     Given I am the user with id "11"
     When I send a DELETE request to "/items/22"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_propagate" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
-    And the table "item_dependencies" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
-    And the table "answers" should stay unchanged
-    And the table "filters" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_propagate" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "item_dependencies" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
+    And the table "answers" should remain unchanged
+    And the table "filters" should remain unchanged
 
   Scenario: The item has children
     Given I am the user with id "11"
@@ -133,16 +133,16 @@ Feature: Delete an item - robustness
       "error_text": "The item must not have children"
     }
     """
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_propagate" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
-    And the table "item_dependencies" should stay unchanged
-    And the table "groups_contest_items" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
-    And the table "answers" should stay unchanged
-    And the table "filters" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_propagate" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
+    And the table "item_dependencies" should remain unchanged
+    And the table "groups_contest_items" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
+    And the table "answers" should remain unchanged
+    And the table "filters" should remain unchanged

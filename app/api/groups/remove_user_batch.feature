@@ -57,11 +57,11 @@ Feature: Remove user batch (userBatchRemove)
     """
     {"success": true, "message": "deleted"}
     """
-    And the table "user_batches_v2" should stay unchanged but the rows with group_prefix "test"
+    And the table "user_batches_v2" should remain unchanged, regardless of the rows with group_prefix "test"
     And the table "user_batches_v2" at group_prefix "test" should be:
       | group_prefix | custom_prefix | size | creator_id |
       | test         | custom1       | 200  | 13         |
-    And the table "users" should stay unchanged but the rows with login "test_custom_user,test_custom_another_user"
+    And the table "users" should remain unchanged, regardless of the rows with login "test_custom_user,test_custom_another_user"
     And the table "users" should not contain login "test_custom_user,test_custom_another_user"
-    And the table "groups" should stay unchanged but the rows with name "test_custom_user,test_custom_another_user"
+    And the table "groups" should remain unchanged, regardless of the rows with name "test_custom_user,test_custom_another_user"
     And the table "groups" should not contain name "test_custom_user,test_custom_another_user"

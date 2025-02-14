@@ -69,8 +69,8 @@ Feature: Generate a task token with a refreshed attempt for an item
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the row with attempt_id "1"
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the row with attempt_id "1"
     And the table "results" at attempt_id "1" should be:
       | attempt_id | participant_id | item_id | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_submission_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, score_obtained_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, validated_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 1          | 101            | 50      | 0              | 0           | 1                                                         | null                                                        | null                                                     | null                                                | 0                                                 |
@@ -118,8 +118,8 @@ Feature: Generate a task token with a refreshed attempt for an item
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the row with attempt_id "1"
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the row with attempt_id "1"
     And the table "results" at attempt_id "1" should be:
       | attempt_id | participant_id | item_id | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_submission_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, score_obtained_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, validated_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 1          | 102            | 60      | 0              | 0           | 1                                                         | null                                                        | null                                                     | null                                                | 0                                                 |
@@ -167,8 +167,8 @@ Feature: Generate a task token with a refreshed attempt for an item
         "success": true
       }
       """
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged but the row with attempt_id "1"
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged, regardless of the row with attempt_id "1"
     And the table "results" at attempt_id "1" should be:
       | attempt_id | participant_id | item_id | score_computed | tasks_tried | ABS(TIMESTAMPDIFF(SECOND, latest_activity_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, latest_submission_at, NOW())) < 3 | ABS(TIMESTAMPDIFF(SECOND, score_obtained_at, NOW())) < 3 | validated_at        | ABS(TIMESTAMPDIFF(SECOND, started_at, NOW())) < 3 |
       | 1          | 101            | 50      | 0              | 0           | 1                                                         | null                                                        | null                                                     | 2019-05-30 11:00:00 | 0                                                 |

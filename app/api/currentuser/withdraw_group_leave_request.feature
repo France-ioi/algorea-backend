@@ -35,5 +35,5 @@ Feature: User withdraws a request to leave a group
     And the table "group_membership_changes" should be:
       | group_id | member_id | action                  | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 11       | 21        | leave_request_withdrawn | 21           | 1                                         |
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged

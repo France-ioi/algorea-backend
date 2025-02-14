@@ -45,8 +45,8 @@ Feature: User accepts an invitation to join a group - robustness
       "error_text": "Cycles in the group relations graph are not allowed"
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User tries to accept an invitation that doesn't exist
     Given I am the user with id "21"
@@ -60,8 +60,8 @@ Feature: User accepts an invitation to join a group - robustness
       "error_text": "No such relation"
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User tries to accept an invitation to join a team while being a member of another team participating in same contests
     Given I am the user with id "21"
@@ -75,8 +75,8 @@ Feature: User accepts an invitation to join a group - robustness
       "error_text": "Team's participations are in conflict with the user's participations"
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User tries to accept an invitation to join a team while entry conditions would not be met if he joins
     Given I am the user with id "21"
@@ -99,16 +99,16 @@ Feature: User accepts an invitation to join a group - robustness
       "error_text": "Entry conditions would not be satisfied"
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the group id is wrong
     Given I am the user with id "21"
     When I send a POST request to "/current-user/group-invitations/abc/accept"
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails if the user doesn't exist
     Given I am the user with id "404"
@@ -143,8 +143,8 @@ Feature: User accepts an invitation to join a group - robustness
       }
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User tries to accept an invitation to join a group with frozen membership
     Given I am the user with id "21"
@@ -158,5 +158,5 @@ Feature: User accepts an invitation to join a group - robustness
       "error_text": "Group membership is frozen"
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged

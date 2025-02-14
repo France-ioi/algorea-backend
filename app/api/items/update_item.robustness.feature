@@ -72,11 +72,11 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
   Examples:
     | field                            | value         | error                                                                              |
     | default_language_tag             | 1234          | expected type 'string', got unconvertible type 'float64'                           |
@@ -109,11 +109,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong value for item_id (should be int64)"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: The user doesn't exist
     And I am the user with id "121"
@@ -125,11 +125,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: The user doesn't have rights to edit the item
     And I am the user with id "11"
@@ -141,11 +141,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "No access rights to edit the item"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: The user doesn't have rights to edit the item (can_edit = children)
     And I am the user with id "11"
@@ -157,11 +157,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "No access rights to edit the item's properties"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: The user doesn't have rights to edit the item (can_view = info)
     And I am the user with id "11"
@@ -173,11 +173,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "No access rights to edit the item"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: The user doesn't have rights to edit item's children
     And I am the user with id "11"
@@ -189,11 +189,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "No access rights to edit the item"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: Non-unique children item IDs
     Given I am the user with id "11"
@@ -218,11 +218,11 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: Child order is missing
     Given I am the user with id "11"
@@ -244,11 +244,11 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: Children items are not visible to the user
     Given I am the user with id "11"
@@ -273,11 +273,11 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: The item is among child items
     Given I am the user with id "11"
@@ -291,11 +291,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "An item cannot become an ancestor of itself"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario: The item is a descendant of a child item
     Given I am the user with id "11"
@@ -309,11 +309,11 @@ Feature: Update item - robustness
       """
     Then the response code should be 403
     And the response error message should contain "An item cannot become an ancestor of itself"
-    And the table "items" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
 
   Scenario Outline: Not enough permissions for setting propagation in items_items
     Given I am the user with id "11"
@@ -342,12 +342,12 @@ Feature: Update item - robustness
         "error_text": "<error>"
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | field                         | value                       | permission_column        | permission_value         | error                                                            |
       | content_view_propagation      | as_content                  | can_grant_view_generated | none                     | Not enough permissions for setting content_view_propagation      |
@@ -383,12 +383,12 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario Outline: The item cannot have children
     Given I am the user with id "11"
@@ -412,12 +412,12 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
     Examples:
       | item_id |
       | 24      |
@@ -443,12 +443,12 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: A skill cannot have a duration or require an explicit entry
     Given I am the user with id "11"
@@ -472,12 +472,12 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
-    And the table "items_items" should stay unchanged
-    And the table "items_ancestors" should stay unchanged
-    And the table "items_strings" should stay unchanged
-    And the table "permissions_granted" should stay unchanged
-    And the table "permissions_generated" should stay unchanged
+    And the table "items" should remain unchanged
+    And the table "items_items" should remain unchanged
+    And the table "items_ancestors" should remain unchanged
+    And the table "items_strings" should remain unchanged
+    And the table "permissions_granted" should remain unchanged
+    And the table "permissions_generated" should remain unchanged
 
   Scenario: text_id should be unique
     Given I am the user with id "11"
@@ -499,4 +499,4 @@ Feature: Update item - robustness
         }
       }
       """
-    And the table "items" should stay unchanged
+    And the table "items" should remain unchanged

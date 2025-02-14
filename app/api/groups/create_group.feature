@@ -23,14 +23,14 @@ Feature: Create a group (groupCreate)
       "data": {"id":"5577006791947779410"}
     }
     """
-    And the table "groups" should stay unchanged but the row with id "5577006791947779410"
+    And the table "groups" should remain unchanged, regardless of the row with id "5577006791947779410"
     And the table "groups" at id "5577006791947779410" should be:
       | id                  | name      | type         | TIMESTAMPDIFF(SECOND, NOW(), created_at) < 3 |
       | 5577006791947779410 | some name | <group_type> | true                                         |
     And the table "group_managers" should be:
       | manager_id | group_id            | can_manage            | can_grant_group_access | can_watch_members |
       | 21         | 5577006791947779410 | memberships_and_group | 1                      | 1                 |
-    And the table "groups_groups" should stay unchanged
+    And the table "groups_groups" should remain unchanged
     And the table "groups_ancestors" should be:
       | ancestor_group_id   | child_group_id      | is_self |
       | 21                  | 21                  | 1       |

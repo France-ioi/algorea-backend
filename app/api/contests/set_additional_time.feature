@@ -94,7 +94,7 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
     When I send a PUT request to "/contests/50/groups/13/additional-times?seconds=3020399"
     Then the response code should be 200
     And the response should be "updated"
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
     And the table "groups_contest_items" should be:
       | group_id | item_id | additional_time |
       | 10       | 50      | 01:00:00        |
@@ -151,14 +151,14 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
       | 1  | 16             | 3019-05-29 06:38:38 | 21         | 0                 | 70           | 2018-12-31 23:59:59      |
       | 1  | 31             | 3017-05-29 06:38:38 | 21         | 0                 | 70           | 9999-12-31 23:59:59      |
       | 2  | 14             | 3019-05-29 06:38:38 | 21         | 0                 | 50           | 9999-12-31 23:59:59      |
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Creates a new row
     Given I am the user with id "21"
     When I send a PUT request to "/contests/70/groups/13/additional-times?seconds=-3020399"
     Then the response code should be 200
     And the response should be "updated"
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
     And the table "groups_contest_items" should be:
       | group_id | item_id | additional_time |
       | 10       | 50      | 01:00:00        |
@@ -208,19 +208,19 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
       | 36                | 14             | 0       | 3018-04-24 07:38:42 |
       | 36                | 31             | 0       | 9999-12-31 23:59:59 |
       | 36                | 36             | 1       | 9999-12-31 23:59:59 |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Doesn't create a new row when seconds=0
     Given I am the user with id "21"
     When I send a PUT request to "/contests/70/groups/13/additional-times?seconds=0"
     Then the response code should be 200
     And the response should be "updated"
-    And the table "groups_contest_items" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_contest_items" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Doesn't update time columns of groups_groups/attempts for ended attempts
     Given I am the user with id "21"
@@ -237,10 +237,10 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
       | 21       | 50      | 00:01:00        |
       | 21       | 60      | 00:01:00        |
       | 21       | 70      | 00:01:00        |
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Doesn't update attempts.allows_submissions_until if both old and new values are in the past
     Given I am the user with id "21"
@@ -296,8 +296,8 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
       | 36                | 14             | 0       | 9999-12-31 23:59:59 |
       | 36                | 31             | 0       | 9999-12-31 23:59:59 |
       | 36                | 36             | 1       | 9999-12-31 23:59:59 |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Activates an expired participation
     Given I am the user with id "21"
@@ -362,14 +362,14 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
       | 1  | 16             | 3019-05-29 06:38:38 | 21         | 0                 | 70           | 3019-12-05 23:00:01      |
       | 1  | 31             | 3017-05-29 06:38:38 | 21         | 0                 | 70           | 9999-12-31 23:59:59      |
       | 2  | 14             | 3019-05-29 06:38:38 | 21         | 0                 | 50           | 9999-12-31 23:59:59      |
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Creates a new row for a user
     Given I am the user with id "21"
     When I send a PUT request to "/contests/70/groups/31/additional-times?seconds=-3020399"
     Then the response code should be 200
     And the response should be "updated"
-    And the table "permissions_generated" should stay unchanged
+    And the table "permissions_generated" should remain unchanged
     And the table "groups_contest_items" should be:
       | group_id | item_id | additional_time |
       | 10       | 50      | 01:00:00        |
@@ -427,4 +427,4 @@ Feature: Set additional time in the contest for the group (contestSetAdditionalT
       | 1  | 16             | 3019-05-29 06:38:38 | 21         | 0                 | 70           | 2018-12-31 23:59:59      |
       | 1  | 31             | 3017-05-29 06:38:38 | 21         | 0                 | 70           | 3017-04-24 07:38:42      |
       | 2  | 14             | 3019-05-29 06:38:38 | 21         | 0                 | 50           | 9999-12-31 23:59:59      |
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged

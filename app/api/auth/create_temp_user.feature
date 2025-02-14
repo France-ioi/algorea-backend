@@ -38,11 +38,11 @@ Feature: Create a temporary user
     And the table "users" at group_id "5577006791947779410" should be:
       | group_id            | login_id | login        | temp_user | default_language            | ABS(TIMESTAMPDIFF(SECOND, registered_at, NOW())) < 3 | last_ip   |
       | 5577006791947779410 | 0        | tmp-49727887 | true      | <expected_default_language> | true                                                 | 127.0.0.1 |
-    And the table "groups" should stay unchanged but the row with id "5577006791947779410"
+    And the table "groups" should remain unchanged, regardless of the row with id "5577006791947779410"
     And the table "groups" at id "5577006791947779410" should be:
       | id                  | name         | type | description  | ABS(TIMESTAMPDIFF(SECOND, created_at, NOW())) < 3 | is_open | send_emails |
       | 5577006791947779410 | tmp-49727887 | User | tmp-49727887 | true                                              | false   | false       |
-    And the table "groups_groups" should stay unchanged but the row with child_group_id "5577006791947779410"
+    And the table "groups_groups" should remain unchanged, regardless of the row with child_group_id "5577006791947779410"
     And the table "groups_groups" at child_group_id "5577006791947779410" should be:
       | parent_group_id | child_group_id      |
       | 4               | 5577006791947779410 |

@@ -47,9 +47,9 @@ Feature: Remove user batch (userBatchRemove) - robustness
     When I send a DELETE request to "/user-batches/<group_prefix>/<custom_prefix>"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
   Examples:
     | group_prefix | custom_prefix |
     | unknown      | custom        |
@@ -60,18 +60,18 @@ Feature: Remove user batch (userBatchRemove) - robustness
     When I send a DELETE request to "/user-batches/test/custom"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
 
   Scenario: There are some users with locked membership that the current user cannot manage
     Given I am the user with id "21"
     When I send a DELETE request to "/user-batches/test/custom"
     Then the response code should be 422
     And the response error message should contain "There are users with locked membership"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
     And logs should contain:
       """
       User with group_id = 21 failed to delete a user batch because of locked membership (group_prefix = 'test', custom_prefix = 'custom')
@@ -86,9 +86,9 @@ Feature: Remove user batch (userBatchRemove) - robustness
     When I send a DELETE request to "/user-batches/test1/custom"
     Then the response code should be 500
     And the response error message should contain "Login module failed"
-    And the table "user_batches_v2" should stay unchanged
-    And the table "users" should stay unchanged
-    And the table "groups" should stay unchanged
+    And the table "user_batches_v2" should remain unchanged
+    And the table "users" should remain unchanged
+    And the table "groups" should remain unchanged
     And logs should contain:
       """
       The login module returned an error for /platform_api/accounts_manager/delete: some error

@@ -9,7 +9,7 @@ Feature: Set users.notifications_read_at to NOW() for the current user
     Given I am the user with id "1"
     When I send a PUT request to "/current-user/notifications-read-at"
     Then the response should be "updated"
-    And the table "users" should stay unchanged but the row with group_id "1"
+    And the table "users" should remain unchanged, regardless of the row with group_id "1"
     And the table "users" at group_id "1" should be:
       | group_id | login | ABS(TIMESTAMPDIFF(SECOND, notifications_read_at, NOW())) < 3 |
       | 1        | user  | 1                                                            |

@@ -60,7 +60,7 @@ Feature: Accept requests to leave a group
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged but the row with parent_group_id "13"
+    And the table "groups_groups" should remain unchanged, regardless of the row with parent_group_id "13"
     And the table "groups_groups" at parent_group_id "13" should be:
       | parent_group_id | child_group_id | expires_at          |
       | 13              | 111            | 9999-12-31 23:59:59 |
@@ -116,7 +116,7 @@ Feature: Accept requests to leave a group
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged but the row with parent_group_id "14"
+    And the table "groups_groups" should remain unchanged, regardless of the row with parent_group_id "14"
     And the table "groups_groups" at parent_group_id "14" should be empty
     And the table "group_pending_requests" should be:
       | group_id | member_id | type          |
@@ -180,7 +180,7 @@ Feature: Accept requests to leave a group
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged

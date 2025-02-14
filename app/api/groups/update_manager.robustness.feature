@@ -23,7 +23,7 @@ Feature: Update the group manager's permissions (groupManagerEdit) - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "group_managers" should stay unchanged
+    And the table "group_managers" should remain unchanged
 
   Scenario: manager_id is wrong
     Given I am the user with id "21"
@@ -33,7 +33,7 @@ Feature: Update the group manager's permissions (groupManagerEdit) - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong value for manager_id (should be int64)"
-    And the table "group_managers" should stay unchanged
+    And the table "group_managers" should remain unchanged
 
   Scenario: Wrong JSON
     Given I am the user with id "21"
@@ -43,7 +43,7 @@ Feature: Update the group manager's permissions (groupManagerEdit) - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Invalid input JSON: unexpected EOF"
-    And the table "group_managers" should stay unchanged
+    And the table "group_managers" should remain unchanged
 
   Scenario: manager_id doesn't exist
     Given I am the user with id "21"
@@ -53,7 +53,7 @@ Feature: Update the group manager's permissions (groupManagerEdit) - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "group_managers" should stay unchanged
+    And the table "group_managers" should remain unchanged
 
   Scenario: The user doesn't have enough permissions on the group
     Given I am the user with id "21"
@@ -63,7 +63,7 @@ Feature: Update the group manager's permissions (groupManagerEdit) - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "group_managers" should stay unchanged
+    And the table "group_managers" should remain unchanged
 
   Scenario: There group_id-manager_id pair doesn't exist in group_managers
     Given I am the user with id "21"
@@ -73,4 +73,4 @@ Feature: Update the group manager's permissions (groupManagerEdit) - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "group_managers" should stay unchanged
+    And the table "group_managers" should remain unchanged

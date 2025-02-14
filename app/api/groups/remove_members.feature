@@ -66,7 +66,7 @@ Feature: Remove members from a group (groupRemoveMembers)
       | parent_group_id | child_group_id |
       | 13              | 131            |
       | 14              | 41             |
-    And the table "group_pending_requests" should stay unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be:
       | group_id | member_id | action  | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 13       | 51        | removed | 21           | 1                                         |

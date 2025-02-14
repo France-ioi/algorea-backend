@@ -24,46 +24,46 @@ Feature: User creates a request to leave a group - robustness
     When I send a POST request to "/current-user/group-leave-requests/14"
     Then the response code should be 403
     And the response error message should contain "User is not a member of the group or the group doesn't require approval for leaving"
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User tries to send a leave request while groups_groups.lock_membership_approved_at is null
     Given I am the user with id "21"
     When I send a POST request to "/current-user/group-leave-requests/11"
     Then the response code should be 403
     And the response error message should contain "User is not a member of the group or the group doesn't require approval for leaving"
-    And the table "group_pending_requests" should stay unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User tries to send a leave request while groups.require_lock_membership_approval_until is null
     Given I am the user with id "22"
     When I send a POST request to "/current-user/group-leave-requests/14"
     Then the response code should be 403
     And the response error message should contain "User is not a member of the group or the group doesn't require approval for leaving"
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the group id is wrong
     Given I am the user with id "21"
     When I send a POST request to "/current-user/group-leave-requests/abc"
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Fails when the group membership is frozen
     Given I am the user with id "21"
     When I send a POST request to "/current-user/group-leave-requests/15"
     Then the response code should be 403
     And the response error message should contain "User is not a member of the group or the group doesn't require approval for leaving or its membership is frozen"
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged

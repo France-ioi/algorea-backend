@@ -23,45 +23,45 @@ Feature: Delete a group - robustness
     When I send a DELETE request to "/groups/abc"
     Then the response code should be 400
     And the response error message should contain "Wrong value for group_id (should be int64)"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User doesn't have enough rights on the group
     Given I am the user with id "23"
     When I send a DELETE request to "/groups/11"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: User does not exist
     Given I am the user with id "404"
     When I send a DELETE request to "/groups/11"
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: The group is User
     Given I am the user with id "21"
     When I send a DELETE request to "/groups/55"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: The group doesn't exist
     Given I am the user with id "21"
     When I send a DELETE request to "/groups/404"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: The group has a child
     Given I am the user with id "21"
     When I send a DELETE request to "/groups/11"
     Then the response code should be 404
     And the response error message should contain "The group must be empty"
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged

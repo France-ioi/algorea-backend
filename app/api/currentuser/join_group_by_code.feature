@@ -62,7 +62,7 @@ Feature: Join a group using a code (groupsJoinByCode)
       "data": {"changed": true}
     }
     """
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
     And the table "groups_groups" should be:
       | parent_group_id | child_group_id |
       | 11              | 21             |
@@ -73,9 +73,9 @@ Feature: Join a group using a code (groupsJoinByCode)
     And the table "group_membership_changes" should be:
       | group_id | member_id | action         | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 11       | 21        | joined_by_code | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Successfully join a group
     Given I am the user with id "21"
@@ -89,12 +89,12 @@ Feature: Join a group using a code (groupsJoinByCode)
       "data": {"changed": true}
     }
     """
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
     And the table "groups_groups" should be:
       | parent_group_id | child_group_id |
       | 16              | 21             |
       | 17              | 21             |
-    And the table "group_pending_requests" should stay unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be:
       | group_id | member_id | action         | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 16       | 21        | joined_by_code | 21           | 1                                         |
@@ -108,7 +108,7 @@ Feature: Join a group using a code (groupsJoinByCode)
       | 16                | 21             | 9999-12-31 23:59:59 |
       | 17                | 17             | 9999-12-31 23:59:59 |
       | 21                | 21             | 9999-12-31 23:59:59 |
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "results" should be:
       | attempt_id | participant_id | item_id | started_at          |
       | 0          | 17             | 30      | 2019-05-30 11:00:00 |
@@ -129,7 +129,7 @@ Feature: Join a group using a code (groupsJoinByCode)
       "data": {"changed": true}
     }
     """
-    And the table "groups" should stay unchanged but the row with id "12"
+    And the table "groups" should remain unchanged, regardless of the row with id "12"
     And the table "groups" at id "12" should be:
       | id | type | code       | code_lifetime | TIMESTAMPDIFF(SECOND, code_expires_at, DATE_ADD(NOW(), INTERVAL 45296 SECOND)) < 3 |
       | 12 | Team | abc3456789 | 45296         | 1                                                                                  |
@@ -137,13 +137,13 @@ Feature: Join a group using a code (groupsJoinByCode)
       | parent_group_id | child_group_id |
       | 12              | 21             |
       | 17              | 21             |
-    And the table "group_pending_requests" should stay unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be:
       | group_id | member_id | action         | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 12       | 21        | joined_by_code | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Doesn't update the code_expires_at if code_lifetime is null
     Given I am the user with id "21"
@@ -157,7 +157,7 @@ Feature: Join a group using a code (groupsJoinByCode)
       "data": {"changed": true}
     }
     """
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
     And the table "groups_groups" should be:
       | parent_group_id | child_group_id |
       | 14              | 21             |
@@ -168,9 +168,9 @@ Feature: Join a group using a code (groupsJoinByCode)
     And the table "group_membership_changes" should be:
       | group_id | member_id | action         | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 14       | 21        | joined_by_code | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Successfully join a group that requires approvals
     Given I am the user with id "21"
@@ -184,7 +184,7 @@ Feature: Join a group using a code (groupsJoinByCode)
       "data": {"changed": true}
     }
     """
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
     And the table "groups_groups" should be:
       | parent_group_id | child_group_id |
       | 15              | 21             |
@@ -196,6 +196,6 @@ Feature: Join a group using a code (groupsJoinByCode)
     And the table "group_membership_changes" should be:
       | group_id | member_id | action         | initiator_id | ABS(TIMESTAMPDIFF(SECOND, at, NOW())) < 3 |
       | 15       | 21        | joined_by_code | 21           | 1                                         |
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged

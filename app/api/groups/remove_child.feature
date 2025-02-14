@@ -51,8 +51,8 @@ Feature: Remove a direct parent-child relation between two groups
       | 22              | 11             |
       | 22              | 13             |
       | 22              | 14             |
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
     And the table "groups_ancestors" should be:
       | ancestor_group_id | child_group_id | is_self |
       | 11                | 11             | 1       |
@@ -63,7 +63,7 @@ Feature: Remove a direct parent-child relation between two groups
       | 22                | 13             | 0       |
       | 22                | 14             | 0       |
       | 22                | 22             | 1       |
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
 
   Scenario: User deletes a relation and an orphaned child group
     Given I am the user with id "21"
@@ -96,7 +96,7 @@ Feature: Remove a direct parent-child relation between two groups
       | 22                | 11             | 0       |
       | 22                | 14             | 0       |
       | 22                | 22             | 1       |
-    And the table "groups" should stay unchanged but the row with id "13"
+    And the table "groups" should remain unchanged, regardless of the row with id "13"
     And the table "groups" should not contain id "13"
 
   Scenario: Delete a relation making a child group an orphan
@@ -125,5 +125,5 @@ Feature: Remove a direct parent-child relation between two groups
       | 22                | 11             | 0       |
       | 22                | 14             | 0       |
       | 22                | 22             | 1       |
-    And the table "groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged

@@ -79,7 +79,7 @@ Feature: Accept group requests
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged but the row with parent_group_id "14"
+    And the table "groups_groups" should remain unchanged, regardless of the row with parent_group_id "14"
     And the table "groups_groups" at parent_group_id "14" should be:
       | parent_group_id | child_group_id | personal_info_view_approved_at | lock_membership_approved_at | watch_approved_at   |
       | 14              | 31             | 2019-06-02 00:00:00            | null                        | null                |
@@ -119,8 +119,8 @@ Feature: Accept group requests
       | 141               | 141            | 1       |
       | 151               | 151            | 1       |
       | 161               | 161            | 1       |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: The group is full
     Given I am the user with id "21"
@@ -152,12 +152,12 @@ Feature: Accept group requests
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
-    And the table "group_membership_changes" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
+    And the table "group_membership_changes" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario Outline: Accept team requests
     Given I am the user with id "21"
@@ -180,7 +180,7 @@ Feature: Accept group requests
       "success": true
     }
     """
-    And the table "groups_groups" should stay unchanged but the row with parent_group_id "13"
+    And the table "groups_groups" should remain unchanged, regardless of the row with parent_group_id "13"
     And the table "groups_groups" at parent_group_id "13" should be:
       | parent_group_id | child_group_id | personal_info_view_approved_at   | lock_membership_approved_at   | watch_approved_at   |
       | 13              | 31             | <personal_info_view_approved_at> | <lock_membership_approved_at> | <watch_approved_at> |
@@ -209,8 +209,8 @@ Feature: Accept group requests
       | 141               | 141            | 1       |
       | 151               | 151            | 1       |
       | 161               | 161            | 1       |
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
   Examples:
     | result  | personal_info_view_approved | lock_membership_approved | watch_approved | at                      | personal_info_view_approved_at | lock_membership_approved_at | watch_approved_at   |
     | success | 1                           | 0                        | 0              | 2019-06-01 00:00:00.000 | 2019-06-01 00:00:00            | null                        | null                |
@@ -248,12 +248,12 @@ Feature: Accept group requests
         "success": true
       }
       """
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Accept request for a team for which entry conditions would become not satisfied
     Given I am the user with id "21"
@@ -284,12 +284,12 @@ Feature: Accept group requests
         "success": true
       }
       """
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Checks approvals if required
     Given I am the user with id "21"
@@ -311,9 +311,9 @@ Feature: Accept group requests
         "success": true
       }
       """
-    And the table "groups_groups" should stay unchanged
-    And the table "group_pending_requests" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "group_pending_requests" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "groups_ancestors" should stay unchanged
-    And the table "attempts" should stay unchanged
-    And the table "results" should stay unchanged
+    And the table "groups_ancestors" should remain unchanged
+    And the table "attempts" should remain unchanged
+    And the table "results" should remain unchanged

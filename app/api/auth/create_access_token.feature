@@ -230,15 +230,15 @@ Feature: Create an access token
       }
       """
     And the response header "Set-Cookie" should not be set
-    And the table "users" should stay unchanged but the row with group_id "11"
+    And the table "users" should remain unchanged, regardless of the row with group_id "11"
     And the table "users" at group_id "11" should be:
       | group_id | latest_login_at     | latest_activity_at  | temp_user | registered_at       | latest_profile_sync_at | login_id  | login | email   | first_name   | last_name   | student_id   | country_code   | birth_date   | graduation_year   | grade   | address | zipcode | city | land_line_number | cell_phone_number | default_language | free_text   | web_site   | sex   | email_verified   | last_ip   | time_zone   | notify_news   | photo_autoload   | public_first_name   | public_last_name    |
       | 11       | 2019-07-16 22:02:28 | 2019-07-16 22:02:28 | 0         | 2019-05-10 10:42:11 | 2019-07-16 22:02:28    | 100000001 | jane  | <email> | <first_name> | <last_name> | <student_id> | <country_code> | <birth_date> | <graduation_year> | <grade> | null    | null    | null | null             | null              | en               | <free_text> | <web_site> | <sex> | <email_verified> | 127.0.0.1 | <time_zone> | <notify_news> | <photo_autoload> | <real_name_visible> | <real_name_visible> |
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
     And the table "group_membership_changes" should be empty
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
     And the table "sessions" should be:
       | session_id          | user_id | refresh_token                |
       | 1                   | 11      | previousrefreshtoken1        |
@@ -301,11 +301,11 @@ Feature: Create an access token
       """
     When I send a POST request to "/auth/token?code={{code_from_oauth}}"
     Then the response code should be 201
-    And the table "users" should stay unchanged but the row with group_id "11"
+    And the table "users" should remain unchanged, regardless of the row with group_id "11"
     And the table "users" at group_id "11" should be:
       | group_id |
       | 11       |
-    And the table "groups" should stay unchanged
+    And the table "groups" should remain unchanged
     And the table "groups_groups" should be:
       | parent_group_id | child_group_id |
       | 2               | 4              |
@@ -318,7 +318,7 @@ Feature: Create an access token
       | 4                 | 4              | true    |
       | 11                | 11             | true    |
     And the table "group_membership_changes" should be empty
-    And the table "attempts" should stay unchanged
+    And the table "attempts" should remain unchanged
 
   Scenario Outline: Accepts parameters from POST data
     Given the server time now is "2019-07-17T01:02:29+03:00"

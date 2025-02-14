@@ -34,9 +34,9 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
     When I send a POST request to "/current-user/group-memberships/by-code"
     Then the response code should be 400
     And the response error message should contain "Missing code"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Join with a wrong code
     Given I am the user with id "21"
@@ -47,9 +47,9 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       """
       A user with group_id = 21 tried to join a group using a wrong/expired code
       """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Join with an expired code
     Given I am the user with id "21"
@@ -60,18 +60,18 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       """
       A user with group_id = 21 tried to join a group using a wrong/expired code
       """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: The user is temporary
     Given I am the user with id "22"
     When I send a POST request to "/current-user/group-memberships/by-code?code=cba9876543"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Join an already joined group
     Given I am the user with id "21"
@@ -85,9 +85,9 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
         "error_text": "A conflicting relation exists"
       }
       """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Join a team while being a member of another team participating in same contests
     Given I am the user with id "21"
@@ -101,8 +101,8 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       "error_text": "Team's participations are in conflict with the user's participations"
     }
     """
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Cannot join if required approvals are missing
     Given I am the user with id "21"
@@ -117,9 +117,9 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       "error_text": "Missing required approvals"
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Cannot join if the group membership is frozen
     Given I am the user with id "21"
@@ -133,9 +133,9 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       "error_text": "Group membership is frozen"
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Cannot join if enforce_max_participants is true and the limit is reached
     Given I am the user with id "21"
@@ -149,9 +149,9 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       "error_text": "The group is full"
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Cannot join if joining breaks entry conditions for the team
     Given I am the user with id "21"
@@ -174,9 +174,9 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       "error_text": "Entry conditions would not be satisfied"
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged
 
   Scenario: Cannot join a user group
     Given I am the user with id "21"
@@ -190,6 +190,6 @@ Feature: Join a group using a code (groupsJoinByCode) - robustness
       "error_text": "Insufficient access rights"
     }
     """
-    And the table "groups" should stay unchanged
-    And the table "groups_groups" should stay unchanged
-    And the table "groups_ancestors" should stay unchanged
+    And the table "groups" should remain unchanged
+    And the table "groups_groups" should remain unchanged
+    And the table "groups_ancestors" should remain unchanged

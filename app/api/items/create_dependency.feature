@@ -72,7 +72,7 @@ Feature: Create an item dependency
     }
     """
     Then the response should be "created"
-    And the table "item_dependencies" should stay unchanged but the rows with dependent_item_id "210"
+    And the table "item_dependencies" should remain unchanged, regardless of the rows with dependent_item_id "210"
     And the table "item_dependencies" at dependent_item_id "210" should be:
       | item_id | dependent_item_id | score            | grant_content_view |
       | 100     | 210               | 22               | true               |
@@ -92,7 +92,7 @@ Feature: Create an item dependency
     }
     """
     Then the response should be "created"
-    And the table "item_dependencies" should stay unchanged but the rows with dependent_item_id "200"
+    And the table "item_dependencies" should remain unchanged, regardless of the rows with dependent_item_id "200"
     And the table "item_dependencies" at dependent_item_id "200" should be:
       | item_id | dependent_item_id | score | grant_content_view |
       | 210     | 200               | 100   | true               |
@@ -107,7 +107,7 @@ Feature: Create an item dependency
     }
     """
     Then the response should be "created"
-    And the table "item_dependencies" should stay unchanged but the rows with dependent_item_id "210"
+    And the table "item_dependencies" should remain unchanged, regardless of the rows with dependent_item_id "210"
     And the table "item_dependencies" at dependent_item_id "210" should be:
       | item_id | dependent_item_id | score | grant_content_view |
       | 100     | 210               | 22    | true               |

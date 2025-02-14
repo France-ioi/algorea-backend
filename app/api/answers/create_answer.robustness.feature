@@ -39,7 +39,7 @@ Feature: Create a 'saved' answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong value for attempt_id (should be int64)"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Invalid item_id
     Given I am the user with id "101"
@@ -52,7 +52,7 @@ Feature: Create a 'saved' answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong value for item_id (should be int64)"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Invalid as_team_id
     Given I am the user with id "101"
@@ -65,7 +65,7 @@ Feature: Create a 'saved' answer - robustness
       """
     Then the response code should be 400
     And the response error message should contain "Wrong value for as_team_id (should be int64)"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Missing answer
     Given I am the user with id "101"
@@ -87,7 +87,7 @@ Feature: Create a 'saved' answer - robustness
         "success": false
       }
       """
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: Missing state
     Given I am the user with id "101"
@@ -109,7 +109,7 @@ Feature: Create a 'saved' answer - robustness
         "success": false
       }
       """
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: User not found
     Given I am the user with id "404"
@@ -122,7 +122,7 @@ Feature: Create a 'saved' answer - robustness
       """
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: No access
     Given I am the user with id "101"
@@ -135,7 +135,7 @@ Feature: Create a 'saved' answer - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged
 
   Scenario: No access (as a team)
     Given I am the user with id "101"
@@ -148,4 +148,4 @@ Feature: Create a 'saved' answer - robustness
       """
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "answers" should stay unchanged
+    And the table "answers" should remain unchanged

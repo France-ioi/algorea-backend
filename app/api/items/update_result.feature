@@ -49,7 +49,7 @@ Feature: Update an attempt result
       }
       """
     Then the response should be "updated"
-    And the table "results" should stay unchanged but the row with participant_id "11"
+    And the table "results" should remain unchanged, regardless of the row with participant_id "11"
     And the table "results" at participant_id "11" should be:
       | attempt_id | participant_id | item_id | score_computed | validated_at        | started_at          | latest_activity_at  | help_requested |
       | 0          | 11             | 200     | 99             | null                | 2018-05-29 06:38:38 | 2018-05-29 06:38:39 | false          |
@@ -67,7 +67,7 @@ Feature: Update an attempt result
       }
       """
     Then the response should be "updated"
-    And the table "results" should stay unchanged but the row with participant_id "11"
+    And the table "results" should remain unchanged, regardless of the row with participant_id "11"
     And the table "results" at participant_id "11" should be:
       | attempt_id | participant_id | item_id | score_computed | validated_at        | started_at          | latest_activity_at  | help_requested |
       | 0          | 11             | 200     | 99             | null                | 2018-05-29 06:38:38 | 2018-05-29 06:38:39 | false          |
@@ -85,7 +85,7 @@ Feature: Update an attempt result
       }
       """
     Then the response should be "updated"
-    And the table "results" should stay unchanged but the row with participant_id "23"
+    And the table "results" should remain unchanged, regardless of the row with participant_id "23"
     And the table "results" at participant_id "23" should be:
       | attempt_id | participant_id | item_id | score_computed | validated_at        | started_at          | latest_activity_at  | help_requested |
       | 0          | 23             | 210     | 99             | 2018-05-29 08:00:00 | 2019-05-29 06:38:38 | 2019-05-29 06:38:39 | true           |
@@ -98,4 +98,4 @@ Feature: Update an attempt result
       {}
       """
     Then the response should be "updated"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged

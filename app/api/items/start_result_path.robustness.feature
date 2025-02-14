@@ -35,14 +35,14 @@ Feature: Start results for an item path - robustness
     When I send a POST request to "/items/11111111111111111111111111111/222222222222/start-result-path?attempt_id=0"
     Then the response code should be 400
     And the response error message should contain "Unable to parse one of the integers given as query args (value: '11111111111111111111111111111', param: 'ids')"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: The path is too long
     Given I am the user with id "101"
     When I send a POST request to "/items/1/2/3/4/5/6/7/8/9/10/11/start-result-path"
     Then the response code should be 400
     And the response error message should contain "No more than 10 ids expected"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Invalid as_team_id
     Given I am the user with id "101"
@@ -55,46 +55,46 @@ Feature: Start results for an item path - robustness
     When I send a POST request to "/items/50/start-result-path"
     Then the response code should be 401
     And the response error message should contain "Invalid access token"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: No access to the item (no item)
     Given I am the user with id "101"
     When I send a POST request to "/items/404/start-result-path"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: No access to the item (info access)
     Given I am the user with id "101"
     When I send a POST request to "/items/50/start-result-path"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: No access to the item (as a team)
     Given I am the user with id "101"
     When I send a POST request to "/items/50/start-result-path?as_team_id=104"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: User is not a team member
     Given I am the user with id "101"
     When I send a POST request to "/items/60/start-result-path?as_team_id=102"
     Then the response code should be 403
     And the response error message should contain "Can't use given as_team_id as a user's team"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: as_team_id is not a team
     Given I am the user with id "101"
     When I send a POST request to "/items/60/start-result-path?as_team_id=103"
     Then the response code should be 403
     And the response error message should contain "Can't use given as_team_id as a user's team"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
 
   Scenario: Cannot start the path
     Given I am the user with id "101"
     When I send a POST request to "/items/70/start-result-path"
     Then the response code should be 403
     And the response error message should contain "Insufficient access rights"
-    And the table "results" should stay unchanged
+    And the table "results" should remain unchanged
